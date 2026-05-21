@@ -7,5 +7,10 @@ use Illuminate\Http\Request;
 
 class ModulesController extends Controller
 {
-    //
+
+    public function modules() {
+
+        return view("admin.modules");
+    }
+
 }

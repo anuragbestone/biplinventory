@@ -6,6 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use App\Models\PermissionMaster;
+use App\Models\ModuleMaster;
+
 class RoleCheck
 {
     /**
@@ -26,13 +29,33 @@ class RoleCheck
                 if ($request->is('warehouse/*')) {
                     return $next($request);
                 } else {
-                    return redirect()->route("dashboard");
+                    return redirect()->route("dashboard")->with("error", "You don't have permission to access the route!!");
                 }
             } else {
                 if ($request->is("warehouse/*")) {
                     return redirect()->route("dashboard");
                 } else {
-                    return $next($request);
+
+                    $moduleRoute = ModuleMaster::select("id", "module_route")
+                        ->where("module_route", $uri)
+                        ->first();
+
+                    if ($moduleRoute) {
+
+                        $permissionStatus = PermissionMaster::where("module_id", $moduleRoute->id)
+                            ->where("role_id", $rollID)
+                            ->exists();
+
+                        if ($permissionStatus) {
+                            return $next($request);
+                        } else {
+                            return redirect()->route("dashboard")->with("error", "You don't have permission to access the route!!");
+                        }
+
+                    } else {
+                        return redirect()->route("dashboard")->with("error", "Route not found!!");
+                    }
+                
                 }
             }
         }

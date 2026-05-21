@@ -100,6 +100,8 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     
     
     Route::get("/userRole", [UserRolesController::class, "userRole"]);
+    Route::get("/getUserDetailsOfRoleId", [UserRolesController::class, "getUserDetailsOfRoleId"]);
+
     Route::get("/modules", [ModulesController::class, "modules"]);
     Route::get("/permissions", [PermissionsController::class, "permissions"]);
     Route::get("/email", [EmailController::class, "email"]);

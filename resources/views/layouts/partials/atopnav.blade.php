@@ -1,7 +1,7 @@
 <div class="header-wrapper d-flex justify-content-between align-items-center">
     <!-- LOGO -->
     <div class="logo">
-        <a href="#"><img src="{{ asset("assets") }}/images/logo.png.webp" /></a>
+        <a href="{{ url("dashboard") }}"><img src="{{ asset("assets") }}/images/logo.png.webp" /></a>
     </div>
 
     <!-- TOGGLE BUTTON (Mobile Only) -->
@@ -37,16 +37,16 @@
                 </ul>
             </div>
 
-            <!--<div class="dropdown">-->
-            <!--    <div class="menu-item dropdown-toggle" data-bs-toggle="dropdown">-->
-            <!--        <i class="bi bi-people"></i> Users-->
-            <!--    </div>-->
-            <!--    <ul class="dropdown-menu">-->
-            <!--        <li><a class="dropdown-item" href="{{ url("userRole") }}">User Role</a></li>-->
-            <!--        <li><a class="dropdown-item" href="{{ url("modules") }}">Modules</a></li>-->
-            <!--        <li><a class="dropdown-item" href="{{ url("permissions") }}">Permission</a></li>-->
-            <!--    </ul>-->
-            <!--</div>-->
+            <div class="dropdown">
+                <div class="menu-item dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="bi bi-people"></i> Users
+                </div>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ url("userRole") }}">User Role</a></li>
+                    <li><a class="dropdown-item" href="{{ url("modules") }}">Modules</a></li>
+                    <li><a class="dropdown-item" href="{{ url("permissions") }}">Permission</a></li>
+                </ul>
+            </div>
 
             <!--<div class="dropdown">-->
             <!--    <div class="menu-item dropdown-toggle" data-bs-toggle="dropdown">-->
