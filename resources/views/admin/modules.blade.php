@@ -20,49 +20,34 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="moduleTable">
                         <thead>
                             <tr>
                                 <th>S.No</th>
                                 <th>Module Name</th>
+                                <th>Route Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>FG Stock Master</td>
-                                <td>Active</td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#assignModal">
-                                        <i class="bi bi-gear"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>2</td>
-                                <td>Rejection Master</td>
-                                <td>Active</td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#assignModal">
-                                        <i class="bi bi-gear"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>3</td>
-                                <td>Production Line Log</td>
-                                <td>Active</td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#assignModal">
-                                        <i class="bi bi-gear"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            @if ($moduleData)
+                                @php $counter = 1 @endphp
+                                @foreach ($moduleData as $mData)
+                                    <tr>
+                                        <td>{{ $counter++ }}</td>
+                                        <td>{{ $mData["module_name"] }}</td>
+                                        <td>{{ $mData["module_route"] }}</td>
+                                        <td>{{ $mData["is_active"] == 1 ? "Active" : "Inactive" }}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#assignModal">
+                                                <i class="bi bi-gear"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -99,5 +84,28 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#moduleTable').DataTable({
+            responsive: true,
+            autoWidth: false,
+            pageLength: 10,
+            ordering: true,
+            searching: true,
+            scrollX: true,
+            columnDefs: [
+                {
+                    orderable: false,
+                    targets: [0]
+                }
+            ]
+        });
+
+    });
+
+</script>
 
 @endsection
