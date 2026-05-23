@@ -79,6 +79,7 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
         Route::get("/warehouse/addOrderDev", [WarehouseController::class, "addOrderDev"]);
 
         Route::get("/warehouse/order", [WarehouseController::class, "order"])->name("warehouse/order");
+        Route::get("/warehouse/getOrderDetailsDataByOrderCode", [WarehouseController::class, "getOrderDetailsDataByOrderCode"]);
         Route::post("/warehouse/dispatchOrder", [WarehouseController::class, "dispatchOrder"]);
     });
     // -- Warehouse Entry Ends

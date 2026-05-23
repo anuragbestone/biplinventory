@@ -134,7 +134,7 @@
                 <!-- HEADER -->
                 <div class="modal-header">
                     <h4 class="mb-0">Dispatch Updates</h4>
-                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <!-- BODY -->
@@ -159,6 +159,22 @@
                                 <input type="text" class="custom-field form-control" name="shift_to" value="{{ session("shift_to") }}" readonly />
                             </div>
                         </div>
+                    </div>
+
+                    <!-- SKU CARD -->
+                    <div class="card bg-white p-3 mb-3 custom-sku-card">
+
+                        <!-- HEADER -->
+                        <div class="row text-center fw-bold mb-2 border-bottom pb-2">
+                            <div class="col-6">SKU</div>
+                            <div class="col-6">QTY</div>
+                        </div>
+
+                        <!-- DYNAMIC DATA -->
+                        <div id="infoSkuContainer">
+
+                        </div>
+
                     </div>
 
                     <div class="order-field">
@@ -204,10 +220,55 @@
 
 <script>
     function dispatchOrder(orderID) {
-        $("#order_id").val(orderID);
-        $("#userdispatchModal").modal("show");
+        $.ajax({
+            url: "{{ url('/warehouse/getOrderDetailsDataByOrderCode') }}",
+            type: "GET",
+            data: {
+                orderID: orderID
+            },
 
-    }
+            success: function(response) {
+
+                if(response.status == "success") {
+                    let orderDetails = response.data.orderDetails;
+
+                    // SKU HTML
+                    let html = '';
+
+                    $.each(orderDetails, function(index, item){
+
+                        html += `
+                            <div class="row text-center border-bottom py-2">
+                                <div class="col-6 border-end">
+                                    ${item.fg_cat_name}
+                                </div>
+
+                                <div class="col-6">
+                                    ${item.fg_quantity}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    // APPEND
+                    $("#infoSkuContainer").html(html);
+                    $("#order_id").val(orderID);
+                    $("#userdispatchModal").modal("show");
+
+                }
+                else
+                {
+                    alert("No Data Found");
+                }
+
+            },
+
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
+    }   
 </script>
 
 @endsection

@@ -1093,6 +1093,27 @@ class WarehouseController extends Controller {
         }
     }
 
+    public function getOrderDetailsDataByOrderCode(Request $request) {
+
+        $data["orderDetails"] = OrderDetails::select("fg_cat_master.fg_cat_name", "order_details.fg_quantity")
+            ->leftjoin("fg_cat_master", "order_details.fg_cat_id", "fg_cat_master.id")
+            ->where("order_details.order_id", $request->order_id)
+            ->get()->toArray();
+
+        if ($data["orderData"]) {
+            $data = [
+                "status" => "success",
+                "data" => $data
+            ];
+        } else {
+            $data = [
+                "status" => "error"
+            ];
+        }
+
+        return response()->json($data);
+    }
+
     public function dispatchOrder(Request $request) {
         if ($request->dispatch_status == "completed") {
             $orderedFG = OrderDetails::select("fg_cat_id", "fg_quantity")
