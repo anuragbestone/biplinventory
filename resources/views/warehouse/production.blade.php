@@ -113,7 +113,7 @@
                                 <div class="plu-row">
 
                                     <input type="text" value="{{ $fData['fg_cat_name'] }}" readonly>
-                                    <input type="number" min="0" step="0.01" name="qty[{{ $fData['id'] }}]" placeholder="Enter Qty" class="qty-input" disabled>
+                                    <input type="number" min="0" max="{{ $fData["max_quantity"] }}" step="0.01" name="qty[{{ $fData['id'] }}]" placeholder="Enter Qty" class="qty-input" disabled>
                                     <input type="text" value="Cases" readonly>
 
                                 </div>
@@ -606,19 +606,52 @@
             return;
         }
 
+
         // QTY VALIDATION
         let hasQty = false;
+        let hasInvalidQty = false;
+
         qtyInputs.forEach(input => {
-            let value = parseFloat(input.value);
+
+            let value = parseFloat(input.value) || 0;
+
+            let max = parseFloat(input.max) || 0;
+
+            // CHECK IF ANY VALUE ENTERED
             if(value > 0)
             {
                 hasQty = true;
             }
+
+            // MAX VALIDATION
+            if(value > max)
+            {
+                hasInvalidQty = true;
+
+                input.style.border = "2px solid red";
+
+                alert(
+                    "Entered quantity cannot be greater than "
+                    + max
+                );
+
+                return;
+            }
+            else
+            {
+                input.style.border = "";
+            }
+
         });
 
         if(!hasQty)
         {
             alert("Kindly enter some quantity");
+            return;
+        }
+
+        if(hasInvalidQty)
+        {
             return;
         }
 

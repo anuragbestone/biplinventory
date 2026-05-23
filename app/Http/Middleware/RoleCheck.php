@@ -22,7 +22,7 @@ class RoleCheck
         $rollID = $request->session()->get("role_id");
 
         // echo $rollID;die();
-        if ($uri == "dashboard" || $uri == "logout") {
+        if ($uri == "dashboard" || $uri == "logout" || $uri == "mail") {
             return $next($request);
         } else {
             if ($rollID == 3) {

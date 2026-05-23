@@ -6,7 +6,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WarehouseController;
 
-
 use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Admin\ModulesController;
 use App\Http\Controllers\Admin\OrderController;
@@ -21,6 +20,8 @@ use App\Http\Controllers\Admin\WhatsAppMessagingController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\FgPgFormulaController;
 use App\Http\Controllers\Admin\OrderNDispatchController;
+use App\Http\Controllers\Admin\ThresholdController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,6 @@ Route::get('/', function () {
 Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
 
     Route::get("/dashboard", [DashboardController::class, "showDashboard"])->name("dashboard"); 
-
     // -- Warehouse Entry Starts
 
     //** Dev URls Starts */
@@ -51,6 +51,9 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::middleware("CheckShift")->group(function() {
 
         Route::get("/warehouse/profile", [WarehouseController::class, "profile"])->name("warehouse/profile");
+
+        Route::get("/warehouse/rmpmentrystock", [WarehouseController::class, "rmpmentryStock"]);
+        Route::post("/warehouse/rmpmentryStockDo", [WarehouseController::class, "rmpmentryStockDo"]);
 
         Route::get("/warehouse/rmpmentry", [WarehouseController::class, "rmpmentry"])->name("warehouse/rmpmentry");
         Route::post("/warehouse/rmpmentryDo", [WarehouseController::class, "rmpmentryDo"]);
@@ -74,12 +77,18 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
         Route::post("/warehouse/uploadRejection", [WarehouseController::class, "uploadRejection"]);
 
         Route::get("/warehouse/addOrderDev", [WarehouseController::class, "addOrderDev"]);
+
         Route::get("/warehouse/order", [WarehouseController::class, "order"])->name("warehouse/order");
+        Route::post("/warehouse/dispatchOrder", [WarehouseController::class, "dispatchOrder"]);
     });
     // -- Warehouse Entry Ends
 
 
     // -- Remaining Routes Start
+
+    Route::get("/threshold", [ThresholdController::class, "showPage"]);
+    Route::post("/updateThresholdRmPm", [ThresholdController::class, "updateThresholdRmPm"]);
+    Route::post("/updateThresholdProduction", [ThresholdController::class, "updateThresholdProduction"]);
 
     Route::get("/rejectionUpdate", [RejectionUpdateController::class, "rejectionUpdate"]);
     Route::post("/rejectionUpdateDo", [RejectionUpdateController::class, "rejectionUpdateDo"]);

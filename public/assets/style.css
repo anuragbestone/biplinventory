@@ -5181,3 +5181,81 @@ nav.flex.items-center.justify-between svg{
 .order-tableadmin td:nth-child(8) {
     width: 60px;
 }
+
+
+/* MAIN */
+.threshold-main-stock {
+    display: flex;
+    justify-content: center;
+}
+ 
+/* CARD */
+.threshold-card {
+    width: 100%;
+    max-width: 500px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+}
+ 
+/* HEADER */
+.threshold-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background: #2563eb;
+    color: #fff;
+    padding: 10px;
+    font-weight: 600;
+    text-align: center;
+}
+ 
+/* BODY */
+.threshold-body {
+    padding: 5px 0;
+}
+ 
+/* ROW */
+.threshold-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 10px;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+    gap: 8px;
+}
+ 
+/* INPUT */
+.threshold-row input {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+}
+ 
+/* READONLY */
+.threshold-row input[readonly] {
+    background: #f3f4f6;
+}
+ 
+/* FOOTER */
+.threshold-footer {
+    text-align: center;
+    padding: 12px;
+    border-top: 1px solid #e5e7eb;
+    background: #f9fafb;
+}
+ 
+/* BUTTON */
+.threshold-btn {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 8px 30px;
+    border-radius: 8px;
+}
+ 
+.threshold-btn:hover {
+    background: #1d4ed8;
+}

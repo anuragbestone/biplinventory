@@ -14,6 +14,9 @@ use App\Models\RmPmStockTransactionIn;
 use App\Models\RmPmStockTransactionOut;
 use App\Models\RmPmStockInReciept;
 
+use App\Models\RmPmStockWarehouseMaster;
+use App\Models\RmPmStockWarehouseTransactionMaster;
+
 use App\Models\FgMaster;
 use App\Models\FgCatMaster;
 use App\Models\FgStockMaster;
@@ -33,8 +36,12 @@ use App\Models\ShiftMaster;
 
 use App\Models\OrderMaster;
 use App\Models\OrderDetails;
+use App\Models\FgDispatchMaster;
 
 use App\Models\FgPmFormulaMaster;
+
+use App\Models\ThresholdProductionMaster;
+use App\Models\ThresholdRmPmMaster;
 
 use Illuminate\Support\Carbon;
 
@@ -119,6 +126,81 @@ class WarehouseController extends Controller {
         ]);
     }
 
+    public function rmpmentryStock() {
+
+        $rmpmData = RmPmMaster::select("id", "rm_pm_name")
+            ->where("is_active", 1)
+            ->get();
+
+        foreach ($rmpmData as $rData) {
+            $catData = RmPmCatMaster::select(
+                    "rm_pm_cat_master.id",
+                    "rm_pm_cat_master.rm_pm_cat_name",
+                    "rm_pm_cat_master.cat_unit"
+                )
+            ->where("rm_pm_cat_master.rm_pm_id", $rData->id)
+            ->where("rm_pm_cat_master.is_active", 1)
+            ->get()
+            ->toArray();
+
+            $data["rmpmData"][] = [
+                "id" => $rData->id,
+                "rm_pm_name" => $rData->rm_pm_name,
+                "catData" => $catData
+            ];
+
+        }
+
+        return view("warehouse.rmpmentryStock", $data);
+    }
+
+    public function rmpmentryStockDo(Request $request) {
+        $data = collect($request->except('_token'))->flatten();
+        $hasValue = $data->contains(function ($value) {
+            return !empty($value) && $value > 0;
+        });
+
+        if (!$hasValue) {
+            return redirect()->back()->with("error", "Please enter at least one quantity.");
+        } else {
+            $rData = $request->except(['_token']);
+            foreach ($rData as $key => $value) {
+
+                if ($value && $value > 0) {
+                    // ---- Upload Current Stock
+                    $stockValue = RmPmStockWarehouseMaster::select("stock_quantity")
+                        ->where("rm_pm_cat_id", $key)
+                        ->first();
+
+                    if ($stockValue) {
+                        RmPmStockWarehouseMaster::where("rm_pm_cat_id", $key)
+                            ->update([
+                                "stock_quantity" => $stockValue->stock_quantity + (empty($value[0]) ? 0 : $value[0]), 
+                                "is_active" => 1
+                            ]);
+
+                    } else {
+                            
+                        RmPmStockWarehouseMaster::create([
+                            "rm_pm_cat_id" => $key,
+                            "stock_quantity" => empty($value[0]) ? 0 : $value[0]
+                        ]);
+                    }
+
+
+                    RmPmStockWarehouseTransactionMaster::create([
+                        "rm_pm_cat_id" => $key,
+                        "stock_quantity" => empty($value[0]) ? 0 : $value[0],
+                        "added_by" => $request->session()->get('userID')
+                    ]);
+                }
+
+            }
+        }
+
+        return back()->with("success", "Rm / Pm Stock Uploaded To Warehouse");
+    }
+
     public function rmpmentry(Request $request) {
         //echo "<pre>";print_r($request->all());die();
         $data["formulaData"] = [];
@@ -171,13 +253,20 @@ class WarehouseController extends Controller {
                 $catData = RmPmCatMaster::select(
                         "rm_pm_cat_master.id",
                         "rm_pm_cat_master.rm_pm_cat_name",
-                        "rm_pm_cat_master.cat_unit"
+                        "rm_pm_cat_master.cat_unit",
+                        "rm_pm_stock_warehouse_master.stock_quantity as max_quantity"
                     )
                     ->leftJoin(
                         "fg_pm_formula_master",
                         "rm_pm_cat_master.id",
                         "=",
                         "fg_pm_formula_master.rm_pm_cat_id"
+                    )
+                    ->leftJoin(
+                        "rm_pm_stock_warehouse_master",
+                        "rm_pm_stock_warehouse_master.rm_pm_cat_id",
+                        "=",
+                        "rm_pm_cat_master.id"
                     )
                     ->where("fg_pm_formula_master.fg_cat_id", $data["fg_cat_id"])
                     ->where("rm_pm_cat_master.rm_pm_id", $rData->id)
@@ -193,7 +282,7 @@ class WarehouseController extends Controller {
             ];
         }
 
-        // echo "<pre>";print_r($data);die();
+        //echo "<pre>";print_r($data);die();
 
         return view("warehouse.rmpmentry", $data);
     }
@@ -219,6 +308,17 @@ class WarehouseController extends Controller {
 
             foreach ($rData as $key => $value) {
                 
+                // ---- Remove From Stock Warehouse Master
+
+                $stockValue = RmPmStockWarehouseMaster::select("stock_quantity")
+                    ->where("rm_pm_cat_id", $key)
+                    ->first();
+
+                if ($stockValue) {
+                    RmPmStockWarehouseMaster::where("rm_pm_cat_id", $key)
+                        ->update(["stock_quantity" => $stockValue->stock_quantity - (empty($value[0]) ? 0 : $value[0]), "is_active" => 1]);
+                }
+
                 // ---- Upload Current Stock
                 $stockValue = RmPmStockMaster::select("stock_quantity")
                     ->where("rm_pm_cat_id", $key)
@@ -390,9 +490,14 @@ class WarehouseController extends Controller {
                     ->exists() ? 1 : 0;
 
                 $data["productionLineData"][$counter] = $pData;
-                $data["productionLineData"][$counter]["fg"] = FgCatMaster::select("id", "fg_cat_name")
-                    ->where("production_line_id", $pData["id"])
-                    ->where("is_active", 1)
+                $data["productionLineData"][$counter]["fg"] = FgCatMaster::select(
+                            "fg_cat_master.id", 
+                            "fg_cat_master.fg_cat_name",
+                            "threshold_production_master.max_quantity"
+                        )
+                    ->leftjoin("threshold_production_master", "threshold_production_master.fg_cat_id", "=", "fg_cat_master.id")
+                    ->where("fg_cat_master.production_line_id", $pData["id"])
+                    ->where("fg_cat_master.is_active", 1)
                     ->get()->toArray();
 
                 $counter++;
@@ -951,7 +1056,84 @@ class WarehouseController extends Controller {
 
     public function order() {
 
-        return view("warehouse.order");
+        $orderData = OrderMaster::select(
+            "id", 
+            "order_id", 
+            "order_date", 
+            "dispatch_address",
+            "order_dispatch_date",
+            "order_production_status",
+            "order_dispatch_status",
+        )->where("is_active", 1)
+        ->latest("created_at")
+        ->get()->toArray();
+
+        if ($orderData) {
+            $counter = 0;
+            foreach ($orderData as $oData) {
+                $data["orderData"][$counter]["order"] = $oData;
+                $data["orderData"][$counter]["details"] = OrderDetails::select(
+                        "order_details.fg_quantity",
+                        "fg_cat_master.fg_cat_name",
+                        "fg_master.fg_name"
+                    )
+                    ->leftjoin("fg_cat_master", "fg_cat_master.id", "=", "order_details.fg_cat_id")
+                    ->leftjoin("fg_master", "fg_cat_master.fg_id", "=", "fg_master.id")
+                    ->where("order_details.order_id", $oData["order_id"])
+                    ->get()->toArray();
+                $counter++;
+            }
+
+            //echo "<pre>";print_r($data);die();
+
+            return view("warehouse.order", $data);
+
+        } else {
+            return redirect()->route("dashboard")->with("error", "No Orders Found");
+        }
+    }
+
+    public function dispatchOrder(Request $request) {
+        if ($request->dispatch_status == "completed") {
+            $orderedFG = OrderDetails::select("fg_cat_id", "fg_quantity")
+                ->where("order_id", $request->input("order_id"))
+                ->get()->toArray();
+
+            if ($orderedFG) {
+
+                foreach ($orderedFG as $oValues) {
+                    // ----- Update FG Stock Master
+                    $stockQuantity = FgStockMaster::select("stock_quantity")->where("fg_cat_id", $oValues["fg_cat_id"])->first();
+
+                    FgStockMaster::where("fg_cat_id", $oValues["fg_cat_id"])
+                        ->update([
+                            "stock_quantity" => $stockQuantity->stock_quantity - $oValues["fg_quantity"]
+                        ]);
+
+                    // ----- Update Fg Dispatched Master
+                    FgDispatchMaster::create([
+                        "order_id" => $request->input("order_id"),
+                        "fg_cat_id" => $oValues["fg_cat_id"],
+                        'fg_quantity' => $oValues["fg_quantity"],
+                    ]);
+                }
+
+                OrderMaster::where("order_id", $request->input("order_id"))
+                    ->update([
+                        "order_production_status" => 1,
+                        "order_dispatch_status" => 1,
+                        "order_dispatch_date_achieved" => Carbon::now()->format("Y-m-d")
+                    ]);
+
+                return back()->with("success", "Order Dispatched Successfully");
+
+            } else {
+                return back()->with("error", "FG Not Found!!!");
+            }
+        } else {
+            return back()->with("error", "No Changes Made");
+        }
+        
     }
 
 }

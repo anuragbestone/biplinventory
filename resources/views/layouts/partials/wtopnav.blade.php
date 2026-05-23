@@ -16,12 +16,13 @@
             <div class="menu-item {{ request()->path() == "dashboard" ? "active" : "" }}">
                 <a href="{{ url("dashboard") }}"><i class="bi bi-house"></i></a>
             </div>
+            <div class="menu-item {{ request()->path() == "warehouse/rmpmentrystock" ? "active" : "" }}"><a class="dropdown-item" href="{{ url("warehouse/rmpmentrystock") }}"><i class="bi bi-file-earmark-text"></i>  RM/PM Stock</a></div>
             <div class="menu-item {{ request()->path() == "warehouse/rmpmentry" ? "active" : "" }}"><a class="dropdown-item" href="{{ url("warehouse/rmpmentry") }}"><i class="bi bi-file-earmark-text"></i>  RM/PM Entry</a></div>
             <div class="menu-item {{ request()->path() == "warehouse/production" ? "active" : "" }}"><a class="dropdown-item" href="{{ url("warehouse/production") }}"><i class="bi bi-file-earmark-text"></i> Production</a></div>
             <div class="menu-item {{ request()->path() == "warehouse/rejection" ? "active" : "" }}"><a class="dropdown-item" href="{{ url("warehouse/rejection") }}"><i class="bi bi-file-earmark-text"></i> Rejection</a></div>
             <!--<div class="menu-item {{ request()->path() == "warehouse/rmpmstock" ? "active" : "" }}"><a class="dropdown-item" href="{{ url("warehouse/rmpmstock") }}"><i class="bi bi-file-earmark-text"></i>  RM/PM Stock</a></div>-->
             <!--<div class="menu-item {{ request()->path() == "warehouse/fgstock" ? "active" : "" }}"><a class="dropdown-item" href="{{ url("warehouse/fgstock") }}"><i class="bi bi-file-earmark-text"></i> FG Stock</a></div>-->
-            <!--<div class="menu-item {{ request()->path() == "warehouse/order" ? "active" : "" }}"><a class="dropdown-item" href="{{ url("warehouse/order") }}"><i class="bi bi-file-earmark-text"></i> Order</a></div>-->
+            <div class="menu-item {{ request()->path() == "warehouse/order" ? "active" : "" }}"><a class="dropdown-item" href="{{ url("warehouse/order") }}"><i class="bi bi-file-earmark-text"></i> Order</a></div>
         </div>
 
         <!-- RIGHT ICONS -->

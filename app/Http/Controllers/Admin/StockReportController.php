@@ -33,8 +33,12 @@ class StockReportController extends Controller
 
             foreach ($rmPmData as $rData) {
                 $rmPmStockWiseData[$counter] = $rData;
-                $rmPmStockWiseData[$counter]["rcData"] = RmPmCatMaster::select("rm_pm_cat_master.rm_pm_cat_name", "rm_pm_cat_master.cat_unit", "rm_pm_stock_master.stock_quantity")
-                    ->leftjoin("rm_pm_stock_master", "rm_pm_cat_master.id", "=", "rm_pm_stock_master.rm_pm_cat_id")
+                $rmPmStockWiseData[$counter]["rcData"] = RmPmCatMaster::select(
+                    "rm_pm_cat_master.rm_pm_cat_name", 
+                    "rm_pm_cat_master.cat_unit", 
+                    "rm_pm_stock_warehouse_master.stock_quantity"
+                    )
+                    ->leftjoin("rm_pm_stock_warehouse_master", "rm_pm_cat_master.id", "=", "rm_pm_stock_warehouse_master.rm_pm_cat_id")
                     ->where("rm_pm_cat_master.rm_pm_id", $rData["id"])
                     ->get()->toArray();
 

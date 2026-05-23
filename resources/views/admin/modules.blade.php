@@ -20,7 +20,7 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="moduleTable">
+                    <table class="table table-bordered" id="modalTable">
                         <thead>
                             <tr>
                                 <th>S.No</th>
@@ -89,7 +89,7 @@
 
     $(document).ready(function () {
 
-        $('#moduleTable').DataTable({
+        $('#modalTable').DataTable({
             responsive: true,
             autoWidth: false,
             pageLength: 10,
@@ -98,7 +98,7 @@
             scrollX: true,
             columnDefs: [
                 {
-                    orderable: false,
+                    orderable: true,
                     targets: [0]
                 }
             ]

@@ -107,8 +107,9 @@
                                                     step="0.001"
                                                     id="rmPmCat_{{ $rcData['id'] }}"
                                                     name="{{ $rcData['id'] }}[]"
-                                                    min="0"
-                                                    placeholder="Enter Qty"
+                                                    min="0",
+                                                    max="{{ $rcData['max_quantity'] }}",
+                                                    placeholder="{{ $rcData['max_quantity'] }} {{ $rcData['cat_unit'] }} Available"
 
                                                     {!! isset($fg_id) && $rData["rm_pm_name"] == "Preform"
                                                         ? 'onkeyup="setRmPmData('.$rcData['id'].', '.$fg_cat_id.')"'

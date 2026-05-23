@@ -28,14 +28,14 @@
 
             <div class="rmpm-dashboard">
 
-                <!-- RM/PM CARD -->
+                <!-- RM/PM Stock CARD -->
                 <div class="rmpm-dash-card">
 
                     <div class="header-box">
                         <img src="{{ asset("assets") }}/images/rmpmstock.png" alt="img">
                         <div>
                             <div class="title">
-                                <h3>Total RM/PM</h3></div>
+                                <h3>Total RM/PM Stock</h3></div>
                         </div>
                     </div>
                     <div class="rmpm-box">
@@ -50,6 +50,48 @@
 
                         @if ($rmpmData)
                             @foreach ($rmpmData as $rData)
+                        <div class="blockcard">
+                            <div class="rmpm-subtitle">{{ $rData["rm_pm_name"] }}</div>
+
+                            <div class="rmpm-divider dotted"></div>
+                            @if ($rData["rcData"])
+                                @foreach ($rData["rcData"] as $rcData)
+                                    <div class="rmpm-row">
+                                        <span>{{ $rcData["rm_pm_cat_name"] }}</span>
+                                        <span>{{ $rcData["stock_quantity"] }} {{ $rcData["cat_unit"] }}</span>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                            @endforeach
+                        @endif
+
+                    </div>
+
+                </div>
+
+                <!-- RM/PM Procured (Remaining) CARD -->
+                <div class="rmpm-dash-card">
+
+                    <div class="header-box">
+                        <img src="{{ asset("assets") }}/images/rmpmstock.png" alt="img">
+                        <div>
+                            <div class="title">
+                                <h3>Total RM/PM Remaining (After Consumed)</h3></div>
+                        </div>
+                    </div>
+                    <div class="rmpm-box">
+
+                        <!-- HEADER ROW -->
+                        <div class="rmpm-row rmpm-head">
+                            <span>RM/PM</span>
+                            <span>QTY</span>
+                        </div>
+
+                        <div class="rmpm-divider"></div>
+
+                        @if ($rmpmConsumedData)
+                            @foreach ($rmpmConsumedData as $rData)
                         <div class="blockcard">
                             <div class="rmpm-subtitle">{{ $rData["rm_pm_name"] }}</div>
 
@@ -98,7 +140,7 @@
                                     @foreach ($fData["fgcData"] as $fgcValues)
                                         <div class="rmpm-row">
                                             <span>{{ $fgcValues["fg_cat_name"] }}</span>
-                                            <span>{{ $fgcValues["stock_quantity"] }} kg</span>
+                                            <span>{{ $fgcValues["stock_quantity"] }} cases</span>
                                         </div>
                                     @endforeach
                                 @endif
