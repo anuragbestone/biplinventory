@@ -1,5 +1,41 @@
 @extends("layouts.app") @section("mainContent")
 
+
+<style>
+    .graph-area {
+    display: flex;
+    align-items: flex-end;
+    gap: 30px;
+    overflow-x: auto;
+}
+
+.day-group {
+    min-width: 120px;
+}
+
+.bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 300px;
+}
+
+.bar {
+    width: 22px;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    transition: 0.3s;
+}
+
+.bar small {
+    position: absolute;
+    top: -22px;
+    left: -5px;
+    font-size: 11px;
+    white-space: nowrap;
+}
+</style>
+
 <div class="main-card shadow-sm">
     <h5 class="main-heading text-center mb-3 fw-light-custom">
                     Welcome, <b class="fw-semibold">Bestone Inventory System</b>
@@ -12,12 +48,16 @@
                 <!-- Floating Today Badge -->
                 <div class="today-badge">
                     <div class="today-text">Today</div>
-                    <div class="time-text">12:25 PM</div>
+                    <div class="time-text">
+                        {{ \Carbon\Carbon::now()->format('h:i A') }}
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="row pt-4">
+
+
             <!-- LEFT CARD -->
             <div class="col-md-6">
                 <div class="bottle-card shadow-sm">
@@ -25,7 +65,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <button class="alert-btn">
                             <i class="bi bi-exclamation-triangle-fill"></i>
-                            <span>Alert</span>
+                            <span id="">Line Is Off</span>
                         </button>
 
                         <div class="status-box">
@@ -83,6 +123,8 @@
                     </div>
                 </div>
             </div>
+
+
 
             <!-- RIGHT CARD -->
             <div class="col-md-6">
@@ -161,31 +203,19 @@
                         <img src="{{ asset("assets") }}/images/bottleimg.png" alt="img" />
                         <div>
                             <div class="title">Total Finish Goods</div>
-                            <div class="sub-text">Total 11550 Case</div>
+                            <div class="sub-text">Total {{ $fgTotalQuantity }} Cases</div>
                         </div>
                     </div>
 
                     <table class="table table-borderless table-custom">
-                        <tr>
-                            <td>2 Ltr. (Blue)</td>
-                            <td class="qty">550 Cases</td>
-                        </tr>
-                        <tr>
-                            <td>1 Ltr. (Blue)</td>
-                            <td class="qty">2750 Cases</td>
-                        </tr>
-                        <tr>
-                            <td>500ml (Blue)</td>
-                            <td class="qty">1750 Cases</td>
-                        </tr>
-                        <tr>
-                            <td>200ml (Blue)</td>
-                            <td class="qty">1500 Cases</td>
-                        </tr>
-                        <tr>
-                            <td>200ml (Pink)</td>
-                            <td class="qty">5000 Cases</td>
-                        </tr>
+                        @if ($fgData)
+                            @foreach ($fgData as $fData)
+                                <tr>
+                                    <td>{{ $fData["fg_cat_name"] }} ({{ $fData["fg_name"] }})</td>
+                                    <td class="qty">{{ $fData["stock_quantity"] }} Cases</td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </table>
                 </div>
             </div>
@@ -197,31 +227,19 @@
                         <img src="{{ asset("assets") }}/images/factory.png" alt="img" />
                         <div>
                             <div class="title">Today's Production</div>
-                            <div class="sub-text">Total 1900 Case</div>
+                            <div class="sub-text">Total {{ $currentDayTotalProduction }} Case</div>
                         </div>
                     </div>
 
                     <table class="table table-borderless table-custom">
-                        <tr>
-                            <td>2 Ltr. (Blue)</td>
-                            <td class="qty">100 Cases</td>
-                        </tr>
-                        <tr>
-                            <td>1 Ltr. (Blue)</td>
-                            <td class="qty">550 Cases</td>
-                        </tr>
-                        <tr>
-                            <td>500ml (Blue)</td>
-                            <td class="qty">100 Cases</td>
-                        </tr>
-                        <tr>
-                            <td>200ml (Blue)</td>
-                            <td class="qty">350 Cases</td>
-                        </tr>
-                        <tr>
-                            <td>200ml (Pink)</td>
-                            <td class="qty">800 Cases</td>
-                        </tr>
+                        @if ($currentdayProduction)
+                            @foreach ($currentdayProduction as $cProduction)
+                                <tr>
+                                    <td>{{ $cProduction["fgData"]["fg_cat_name"] }} ({{ $cProduction["fgData"]["fg_name"] }})</td>
+                                    <td class="qty">{{ $cProduction["production"] }} Cases</td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </table>
                 </div>
             </div>
@@ -231,126 +249,96 @@
     <div class="production-stats-main mt-4">
         <div class="production-card">
             <div class="d-flex align-items-center justify-content-between flex-wrap pb-5">
-                <!-- Left spacer -->
                 <div class="header-spacer"></div>
-
                 <div class="production-header">
                     <h2>Dispatch Stats</h2>
-                    <p>Last 7 Days Dispatch</p>
+                    <p>
+                        @if($selectedFilter == "1day")
+                            Today Dispatch
+                        @elseif($selectedFilter == "1month")
+                            Last 1 Month Dispatch
+                        @else
+                            Last 7 Days Dispatch
+                        @endif
+                    </p>
                 </div>
-                <!-- Right Button -->
+    
+                <!-- FILTER -->
                 <div>
-                    <button class="btn btn-primary btn-sm">
-                        <i class="fa-solid fa-filter"></i> Filter
-                    </button>
+                    <form method="GET">
+                        <select
+                            name="filter"
+                            class="form-select"
+                            onchange="this.form.submit()"
+                        >
+                            <option value="1day"
+                                {{ $selectedFilter == "1day" ? "selected" : "" }}>
+                                1 Day
+                            </option>
+    
+                            <option value="7days"
+                                {{ $selectedFilter == "7days" ? "selected" : "" }}>
+                                7 Days
+                            </option>
+    
+                            <option value="1month"
+                                {{ $selectedFilter == "1month" ? "selected" : "" }}>
+                                1 Month
+                            </option>
+                        </select>
+                    </form>
                 </div>
             </div>
-
+    
+    
             <div class="production-chart">
-                <!-- Y Axis -->
+    
+                <!-- Y AXIS -->
                 <div class="y-axis">
-                    <span>8k</span>
-                    <span>6k</span>
-                    <span>4k</span>
-                    <span>2k</span>
+                    <span>{{ $maxDispatchQty }}</span>
+                    <span>{{ round($maxDispatchQty * 0.75) }}</span>
+                    <span>{{ round($maxDispatchQty * 0.50) }}</span>
+                    <span>{{ round($maxDispatchQty * 0.25) }}</span>
                     <span>0</span>
                 </div>
-
-                <!-- Graph Area -->
+    
+    
+                <!-- GRAPH -->
                 <div class="graph-area">
-                    <!-- Day 1 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 75%">
-                                <small>1.1L</small>
+                    @php
+                        $barClasses = [
+                            "bar1",
+                            "bar2",
+                            "bar3",
+                            "bar4",
+                            "bar5 pink"
+                        ];
+                    @endphp
+    
+                    @foreach($dispatchGraphData as $day => $dispatchValues)
+                        <div class="day-group">
+                            <div class="bars">
+                                @foreach($fgCategories as $index => $cat)
+                                    @php
+                                        $qty = $dispatchValues[$cat["fg_cat_name"]] ?? 0;
+                                        $height = 0;
+                                        if($maxDispatchQty > 0){
+                                            $height = ($qty / $maxDispatchQty) * 100;
+                                        }
+                                    @endphp
+                                    <div
+                                        class="bar {{ $barClasses[$index % 5] }}"
+                                        style="height: {{ $height }}%"
+                                    >
+                                        <small>
+                                            {{ $cat["fg_cat_name"] }}
+                                        </small>
+                                    </div>
+                                @endforeach
                             </div>
-                            <div class="bar bar2" style="height: 85%">
-                                <small>2L</small>
-                            </div>
-                            <div class="bar bar3" style="height: 95%">
-                                <small>300ml</small>
-                            </div>
-                            <div class="bar bar4" style="height: 65%">
-                                <small>500ml</small>
-                            </div>
-                            <div class="bar bar5 pink" style="height: 85%">
-                                <small>200ml</small>
-                            </div>
+                            <h4>{{ $day }}</h4>
                         </div>
-                        <h4>Day 1</h4>
-                    </div>
-
-                    <!-- Day 2 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 60%"><small>1L</small></div>
-                            <div class="bar bar2" style="height: 75%"><small>1.1L</small></div>
-                            <div class="bar bar3" style="height: 40%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 55%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 65%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 2</h4>
-                    </div>
-
-                    <!-- Day 3 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 35%"><small>1L</small></div>
-                            <div class="bar bar2" style="height: 45%"><small>300ml</small></div>
-                            <div class="bar bar3" style="height: 20%"><small>1L</small></div>
-                            <div class="bar bar4" style="height: 30%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 40%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 3</h4>
-                    </div>
-
-                    <!-- Day 4 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 55%"><small>1L</small></div>
-                            <div class="bar bar2" style="height: 70%"><small>200ml</small></div>
-                            <div class="bar bar3" style="height: 30%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 40%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 50%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 4</h4>
-                    </div>
-
-                    <!-- Day 5 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 85%"><small>200ml</small></div>
-                            <div class="bar bar2" style="height: 75%"><small>1L</small></div>
-                            <div class="bar bar3" style="height: 35%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 55%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 65%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 5</h4>
-                    </div>
-
-                    <!-- Day 6 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 75%"><small>1.1L</small></div>
-                            <div class="bar bar2" style="height: 95%"><small>300ml</small></div>
-                            <div class="bar bar3" style="height: 30%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 55%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 85%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 6</h4>
-                    </div>
-
-                    <!-- Day 7 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 50%"><small>1L</small></div>
-                            <div class="bar bar2" style="height: 65%"><small>200ml</small></div>
-                            <div class="bar bar3" style="height: 25%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 50%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 65%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 7</h4>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -368,77 +356,49 @@
 
                         <!-- Right Button -->
                         <div>
-                            <button class="btn btn-primary btn-sm">Details</button>
+                            <a href="{{ url("stockReport") }}"><button class="btn btn-primary btn-sm">Details</button></a>
                         </div>
                     </div>
-                    <div class="row text-center justify-content-center rm-row">
-                        <!-- Item 1 -->
-                        <div class="col-md-4 custom-col">
+                    <div class="row text-center justify-content-center rm-row stockreportrmpm">
+                
+                @if ($rmPmStockWiseData)
+                    @foreach ($rmPmStockWiseData as $rSWData)
+                        <div class="col-md-4 custom-col hover-card">
                             <div class="hex-box">
                                 <div class="hex">
-                                    <img src="{{ asset("assets") }}/images/preforms.png" alt="Preform" />
+                                    <img src="{{ asset("assets") }}/{{ $rSWData["rm_pm_image"] }}" alt="{{ $rSWData["rm_pm_name"] }}" />
                                 </div>
                             </div>
-                            <a href="#">
-                                <div class="hex-btn">Preform</div>
+                            <a>
+                                <div class="hex-btn">{{ $rSWData["rm_pm_name"] }}</div>
                             </a>
-                        </div>
 
-                        <!-- Item 2 -->
-                        <div class="col-md-4 custom-col">
-                            <div class="hex-box">
-                                <div class="hex">
-                                    <img src="{{ asset("assets") }}/images/cap.png" alt="Cap" />
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="hex-btn">Cap</div>
-                            </a>
-                        </div>
-
-                        <!-- Item 3 -->
-                        <div class="col-md-4 custom-col">
-                            <div class="hex-box">
-                                <div class="hex">
-                                    <img src="{{ asset("assets") }}/images/label.png" alt="Label" />
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="hex-btn">Label</div>
-                            </a>
-                        </div>
-
-                        <!-- Item 4 -->
-                        <div class="col-md-4 custom-col">
-                            <div class="hex-box">
-                                <div class="hex">
-                                    <img src="{{ asset("assets") }}/images/sticker.png" alt="Sticker" />
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="hex-btn">Sticker</div>
-                            </a>
-                        </div>
-
-                        <!-- Item 5 -->
-                        <div class="col-md-4 custom-col">
-                            <a href="#">
-                                <div class="hex-box">
-                                    <div class="hex">
-                                        <img src="{{ asset("assets") }}/images/ld.png" alt="LD" />
+                            <!-- HOVER CARD -->
+                            <div class="hover-popup">
+                                <div class="hover-inner">
+                                    <div class="hover-head">
+                                        <span>Category</span>
+                                        <span>Qty</span>
                                     </div>
-
-                                    <div class="hex-btn">LD</div>
+                                    @foreach ($rSWData["rcData"] as $rStockData)
+                                        <div class="hover-row">
+                                            <span>{{ $rStockData["rm_pm_cat_name"] }}</span>
+                                            <span>{{ $rStockData["stock_quantity"] }} {{ $rStockData["cat_unit"] }}</span>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            </a>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
+                @endif
+
+            </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="rejection-main h-100 mb-4">
                     <div class="row rejection-row align-items-center">
-                        <div class="rejection-title text-center">Total Rejection</div>
+                        <div class="rejection-title text-center pt-4">Total Rejection</div>
                         <div class="col-md-4">
                             <canvas id="pie_chart" height="250"></canvas>
                         </div>
@@ -507,132 +467,140 @@
         </div>
     </div>
 
+    
+    <!-- Production Graph Starts --->
     <div class="production-stats-main mt-4">
         <div class="production-card">
             <div class="d-flex align-items-center justify-content-between flex-wrap pb-5">
-                <!-- Left spacer -->
                 <div class="header-spacer"></div>
-
                 <div class="production-header">
                     <h2>Production Stats</h2>
-                    <p>Last 7 Days Production</p>
+                    <p>
+                        @if($selectedProductionFilter == "1day")
+                            Today Production
+                        @elseif($selectedProductionFilter == "1month")
+                            Last 1 Month Production
+                        @else
+                            Last 7 Days Production
+                        @endif
+                    </p>
                 </div>
-                <!-- Right Button -->
+    
+                <!-- SEPARATE FILTER -->
                 <div>
-                    <button class="btn btn-primary btn-sm">
-                        <i class="fa-solid fa-filter"></i> Filter
-                    </button>
+                    <form method="GET">
+                        <!-- PRESERVE DISPATCH FILTER -->
+                        <input
+                            type="hidden"
+                            name="filter"
+                            value="{{ $selectedFilter }}"
+                        >
+                        <select
+                            name="production_filter"
+                            class="form-select"
+                            onchange="this.form.submit()"
+                        >
+                            <option
+                                value="1day"
+                                {{
+                                    $selectedProductionFilter == "1day"
+                                    ? "selected"
+                                    : ""
+                                }}
+                            >
+                                1 Day
+                            </option>
+    
+                            <option
+                                value="7days"
+                                {{
+                                    $selectedProductionFilter == "7days"
+                                    ? "selected"
+                                    : ""
+                                }}
+                            >
+                                7 Days
+                            </option>
+    
+                            <option
+                                value="1month"
+                                {{
+                                    $selectedProductionFilter == "1month"
+                                    ? "selected"
+                                    : ""
+                                }}
+                            >
+                                1 Month
+                            </option>
+                        </select>
+                    </form>
                 </div>
             </div>
+    
             <div class="production-chart">
-                <!-- Y Axis -->
+    
+                <!-- Y AXIS -->
                 <div class="y-axis">
-                    <span>8k</span>
-                    <span>6k</span>
-                    <span>4k</span>
-                    <span>2k</span>
+                    <span>{{ $maxProductionQty }}</span>
+                    <span>{{ round($maxProductionQty * 0.75) }}</span>
+                    <span>{{ round($maxProductionQty * 0.50) }}</span>
+                    <span>{{ round($maxProductionQty * 0.25) }}</span>
                     <span>0</span>
                 </div>
-
-                <!-- Graph Area -->
+    
+                <!-- GRAPH AREA -->
                 <div class="graph-area">
-                    <!-- Day 1 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 75%">
-                                <small>1.1L</small>
+                    @php
+                        $barClasses = [
+                            "bar1",
+                            "bar2",
+                            "bar3",
+                            "bar4",
+                            "bar5 pink"
+                        ];
+                    @endphp
+    
+                    @foreach($productionGraphData as $day => $productionValues)
+                        <div class="day-group">
+                            <div class="bars">
+                                @foreach($fgCategories as $index => $cat)
+                                    @php
+                                        $qty =
+                                            $productionValues[
+                                                $cat["fg_cat_name"]
+                                            ] ?? 0;
+    
+                                        $height = 0;
+                                        if($maxProductionQty > 0){
+                                            $height =
+                                                (
+                                                    $qty /
+                                                    $maxProductionQty
+                                                ) * 100;
+                                        }
+    
+                                    @endphp
+    
+                                    <div
+                                        class="bar {{ $barClasses[$index % 5] }}"
+                                        style="height: {{ $height }}%"
+                                    >
+                                        <small>
+                                            {{ $cat["fg_cat_name"] }}
+                                        </small>
+                                    </div>
+                                @endforeach
                             </div>
-                            <div class="bar bar2" style="height: 85%">
-                                <small>2L</small>
-                            </div>
-                            <div class="bar bar3" style="height: 95%">
-                                <small>300ml</small>
-                            </div>
-                            <div class="bar bar4" style="height: 65%">
-                                <small>500ml</small>
-                            </div>
-                            <div class="bar bar5 pink" style="height: 85%">
-                                <small>200ml</small>
-                            </div>
+                            <h4>{{ $day }}</h4>
                         </div>
-                        <h4>Day 1</h4>
-                    </div>
-
-                    <!-- Day 2 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 60%"><small>1L</small></div>
-                            <div class="bar bar2" style="height: 75%"><small>1.1L</small></div>
-                            <div class="bar bar3" style="height: 40%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 55%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 65%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 2</h4>
-                    </div>
-
-                    <!-- Day 3 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 35%"><small>1L</small></div>
-                            <div class="bar bar2" style="height: 45%"><small>300ml</small></div>
-                            <div class="bar bar3" style="height: 20%"><small>1L</small></div>
-                            <div class="bar bar4" style="height: 30%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 40%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 3</h4>
-                    </div>
-
-                    <!-- Day 4 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 55%"><small>1L</small></div>
-                            <div class="bar bar2" style="height: 70%"><small>200ml</small></div>
-                            <div class="bar bar3" style="height: 30%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 40%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 50%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 4</h4>
-                    </div>
-
-                    <!-- Day 5 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 85%"><small>200ml</small></div>
-                            <div class="bar bar2" style="height: 75%"><small>1L</small></div>
-                            <div class="bar bar3" style="height: 35%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 55%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 65%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 5</h4>
-                    </div>
-
-                    <!-- Day 6 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 75%"><small>1.1L</small></div>
-                            <div class="bar bar2" style="height: 95%"><small>300ml</small></div>
-                            <div class="bar bar3" style="height: 30%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 55%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 85%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 6</h4>
-                    </div>
-
-                    <!-- Day 7 -->
-                    <div class="day-group">
-                        <div class="bars">
-                            <div class="bar bar1" style="height: 50%"><small>1L</small></div>
-                            <div class="bar bar2" style="height: 65%"><small>200ml</small></div>
-                            <div class="bar bar3" style="height: 25%"><small>2L</small></div>
-                            <div class="bar bar4" style="height: 50%"><small>500ml</small></div>
-                            <div class="bar bar5 pink" style="height: 65%"><small>200ml</small></div>
-                        </div>
-                        <h4>Day 7</h4>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
+    <!-- Production Graph Ends --->
+    
+    
 </div>
 
 
@@ -772,6 +740,7 @@
                     });
                 });
 </script>
+
 
 
 @endsection

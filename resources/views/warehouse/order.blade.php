@@ -70,60 +70,7 @@
         </div>
     </div>
 
-
-
 </div>
-{{-- <div class="modal fade" id="userorderModal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rmpm-modal">
-            <!-- HEADER -->
-            <div class="modal-header">
-                <h4 class="mb-0">Order Updates</h4>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- BODY -->
-            <div class="modal-body">
-                <div class="order-field text-center">
-                    <label>Date</label>
-                    <div class="rmpm-date">25 Apr 2026</div>
-                </div>
-
-                <!-- SHIFT ROW -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="order-field">
-                            <label>Shift From</label>
-                            <input type="text" class="custom-field form-control" value="08:00 AM" readonly />
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="order-field">
-                            <label>Shift To</label>
-                            <input type="text" class="custom-field form-control" value="08:00 PM" readonly />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="order-field">
-                    <label>Production Status</label>
-                    <select class="custom-field form-control">
-                        <option>Pending</option>
-                        <option>Complete</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- FOOTER -->
-            <div class="modal-footer rmpm-footer">
-                <button class="btn btn-primary">Submit</button>
-
-            </div>
-        </div>
-    </div>
-</div> --}}
-
 
 <div class="modal fade" id="userdispatchModal">
     <div class="modal-dialog modal-dialog-centered">
@@ -162,12 +109,13 @@
                     </div>
 
                     <!-- SKU CARD -->
-                    <div class="card bg-white p-3 mb-3 custom-sku-card">
-
+                    <div class="card bg-white p-3 mb-3 custom-sku-card mt-4">
+                        <label class="text-center">Order Details</label>
                         <!-- HEADER -->
                         <div class="row text-center fw-bold mb-2 border-bottom pb-2">
-                            <div class="col-6">SKU</div>
-                            <div class="col-6">QTY</div>
+                            <div class="col-4">SKU</div>
+                            <div class="col-4">QTY</div>
+                            
                         </div>
 
                         <!-- DYNAMIC DATA -->

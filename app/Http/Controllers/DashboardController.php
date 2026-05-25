@@ -16,11 +16,337 @@ use App\Models\FgMaster;
 use App\Models\FgCatMaster;
 use App\Models\FgStockMaster;
 
-class DashboardController extends Controller
-{
+use App\Models\FgStockTransaction;
+use App\Models\FgDispatchMaster;
+
+use App\Models\ProductionLineMaster;
+use App\Models\NotificationMaster;
+
+use Carbon\Carbon;
+
+use Illuminate\Support\Facades\DB;
+
+class DashboardController extends Controller {
+
+    public function notificationHandler(Request $request) {
+        NotificationMaster::where("id", $request->id)
+            ->update(["is_clicked" => 1]);
+
+        $routeAddress = NotificationMaster::select("main_address")
+            ->where("id", $request->id)
+            ->first();
+
+        if ($routeAddress) {
+            return redirect()->route($routeAddress->main_address);
+        } else {
+            return redirect()->route("dashboard")->with("error", "No Route Found!!");
+        }
+    }
+
+    public function getNotificationUpdates() {
+        $notificationData = NotificationMaster::select("id", "route_address", "notification_title", "notification_msg", "created_at")
+            ->where("is_clicked", 0)
+            ->latest("created_at")
+            ->get()->toArray();
+
+        if ($notificationData) {
+            $data = [
+                "status" => "success",
+                "notificationData" => $notificationData
+            ];
+        } else {
+            $data = [
+                "status" => "error"
+            ];
+        }
+
+        return response()->json($data);
+    }
+
+    public function getUpdatesOfTheWarehouse() {
+
+    }
+
     public function showDashboard(Request $request) {
         if ($request->session()->get("role_id") != 3) {
-            return view("dashboard.adminDash");
+
+            $productionLineData = ProductionLineMaster::select("id", "line_name")
+                ->where("is_active", 1)
+                ->get()->toArray();
+
+            $data["fgData"] = FgStockMaster::select(
+                    "fg_cat_master.fg_cat_name",
+                    "fg_master.fg_name",
+                    "fg_stock_master.stock_quantity"
+                )
+                ->leftjoin("fg_cat_master", "fg_cat_master.id", "=", "fg_stock_master.fg_cat_id")
+                ->leftjoin("fg_master", "fg_master.id", "=", "fg_cat_master.fg_id")
+                ->where("fg_stock_master.is_active", 1)
+                ->get()->toArray();
+
+            $data["fgTotalQuantity"] = FgStockMaster::sum('stock_quantity');
+            
+
+            // ---- Current Day stock
+            $fgCatData = FgCatMaster::select(
+                "fg_cat_master.id",
+                "fg_cat_master.fg_cat_name",
+                "fg_master.fg_name"
+            )
+            ->leftJoin(
+                "fg_master",
+                "fg_cat_master.fg_id",
+                "=",
+                "fg_master.id"
+            )
+            ->where("fg_cat_master.is_active", 1)
+            ->get()
+            ->toArray();
+
+
+            // GET TODAY PRODUCTION TOTALS
+            $todayProduction = FgStockTransaction::select(
+                    "fg_cat_id",
+                    DB::raw("SUM(stock_quantity) as total_production")
+                )
+                ->whereDate("created_at", Carbon::today())
+                ->groupBy("fg_cat_id")
+                ->pluck("total_production", "fg_cat_id");
+
+
+            // FINAL ARRAY
+            $data["currentdayProduction"] = [];
+
+            $counter = 0;
+            
+            $data["currentDayTotalProduction"] = 0;
+            foreach ($fgCatData as $fValues) {
+
+                $data["currentdayProduction"][$counter]["fgData"] = $fValues;
+
+                $data["currentdayProduction"][$counter]["production"] =
+                    $todayProduction[$fValues["id"]] ?? 0;
+
+                $data["currentDayTotalProduction"] = $data["currentDayTotalProduction"] + ($todayProduction[$fValues["id"]] ?? 0);
+
+                $counter++;
+            }
+
+
+            $rmPmData = RmPmMaster::select("id", "rm_pm_name", "rm_pm_image")
+                ->where("is_active", 1)
+                ->get()->toArray();
+
+            if ($rmPmData) {
+                
+                $rmPmStockWiseData = [];
+                $counter = 0;
+
+                foreach ($rmPmData as $rData) {
+                    $rmPmStockWiseData[$counter] = $rData;
+                    $rmPmStockWiseData[$counter]["rcData"] = RmPmCatMaster::select(
+                        "rm_pm_cat_master.rm_pm_cat_name", 
+                        "rm_pm_cat_master.cat_unit", 
+                        "rm_pm_stock_warehouse_master.stock_quantity"
+                        )
+                        ->leftjoin("rm_pm_stock_warehouse_master", "rm_pm_cat_master.id", "=", "rm_pm_stock_warehouse_master.rm_pm_cat_id")
+                        ->where("rm_pm_cat_master.rm_pm_id", $rData["id"])
+                        ->get()->toArray();
+
+                    $counter++;
+                }
+            }
+
+            $data["rmPmStockWiseData"] = $rmPmStockWiseData;
+            
+            
+            // ---------------- DISPATCH GRAPH DATA STARTS ----------------
+
+            // FILTER TYPE
+            $filter = $request->filter ?? "7days";
+            
+            // DATE RANGE
+            if ($filter == "1day") {
+            
+                $startDate = Carbon::today();
+                $endDate = Carbon::today();
+                $groupFormat = "%H"; // Hour Wise
+            
+            } elseif ($filter == "1month") {
+            
+                $startDate = Carbon::now()->subDays(29);
+                $endDate = Carbon::today();
+                $groupFormat = "%d-%m"; // Date Wise
+            
+            } else {
+            
+                // DEFAULT 7 DAYS
+                $startDate = Carbon::now()->subDays(6);
+                $endDate = Carbon::today();
+                $groupFormat = "%d-%m";
+            }
+            
+            
+            // GET ALL CATEGORY NAMES
+            $fgCategories = FgCatMaster::select(
+                    "id",
+                    "fg_cat_name"
+                )
+                ->where("is_active", 1)
+                ->get()
+                ->toArray();
+            
+            
+            // GET DISPATCH DATA
+            $dispatchRawData = FgDispatchMaster::select(
+                    DB::raw("DATE_FORMAT(bi_fg_dispatched_master.created_at, '$groupFormat') as dispatch_day"),
+                    "fg_cat_master.fg_cat_name",
+                    DB::raw("SUM(bi_fg_dispatched_master.fg_quantity) as total_qty")
+                )
+                ->leftJoin(
+                    "fg_cat_master",
+                    "fg_cat_master.id",
+                    "=",
+                    "fg_dispatched_master.fg_cat_id"
+                )
+                ->whereBetween(
+                    DB::raw("DATE(bi_fg_dispatched_master.created_at)"),
+                    [$startDate->toDateString(), $endDate->toDateString()]
+                )
+                ->groupBy(
+                    "dispatch_day",
+                    "fg_cat_master.fg_cat_name"
+                )
+                ->orderBy("dispatch_day")
+                ->get()
+                ->toArray();
+            
+            
+            // FINAL FORMATTED ARRAY
+            $finalDispatchData = [];
+            
+            foreach ($dispatchRawData as $row) {
+            
+                $day = $row["dispatch_day"];
+                $category = $row["fg_cat_name"];
+            
+                $finalDispatchData[$day][$category] = $row["total_qty"];
+            }
+            
+            
+            // MAX VALUE FOR HEIGHT CALCULATION
+            $maxDispatchQty = FgDispatchMaster::whereBetween(
+                    DB::raw("DATE(created_at)"),
+                    [$startDate->toDateString(), $endDate->toDateString()]
+                )
+                ->sum("fg_quantity");
+            
+            
+            $data["dispatchGraphData"] = $finalDispatchData;
+            $data["fgCategories"] = $fgCategories;
+            $data["maxDispatchQty"] = $maxDispatchQty;
+            $data["selectedFilter"] = $filter;
+            
+            // ---------------- DISPATCH GRAPH DATA ENDS ----------------
+            
+            
+            // ---------------- PRODUCTION GRAPH DATA STARTS -------------
+
+            // SEPARATE FILTER
+            $productionFilter = $request->production_filter ?? "7days";
+            
+            
+            // DATE RANGE
+            if ($productionFilter == "1day") {
+            
+                $productionStartDate = Carbon::today();
+                $productionEndDate = Carbon::today();
+                $productionGroupFormat = "%H";
+            
+            } elseif ($productionFilter == "1month") {
+            
+                $productionStartDate = Carbon::now()->subDays(29);
+                $productionEndDate = Carbon::today();
+                $productionGroupFormat = "%d-%m";
+            
+            } else {
+            
+                // DEFAULT 7 DAYS
+                $productionStartDate = Carbon::now()->subDays(6);
+                $productionEndDate = Carbon::today();
+                $productionGroupFormat = "%d-%m";
+            }
+            
+            
+            
+            // GET PRODUCTION DATA
+            $productionRawData = FgStockTransaction::select(
+                    DB::raw("
+                        DATE_FORMAT(
+                            bi_fg_stock_transaction.created_at,
+                            '$productionGroupFormat'
+                        ) as production_day
+                    "),
+                    "fg_cat_master.fg_cat_name",
+                    DB::raw("
+                        SUM(
+                            bi_fg_stock_transaction.stock_quantity
+                        ) as total_qty
+                    ")
+                )
+                ->leftJoin(
+                    "fg_cat_master",
+                    "fg_cat_master.id",
+                    "=",
+                    "fg_stock_transaction.fg_cat_id"
+                )
+                ->whereBetween(
+                    DB::raw("DATE(bi_fg_stock_transaction.created_at)"),
+                    [
+                        $productionStartDate->toDateString(),
+                        $productionEndDate->toDateString()
+                    ]
+                )
+                ->groupBy(
+                    "production_day",
+                    "fg_cat_master.fg_cat_name"
+                )
+                ->orderBy("production_day")
+                ->get()
+                ->toArray();
+            
+            // FINAL ARRAY FORMAT
+            $finalProductionData = [];
+            
+            foreach ($productionRawData as $row) {
+            
+                $day = $row["production_day"];
+                $category = $row["fg_cat_name"];
+            
+                $finalProductionData[$day][$category] =
+                    $row["total_qty"];
+            }
+            
+            // MAX VALUE
+            $maxProductionQty = FgStockTransaction::whereBetween(
+                    DB::raw("DATE(created_at)"),
+                    [
+                        $productionStartDate->toDateString(),
+                        $productionEndDate->toDateString()
+                    ]
+                )
+                ->sum("stock_quantity");
+            
+            $data["productionGraphData"] = $finalProductionData;
+            $data["maxProductionQty"] = $maxProductionQty;
+            $data["selectedProductionFilter"] = $productionFilter;
+            
+            
+            // ---------------- PRODUCTION GRAPH DATA ENDS -------------
+
+            // echo "<pre>";print_r($data);die();
+
+            return view("dashboard.adminDash", $data);
         }
 
         $data = [];

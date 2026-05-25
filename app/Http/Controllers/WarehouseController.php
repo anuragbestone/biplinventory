@@ -43,6 +43,8 @@ use App\Models\FgPmFormulaMaster;
 use App\Models\ThresholdProductionMaster;
 use App\Models\ThresholdRmPmMaster;
 
+use App\Models\NotificationMaster;
+
 use Illuminate\Support\Carbon;
 
 class WarehouseController extends Controller {
@@ -102,6 +104,16 @@ class WarehouseController extends Controller {
         //     "json" => $response->json()
         // ]);
         // WhatsApp Service -- Ends
+
+        NotificationMaster::create([
+            "route_address" => "notification",
+            "main_address" => "dashboard",
+            "notification_title" => "Shift Started",
+            "notification_msg" => "Shift Details: \nFrom: ".Carbon::parse($shiftFrom)
+                ->format("l, d F Y h:i A")."\nTo: ".Carbon::parse($shiftTo)
+                ->format("l, d F Y h:i A"),
+            "is_clicked" => 0
+        ]);
 
         return back()->with("success", "Shift Updated Successfully");
 
@@ -197,6 +209,14 @@ class WarehouseController extends Controller {
 
             }
         }
+
+        NotificationMaster::create([
+            "route_address" => "notification",
+            "main_address" => "stockReport",
+            "notification_title" => "Rm Pm Stock Uploaded",
+            "notification_msg" => "New Stocks Have Been Added",
+            "is_clicked" => 0
+        ]);
 
         return back()->with("success", "Rm / Pm Stock Uploaded To Warehouse");
     }
@@ -384,6 +404,15 @@ class WarehouseController extends Controller {
             );
             // WhatsApp Service -- Ends
 
+
+            NotificationMaster::create([
+                "route_address" => "notification",
+                "main_address" => "stockReport",
+                "notification_title" => "Rm Pm Stock Procured",
+                "notification_msg" => "New Stocks Have Been Procured",
+                "is_clicked" => 0
+            ]);
+
             return back()->with("success", "Rm / Pm Stock Updated Successfully!!!");
         }
     }
@@ -392,6 +421,19 @@ class WarehouseController extends Controller {
 
     public function startProductionTimerWhatsapp(Request $request, WhatsAppService $whatsapp) {
 
+        $lineName = ProductionLineMaster::where(
+            "id",
+            $request->input("production_line_id")
+        )->value("line_name");
+
+        NotificationMaster::create([
+            "route_address" => "notification",
+            "main_address" => "dashboard",
+            "notification_title" => "Production Has Been Started At ".Carbon::now()->format("d F Y h:i A"),
+            "notification_msg" => "Production Started At ".$lineName,
+            "is_clicked" => 0
+        ]);
+        
         // ----
 
         ProductionTimerMaster::create([
@@ -406,11 +448,7 @@ class WarehouseController extends Controller {
 
         // ----
 
-        // GET LINE NAME
-        $lineName = ProductionLineMaster::where(
-            "id",
-            $request->input("production_line_id")
-        )->value("line_name");
+        
 
         // WhatsApp Service -- Starts
 
@@ -1095,12 +1133,15 @@ class WarehouseController extends Controller {
 
     public function getOrderDetailsDataByOrderCode(Request $request) {
 
-        $data["orderDetails"] = OrderDetails::select("fg_cat_master.fg_cat_name", "order_details.fg_quantity")
-            ->leftjoin("fg_cat_master", "order_details.fg_cat_id", "fg_cat_master.id")
-            ->where("order_details.order_id", $request->order_id)
-            ->get()->toArray();
+        $data["orderDetails"] = OrderDetails::select(
+                "fg_cat_master.fg_cat_name", 
+                "order_details.fg_quantity"
+                )
+                ->leftjoin("fg_cat_master", "order_details.fg_cat_id", "fg_cat_master.id")
+                ->where("order_details.order_id", $request->orderID)
+                ->get()->toArray();
 
-        if ($data["orderData"]) {
+        if ($data) {
             $data = [
                 "status" => "success",
                 "data" => $data

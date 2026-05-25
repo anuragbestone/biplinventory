@@ -86,6 +86,10 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
 
 
     // -- Remaining Routes Start
+    Route::get("/notification", [DashboardController::class, "notificationHandler"]);
+
+    Route::get("/getUpdatesOfTheWarehouse", [DashboardController::class, "getUpdatesOfTheWarehouse"]);
+    Route::get("/getNotificationUpdates", [DashboardController::class, "getNotificationUpdates"]);
 
     Route::get("/threshold", [ThresholdController::class, "showPage"]);
     Route::post("/updateThresholdRmPm", [ThresholdController::class, "updateThresholdRmPm"]);
@@ -101,7 +105,7 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
 
     Route::get("/rmPmProcurementUpdate", [RmPmProcurementUpdateController::class, "rmPmProcurementUpdate"]);
 
-    Route::get("/stockReport", [StockReportController::class, "stockReport"]);
+    Route::get("/stockReport", [StockReportController::class, "stockReport"])->name("stockReport");
     Route::get("/admin/stockreportexcel",[StockReportController::class, "stockReportExcel"]);
     
 
