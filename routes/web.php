@@ -106,6 +106,7 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::get("/rmPmProcurementUpdate", [RmPmProcurementUpdateController::class, "rmPmProcurementUpdate"]);
 
     Route::get("/stockReport", [StockReportController::class, "stockReport"])->name("stockReport");
+    Route::get("/stockReport/rmPmWarehouseStock", [StockReportController::class, "rmPmWarehouseStock"])->name("stockReport/rmPmWarehouseStock");
     Route::get("/admin/stockreportexcel",[StockReportController::class, "stockReportExcel"]);
     
 

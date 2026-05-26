@@ -199,12 +199,13 @@ class WarehouseController extends Controller {
                         ]);
                     }
 
-
-                    RmPmStockWarehouseTransactionMaster::create([
-                        "rm_pm_cat_id" => $key,
-                        "stock_quantity" => empty($value[0]) ? 0 : $value[0],
-                        "added_by" => $request->session()->get('userID')
-                    ]);
+                    if (!empty($value[0])) {
+                        RmPmStockWarehouseTransactionMaster::create([
+                            "rm_pm_cat_id" => $key,
+                            "stock_quantity" => empty($value[0]) ? 0 : $value[0],
+                            "added_by" => $request->session()->get('userID')
+                        ]);
+                    }
                 }
 
             }
@@ -212,7 +213,7 @@ class WarehouseController extends Controller {
 
         NotificationMaster::create([
             "route_address" => "notification",
-            "main_address" => "stockReport",
+            "main_address" => "stockReport/rmPmWarehouseStock",
             "notification_title" => "Rm Pm Stock Uploaded",
             "notification_msg" => "New Stocks Have Been Added",
             "is_clicked" => 0
@@ -355,14 +356,16 @@ class WarehouseController extends Controller {
                     ]);
                 }
 
-                RmPmStockTransactionIn::create([
-                    "rm_pm_cat_id" => $key,
-                    "stock_quantity" => empty($value[0]) ? 0 : $value[0],
-                    "shift_from" => $shift_from,
-                    "shift_to" => $shift_to,
-                    "production_line_id" => $request->production_line_id,
-                    "uploaded_by_user_id" => $request->session()->get('userID')
-                ]);
+                if (!empty($value[0])) {
+                    RmPmStockTransactionIn::create([
+                        "rm_pm_cat_id" => $key,
+                        "stock_quantity" => empty($value[0]) ? 0 : $value[0],
+                        "shift_from" => $shift_from,
+                        "shift_to" => $shift_to,
+                        "production_line_id" => $request->production_line_id,
+                        "uploaded_by_user_id" => $request->session()->get('userID')
+                    ]);
+                }
 
                 if (!empty($value[0])) {
                     $rmpmWData = RmPmCatMaster::select("rm_pm_cat_master.rm_pm_cat_name", "rm_pm_cat_master.cat_unit", "rm_pm_master.rm_pm_name")

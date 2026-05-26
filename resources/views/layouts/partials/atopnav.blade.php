@@ -24,7 +24,8 @@
                     <li><a class="dropdown-item" href="{{ url("rejectionUpdate") }}">Rejection Update</a></li>
 
                     {{-- <li><a class="dropdown-item" href="{{ url("rmPmProcurementUpdate") }}">RM/PM Procurement update</a></li> --}}
-                    <li><a class="dropdown-item" href="{{ url("stockReport") }}">Stock Report</a></li>
+                    <li><a class="dropdown-item" href="{{ url("stockReport/rmPmWarehouseStock") }}">Stock Report (Warehouse)</a></li>
+                    <li><a class="dropdown-item" href="{{ url("stockReport") }}">Stock Report (Procured)</a></li>
                     <li><a class="dropdown-item" href="{{ url("productionReport") }}">Production Report</a></li>
                 </ul>
             </div>
@@ -53,7 +54,7 @@
                     <i class="bi bi-gear"></i> Setting
                 </div>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ url("threshold") }}">Threshold</a></li>
+                    {{-- <li><a class="dropdown-item" href="{{ url("threshold") }}">Threshold</a></li> --}}
                     <li><a class="dropdown-item" href="{{ url("productionIssue") }}">Production Issues</a></li>
                     {{-- <li><a class="dropdown-item" href="{{ url("email") }}">Email</a></li> --}}
                     {{-- <li><a class="dropdown-item" href="{{ url("whatsAppMessaging") }}">Whatsapp Message</a></li>

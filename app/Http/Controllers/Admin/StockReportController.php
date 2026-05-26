@@ -23,30 +23,6 @@ class StockReportController extends Controller
 {
 
     public function stockReport() {
-
-        $rmPmData = RmPmMaster::select("id", "rm_pm_name", "rm_pm_image")
-            ->where("is_active", 1)
-            ->get()->toArray();
-
-        if ($rmPmData) {
-            
-            $rmPmStockWiseData = [];
-            $counter = 0;
-
-            foreach ($rmPmData as $rData) {
-                $rmPmStockWiseData[$counter] = $rData;
-                $rmPmStockWiseData[$counter]["rcData"] = RmPmCatMaster::select(
-                    "rm_pm_cat_master.rm_pm_cat_name", 
-                    "rm_pm_cat_master.cat_unit", 
-                    "rm_pm_stock_warehouse_master.stock_quantity"
-                    )
-                    ->leftjoin("rm_pm_stock_warehouse_master", "rm_pm_cat_master.id", "=", "rm_pm_stock_warehouse_master.rm_pm_cat_id")
-                    ->where("rm_pm_cat_master.rm_pm_id", $rData["id"])
-                    ->get()->toArray();
-
-                $counter++;
-            }
-        }
         
         // --- last 7 days
         
@@ -77,6 +53,41 @@ class StockReportController extends Controller
             $counter++;
         }
         
+        $data["dailyStockTransactionData"] = $dailyStockTransactionInData;
+        
+        return view("admin.stockreport", $data);
+
+    }
+
+    public function rmPmWarehouseStock() {
+
+        $rmPmData = RmPmMaster::select("id", "rm_pm_name", "rm_pm_image")
+            ->where("is_active", 1)
+            ->get()->toArray();
+
+        if ($rmPmData) {
+            
+            $rmPmStockWiseData = [];
+            $counter = 0;
+
+            foreach ($rmPmData as $rData) {
+                $rmPmStockWiseData[$counter] = $rData;
+                $rmPmStockWiseData[$counter]["rcData"] = RmPmCatMaster::select(
+                    "rm_pm_cat_master.rm_pm_cat_name", 
+                    "rm_pm_cat_master.cat_unit", 
+                    "rm_pm_stock_warehouse_master.stock_quantity"
+                    )
+                    ->leftjoin("rm_pm_stock_warehouse_master", "rm_pm_cat_master.id", "=", "rm_pm_stock_warehouse_master.rm_pm_cat_id")
+                    ->where("rm_pm_cat_master.rm_pm_id", $rData["id"])
+                    ->get()->toArray();
+
+                $counter++;
+            }
+        }
+
+        $dates = collect(range(0, 6))->map(function ($i) {
+                    return Carbon::today()->subDays($i)->format('Y-m-d');
+                })->toArray();
 
         $counter = 0;
         foreach ($dates as $d) {
@@ -87,7 +98,7 @@ class StockReportController extends Controller
                 "rm_pm_master.rm_pm_name",
                 "rm_pm_stock_warehouse_transaction_master.stock_quantity"
             )
-            ->leftjoin("rm_pm_cat_master", "rm_pm_stock_warehouse_transaction_master.rm_pm_cat_id", "=", "rm_pm_cat_master.id")
+            ->rightjoin("rm_pm_cat_master", "rm_pm_stock_warehouse_transaction_master.rm_pm_cat_id", "=", "rm_pm_cat_master.id")
             ->leftjoin("rm_pm_master", "rm_pm_cat_master.rm_pm_id", "=", "rm_pm_master.id")
             ->where("rm_pm_stock_warehouse_transaction_master.is_active", 1)
             ->wheredate("rm_pm_stock_warehouse_transaction_master.created_at", $d)
@@ -96,12 +107,9 @@ class StockReportController extends Controller
             $counter++;
         }
 
-        $data["dailyStockWarehouseData"] = $dailyStockWarehouseData;
         $data["rmPmStockWiseData"] = $rmPmStockWiseData;
-        $data["dailyStockTransactionData"] = $dailyStockTransactionInData;
-        
-        return view("admin.stockreport", $data);
-
+        $data["dailyStockWarehouseData"] = $dailyStockWarehouseData;
+        return view("admin.stockreportWarehouse", $data);
     }
 
     public function stockReportExcel()
