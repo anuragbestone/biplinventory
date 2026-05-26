@@ -22,7 +22,6 @@ class ProductionIssuesController extends Controller
 
     public function productionIssueDo(Request $request) {
         $slugValue = Str::slug($request->issue_type, '_');
-
         $status = ProductionIssueMaster::where("issue_slug", $slugValue)
             ->exists();
 

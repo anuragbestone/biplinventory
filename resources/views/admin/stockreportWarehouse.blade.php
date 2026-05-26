@@ -3,19 +3,15 @@
 @section("mainContent")
 
 <div class="main-card content shadow-sm">
-
     <div class="total-stock-main">
         <div class="total-rmpm mb-4 h-100">
             <div class="align-items-center justify-content-between flex-wrap pb-5">
                 <!-- Left spacer -->
                 <div class="header-spacer"></div>
-
                 <h5 class="text-center section-title m-0 flex-grow-1">Stock Report (Current Status)</h5>
-
                 <!-- Right Button -->
             </div>
             <div class="row text-center justify-content-center rm-row stockreportrmpm">
-                
                 @if ($rmPmStockWiseData)
                     @foreach ($rmPmStockWiseData as $rSWData)
                         <div class="col-md-2 custom-col hover-card">
@@ -43,6 +39,7 @@
                                     @endforeach
                                 </div>
                             </div>
+
                         </div>
                     @endforeach
                 @endif
@@ -64,10 +61,7 @@
                             <th>Overall</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        
-                        
                         @if ($dailyStockWarehouseData)
                             @php $counter = 1  @endphp
                             @foreach ($dailyStockWarehouseData as $dData)
@@ -78,7 +72,6 @@
                             <td>
                                 <strong>{{ $dData["date"] }}</strong>
                             </td>
-
                             <td>
                                 <div class="rmpm-card">
                                     <div class="rmpm-card rmpm-toggle">Detail</div>
@@ -99,7 +92,6 @@
                                                 <th>Total Added</th>
                                             </tr>
                                         </thead>
-
                                         <tbody>
                                             @php $subCounter = 1  @endphp
                                             @foreach ($dData["data"] as $detailsD)
@@ -132,17 +124,14 @@
     </div>
     
 
-
 </div>
 
 <script>
     document.querySelectorAll(".rmpm-toggle").forEach((card) => {
         card.addEventListener("click", function (e) {
             e.stopPropagation(); // safety
-
             let row = this.closest("tr");
             let expandRow = row.nextElementSibling;
-
             if (expandRow.style.display === "table-row") {
                 expandRow.style.display = "none";
             } else {
@@ -151,6 +140,5 @@
         });
     });
 </script>
-
 
 @endsection

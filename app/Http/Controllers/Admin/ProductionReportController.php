@@ -14,9 +14,7 @@ use App\Models\FgStockMaster;
 class ProductionReportController extends Controller
 {
     public function productionReport(Request $request) {
-        
         $filter = $request->filter ?? "7days";
-
         // Default values
         $days = 7;
         $groupFormat = 'Y-m-d';
@@ -36,7 +34,6 @@ class ProductionReportController extends Controller
                 
         $counter = 0;
         foreach ($dates as $d) {
-            
             $data["productionData"][$counter]["date"] = $d;
             $data["productionData"][$counter]["data"] = FgStockMaster::select(
                 "fg_cat_master.fg_cat_name",
@@ -47,7 +44,6 @@ class ProductionReportController extends Controller
             ->leftjoin("fg_master", "fg_cat_master.fg_id", "=", "fg_master.id")
             ->wheredate("fg_stock_master.created_at", $d)
             ->get()->toArray();
-            
             $counter++;
             
         }
@@ -56,9 +52,7 @@ class ProductionReportController extends Controller
     
         $data["selectedFilter"] = $filter;
         $data["productionGraphData"] = [];
-    
         foreach ($dates as $index => $d) {
-    
             $stockData = FgStockMaster::select(
                     "fg_cat_master.fg_cat_name",
                     "fg_master.fg_name",
@@ -77,8 +71,6 @@ class ProductionReportController extends Controller
         }
         
         // echo "<pre>";print_r($data);die();
-        
-        
         return view("admin.productionReport", $data);
     }
 }

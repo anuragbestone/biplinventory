@@ -13,36 +13,26 @@ use App\Models\RmPmStockMaster;
 use App\Models\RmPmStockTransactionIn;
 use App\Models\RmPmStockTransactionOut;
 use App\Models\RmPmStockInReciept;
-
 use App\Models\RmPmStockWarehouseMaster;
 use App\Models\RmPmStockWarehouseTransactionMaster;
-
 use App\Models\FgMaster;
 use App\Models\FgCatMaster;
 use App\Models\FgStockMaster;
 use App\Models\FgStockTransaction;
-
 use App\Models\ProductionIssueMaster;
 use App\Models\ProductionLineMaster;
 use App\Models\ProductionLineStatus;
 use App\Models\ProductionIssueRecorded;
 use App\Models\ProductionTimerMaster;
-
 use App\Models\RejectionMaster;
-
 use App\Models\UserMaster;
-
 use App\Models\ShiftMaster;
-
 use App\Models\OrderMaster;
 use App\Models\OrderDetails;
 use App\Models\FgDispatchMaster;
-
 use App\Models\FgPmFormulaMaster;
-
 use App\Models\ThresholdProductionMaster;
 use App\Models\ThresholdRmPmMaster;
-
 use App\Models\NotificationMaster;
 
 use Illuminate\Support\Carbon;
@@ -107,7 +97,7 @@ class WarehouseController extends Controller {
 
         NotificationMaster::create([
             "route_address" => "notification",
-            "main_address" => "dashboard",
+            "main_address" => "shiftReport",
             "notification_title" => "Shift Started",
             "notification_msg" => "Shift Details: \nFrom: ".Carbon::parse($shiftFrom)
                 ->format("l, d F Y h:i A")."\nTo: ".Carbon::parse($shiftTo)
@@ -139,7 +129,6 @@ class WarehouseController extends Controller {
     }
 
     public function rmpmentryStock() {
-
         $rmpmData = RmPmMaster::select("id", "rm_pm_name")
             ->where("is_active", 1)
             ->get();
@@ -177,7 +166,6 @@ class WarehouseController extends Controller {
         } else {
             $rData = $request->except(['_token']);
             foreach ($rData as $key => $value) {
-
                 if ($value && $value > 0) {
                     // ---- Upload Current Stock
                     $stockValue = RmPmStockWarehouseMaster::select("stock_quantity")
@@ -192,7 +180,6 @@ class WarehouseController extends Controller {
                             ]);
 
                     } else {
-                            
                         RmPmStockWarehouseMaster::create([
                             "rm_pm_cat_id" => $key,
                             "stock_quantity" => empty($value[0]) ? 0 : $value[0]
@@ -226,11 +213,9 @@ class WarehouseController extends Controller {
         //echo "<pre>";print_r($request->all());die();
         $data["formulaData"] = [];
         if ($request->has('filter')) {
-
             $data["selected_production_line_id"] = $request->input("production_line_id");
             $data["fg_id"] = $request->input("fg");
             $data["fg_cat_id"] = $request->input("fg_cat");
-
             $data["formulaData"] = FgPmFormulaMaster::select("fg_cat_id", "rm_pm_cat_id", "rm_pm_cat_quantity")
                 ->where("fg_cat_id", $data["fg_cat_id"])
                 ->get()->toArray();
@@ -257,7 +242,6 @@ class WarehouseController extends Controller {
             ->get();
 
         if ($rmpmData->isEmpty()) {
-
             return redirect()
                 ->route("dashboard")
                 ->with("error", "No data found");
@@ -266,11 +250,8 @@ class WarehouseController extends Controller {
         $data["rmpmData"] = [];
 
         foreach ($rmpmData as $rData) {
-
             $catData = [];
-
             if (!empty($data["fg_cat_id"])) {
-
                 $catData = RmPmCatMaster::select(
                         "rm_pm_cat_master.id",
                         "rm_pm_cat_master.rm_pm_cat_name",
@@ -304,16 +285,11 @@ class WarehouseController extends Controller {
         }
 
         //echo "<pre>";print_r($data);die();
-
         return view("warehouse.rmpmentry", $data);
     }
 
     public function rmpmentryDo(Request $request, WhatsAppService $whatsapp) {
-        
-        
-
         $data = collect($request->except('_token'))->flatten();
-
         $hasValue = $data->contains(function ($value) {
             return !empty($value) && $value > 0;
         });
@@ -324,13 +300,10 @@ class WarehouseController extends Controller {
             $shift_from = Carbon::parse($request->input("shift_from"));
             $shift_to = Carbon::parse($request->input("shift_to"));
             $rData = $request->except(['_token', "shift_from", "shift_to", "production_line_id"]);
-
             $whatsAppDetailMessage = "";
-
             foreach ($rData as $key => $value) {
                 
                 // ---- Remove From Stock Warehouse Master
-
                 $stockValue = RmPmStockWarehouseMaster::select("stock_quantity")
                     ->where("rm_pm_cat_id", $key)
                     ->first();
@@ -380,8 +353,6 @@ class WarehouseController extends Controller {
                 }
             }
 
-            
-
             // WhatsApp Service -- Starts
             $message =
                 "📦 *RM/PM STOCK ADDED* \n\n".
@@ -407,7 +378,6 @@ class WarehouseController extends Controller {
             );
             // WhatsApp Service -- Ends
 
-
             NotificationMaster::create([
                 "route_address" => "notification",
                 "main_address" => "stockReport",
@@ -420,10 +390,7 @@ class WarehouseController extends Controller {
         }
     }
 
-    
-
     public function startProductionTimerWhatsapp(Request $request, WhatsAppService $whatsapp) {
-
         $lineName = ProductionLineMaster::where(
             "id",
             $request->input("production_line_id")
@@ -438,7 +405,6 @@ class WarehouseController extends Controller {
         ]);
         
         // ----
-
         ProductionTimerMaster::create([
             "production_line_id" => $request->input("production_line_id"),
             "shift_from" => $request->session()->get("shift_from"),
@@ -448,13 +414,9 @@ class WarehouseController extends Controller {
             "production_timer_seconds" => 120,
             "production_status" => 1
         ]);
-
         // ----
 
-        
-
         // WhatsApp Service -- Starts
-
         $message =
             "🏭 *PRODUCTION STARTED* \n\n".
             "📍 *Production Line:* \n".
@@ -500,19 +462,13 @@ class WarehouseController extends Controller {
         // WhatsApp Service -- Ends
     }
 
-
     public function rmpmstock() {
-
         return view("warehouse.rmpmstock");
     }
 
-
     public function fgstock() {
-
         return view("warehouse.fgstock");
     }
-
-
 
     public function production() {
         $data["productionIssueData"] = ProductionIssueMaster::select("id", "production_issue_types")
@@ -525,7 +481,6 @@ class WarehouseController extends Controller {
         if ($data["productionLineData"]) {
             $counter = 0;
             foreach ($data["productionLineData"] as $pData) {
-
                 $data["productionDelayFlags"][$pData["id"]] = ProductionLineStatus::where("production_line_id", $pData["id"])
                     ->where("line_status", 1)
                     ->exists() ? 1 : 0;
@@ -548,18 +503,14 @@ class WarehouseController extends Controller {
         }
 
         // echo "<pre>";print_r($data);die();
-
         return view("warehouse.production", $data);
     }
 
     public function uploadProduction(Request $request, WhatsAppService $whatsapp) {
         try {
-
             $shiftFrom = Carbon::parse($request->shift_from);
             $shiftTo = Carbon::parse($request->shift_to);
-
             $productionLineId = $request->productionLine;
-
             $qtyData = $request->qty;
 
             // VALIDATE QTY EXISTS
@@ -635,7 +586,6 @@ class WarehouseController extends Controller {
             )->value("line_name");
 
             // WhatsApp Service -- Starts
-
             $message =
                 "🏭 *PRODUCTION UPDATE* \n\n".
                 "📍 *Production Line:* \n".
@@ -752,7 +702,6 @@ class WarehouseController extends Controller {
                 "line_status" => 0
         ]);
 
-
         // Fetch line name safely
         $line = ProductionLineMaster::select("line_name")
                     ->where("id", $request->input("production_line_id"))
@@ -767,7 +716,6 @@ class WarehouseController extends Controller {
         $issueName = $issue ? $issue->production_issue_types : "Unknown Issue";
 
         // WhatsApp Message
-
         $message =
             "🛠️ *PRODUCTION ISSUE REMARK SUBMITTED* \n\n".
             "📍 *Production Line:* \n".
@@ -807,30 +755,25 @@ class WarehouseController extends Controller {
 
     public function rejection(Request $request) {
         $data["filter"] = 0;
+
         // ---- Filter Hit Starts
 
         if ($request->has('filter')) {
-
             $data["selected_production_line_id"] = $request->input("production_line_id");
             $data["fg_id"] = $request->input("fg");
             $data["fg_cat_id"] = $request->input("fg_cat");
-
             $data["formulaData"] = FgPmFormulaMaster::select("fg_cat_id", "rm_pm_cat_id", "rm_pm_cat_quantity")
                 ->where("fg_cat_id", $data["fg_cat_id"])
                 ->get()->toArray();
 
         } else {
-
             $data["selected_production_line_id"] = 0;
             $data["fg_id"] = 0;
             $data["fg_cat_id"] = 0;
         }
 
         // ---- Filter Hit Ends
-
-
         
-
         $data["fgData"] = FgMaster::select("id", "fg_name")
             ->where("is_active", 1)
             ->get()
@@ -852,7 +795,6 @@ class WarehouseController extends Controller {
             if ($rmpmData) {
                 $counter = 0;
                 foreach ($rmpmData as $rData) {
-                    
                         $data["rmpmData"][$counter] = $rData;
                         $data["rmpmData"][$counter]["catData"] = RmPmCatMaster::select("rm_pm_cat_master.id",
                             "rm_pm_cat_master.rm_pm_cat_name", 
@@ -870,9 +812,7 @@ class WarehouseController extends Controller {
                             ->where("rm_pm_cat_master.is_active", 1)
                             ->where("rm_pm_cat_master.rm_pm_id", $rData["id"])
                             ->get()->toArray();
-
                         $counter++;
-                
                 }
 
                 $data["filter"] = 1;
@@ -891,7 +831,6 @@ class WarehouseController extends Controller {
         $shiftTo = Carbon::parse($request->input("shift_to"));
 
         if (count($request->input("catId")) > 0) {
-
             if (intval($request->total_rejection) > 0) {
                 $rm_pm_cat_id = [];
                 $rm_pm_stock_rejection = [];
@@ -901,17 +840,14 @@ class WarehouseController extends Controller {
             $totalRejection = 0;
             $rejectionCount = 0;
             foreach ($request->input("catId") as $cValues => $values) {
-                
                 if (!empty($values)) {
                     $rmpmStockStatus = RmPmStockMaster::select("stock_quantity")
                         ->where("rm_pm_cat_id", $cValues)
                         ->first();
-
                     if ($rmpmStockStatus) {
                         RmPmStockMaster::where("rm_pm_cat_id", $cValues)->update([
                             "stock_quantity" => $rmpmStockStatus->stock_quantity - (!empty($values) ? $values : 0)
                         ]);
-
 
                         $stockOut = RmPmStockTransactionOut::create([
                             "rm_pm_cat_id" => $cValues,
@@ -932,7 +868,6 @@ class WarehouseController extends Controller {
                         }
 
                         if (!empty($request->input("rejectionCat")[$cValues])) {
-                            
                             $rmpmWData = RmPmCatMaster::select("rm_pm_cat_master.rm_pm_cat_name", "rm_pm_cat_master.cat_unit", "rm_pm_master.rm_pm_name")
                             ->join("rm_pm_master", "rm_pm_master.id", "=", "rm_pm_cat_master.rm_pm_id")
                             ->where("rm_pm_cat_master.id", $cValues)
@@ -1057,10 +992,8 @@ class WarehouseController extends Controller {
         ];
 
         $whatsAppDetailMessage = "";
-        
         foreach ($orderData as $oD) {
             OrderDetails::create($oD);
-
             $fgData = FgCatMaster::select("fg_cat_master.fg_cat_name", "fg_master.fg_name")
                 ->join("fg_master", "fg_cat_master.fg_id", "=", "fg_master.id")
                 ->where("fg_cat_master.id", $oD["fg_cat_id"])
@@ -1109,7 +1042,6 @@ class WarehouseController extends Controller {
     }
 
     public function order() {
-
         $orderData = OrderMaster::select(
             "id", 
             "order_id", 
@@ -1139,7 +1071,6 @@ class WarehouseController extends Controller {
             }
 
             //echo "<pre>";print_r($data);die();
-
             return view("warehouse.order", $data);
 
         } else {
@@ -1148,7 +1079,6 @@ class WarehouseController extends Controller {
     }
 
     public function getOrderDetailsDataByOrderCode(Request $request) {
-
         $data["orderDetails"] = OrderDetails::select(
                 "fg_cat_master.fg_cat_name",
                 "order_details.fg_cat_id",
@@ -1173,7 +1103,6 @@ class WarehouseController extends Controller {
     }
 
     public function dispatchOrder(Request $request) {
-        
         if ($request->dispatch_status == "completed") {
             $orderedFG = OrderDetails::select("fg_cat_id", "fg_quantity")
                 ->where("order_id", $request->input("order_id"))
@@ -1206,7 +1135,6 @@ class WarehouseController extends Controller {
                         "order_dispatch_status" => 1,
                         "order_dispatch_date_achieved" => Carbon::now()->format("Y-m-d")
                     ]);
-
 
                 NotificationMaster::create([
                     "route_address" => "notification",

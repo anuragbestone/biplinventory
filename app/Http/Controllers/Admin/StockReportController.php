@@ -13,9 +13,7 @@ use DB;
 use App\Models\RmPmMaster;
 use App\Models\RmPmCatMaster;
 use App\Models\RmPmStockMaster;
-
 use App\Models\RmPmStockWarehouseTransactionMaster;
-
 use App\Exports\StockReportExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -25,7 +23,6 @@ class StockReportController extends Controller
     public function stockReport() {
         
         // --- last 7 days
-        
         $dates = collect(range(0, 6))->map(function ($i) {
                     return Carbon::today()->subDays($i)->format('Y-m-d');
                 })->toArray();
@@ -49,18 +46,14 @@ class StockReportController extends Controller
                 ->where("rm_pm_stock_transaction_in.is_active", 1)
                 ->wheredate("rm_pm_stock_transaction_in.created_at", $d)
                 ->get()->toarray();   
-                
             $counter++;
         }
         
         $data["dailyStockTransactionData"] = $dailyStockTransactionInData;
-        
         return view("admin.stockreport", $data);
-
     }
 
     public function rmPmWarehouseStock() {
-
         $rmPmData = RmPmMaster::select("id", "rm_pm_name", "rm_pm_image")
             ->where("is_active", 1)
             ->get()->toArray();
@@ -78,7 +71,6 @@ class StockReportController extends Controller
                     ->leftjoin("rm_pm_stock_warehouse_master", "rm_pm_cat_master.id", "=", "rm_pm_stock_warehouse_master.rm_pm_cat_id")
                     ->where("rm_pm_cat_master.rm_pm_id", $rData["id"])
                     ->get()->toArray();
-
                 $counter++;
             }
         }
@@ -101,11 +93,9 @@ class StockReportController extends Controller
             ->where("rm_pm_stock_warehouse_transaction_master.is_active", 1)
             ->wheredate("rm_pm_stock_warehouse_transaction_master.created_at", $d)
             ->get()->toarray();
-            
             $counter++;
         }
 
-        
         $data["rmPmStockWiseData"] = $rmPmStockWiseData;
         $data["dailyStockWarehouseData"] = $dailyStockWarehouseData;
         return view("admin.stockreportWarehouse", $data);

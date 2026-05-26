@@ -12,7 +12,6 @@ class AuthController extends Controller
 {
 
     public function showLogin() {
-
         return view("pages.loginPage");
     }
 
@@ -32,7 +31,6 @@ class AuthController extends Controller
                 ->exists();
 
             if ($emailStatus) {
-
                 $userData = UserMaster::select("id", "email", "contact_number", "full_name", "password", "role_id")
                     ->where("email", $request->input("email"))
                     ->first();
@@ -40,13 +38,11 @@ class AuthController extends Controller
                 if ($userData) {
                     // ---- Check for Password
                     if (Hash::check($request->input("password"), $userData->password)) {
-
                         $request->session()->put("userID", $userData->id);
                         $request->session()->put("email", $userData->email);
                         $request->session()->put("contact_number", $userData->contact_number);
                         $request->session()->put("full_name", $userData->full_name);
                         $request->session()->put("role_id", $userData->role_id);
-
                         return redirect()->route("dashboard")->with("success", "session started");
 
                     } else {
@@ -65,7 +61,6 @@ class AuthController extends Controller
 
     public function doLogout(Request $request) {
         $request->session()->flush();
-
         return redirect()->route("/")->with("session has ended!!");
     }
 

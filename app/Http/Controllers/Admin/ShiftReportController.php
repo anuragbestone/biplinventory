@@ -11,7 +11,6 @@ class ShiftReportController extends Controller
 {
 
     public function shiftReport() {
-
         $data["shiftData"] = ShiftMaster::select(
             "user_master.email",
             "shift_master.shift_from",

@@ -13,7 +13,7 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="shiftReport"> 
+                    <table class="table  shifttablereport table-bordered" id="shiftReport"> 
                         <thead>
                             <tr>
                                 <th>S.No</th>
@@ -31,8 +31,8 @@
                                     <tr>
                                         <td>{{ $counter++ }}</td>
                                         <td>{{ $rData["email"] }}</td>
-                                        <td>{{ $rData["shift_from"] }}</td>
-                                        <td>{{ $rData["shift_to"] }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($rData['shift_from'])->format('l, d F Y h:i A') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($rData['shift_to'])->format('l, d F Y h:i A') }}</td>
                                         <td>{{ $rData["shift_over_status"] == 1 ? "Inactive" : "Active" }}</td>
                                     </tr>
                                 @endforeach

@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Models\RmPmCatMaster;
 use App\Models\RmPmMaster;
-
 use App\Models\ThresholdProductionMaster;
 use App\Models\ThresholdRmPmMaster;
-
 use App\Models\FgCatMaster;
 
 class ThresholdController extends Controller

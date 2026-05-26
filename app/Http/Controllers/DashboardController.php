@@ -5,20 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\ShiftMaster;
-
 use App\Models\RmPmMaster;
 use App\Models\RmPmCatMaster;
 use App\Models\RmPmStockMaster;
-
 use App\Models\RmPmStockWarehouseMaster;
-
 use App\Models\FgMaster;
 use App\Models\FgCatMaster;
 use App\Models\FgStockMaster;
-
 use App\Models\FgStockTransaction;
 use App\Models\FgDispatchMaster;
-
 use App\Models\ProductionLineMaster;
 use App\Models\NotificationMaster;
 
@@ -69,16 +64,12 @@ class DashboardController extends Controller {
 
     public function showDashboard(Request $request) {
         if ($request->session()->get("role_id") != 3) {
-
             // ------ Bottle Data Starts
             $productionLineData = ProductionLineMaster::select("id", "line_name")
                 ->where("is_active", 1)
                 ->get()->toArray();
 
-            
-
             // ------ Bottle Data Ends
-
             $data["fgData"] = FgStockMaster::select(
                     "fg_cat_master.fg_cat_name",
                     "fg_master.fg_name",
@@ -88,10 +79,8 @@ class DashboardController extends Controller {
                 ->leftjoin("fg_master", "fg_master.id", "=", "fg_cat_master.fg_id")
                 ->where("fg_stock_master.is_active", 1)
                 ->get()->toArray();
-
             $data["fgTotalQuantity"] = FgStockMaster::sum('stock_quantity');
             
-
             // ---- Current Day stock
             $fgCatData = FgCatMaster::select(
                 "fg_cat_master.id",
@@ -108,7 +97,6 @@ class DashboardController extends Controller {
             ->get()
             ->toArray();
 
-
             // GET TODAY PRODUCTION TOTALS
             $todayProduction = FgStockTransaction::select(
                     "fg_cat_id",
@@ -118,35 +106,25 @@ class DashboardController extends Controller {
                 ->groupBy("fg_cat_id")
                 ->pluck("total_production", "fg_cat_id");
 
-
             // FINAL ARRAY
             $data["currentdayProduction"] = [];
-
             $counter = 0;
-            
             $data["currentDayTotalProduction"] = 0;
             foreach ($fgCatData as $fValues) {
-
                 $data["currentdayProduction"][$counter]["fgData"] = $fValues;
-
                 $data["currentdayProduction"][$counter]["production"] =
                     $todayProduction[$fValues["id"]] ?? 0;
-
                 $data["currentDayTotalProduction"] = $data["currentDayTotalProduction"] + ($todayProduction[$fValues["id"]] ?? 0);
-
                 $counter++;
             }
-
 
             $rmPmData = RmPmMaster::select("id", "rm_pm_name", "rm_pm_image")
                 ->where("is_active", 1)
                 ->get()->toArray();
 
             if ($rmPmData) {
-                
                 $rmPmStockWiseData = [];
                 $counter = 0;
-
                 foreach ($rmPmData as $rData) {
                     $rmPmStockWiseData[$counter] = $rData;
                     $rmPmStockWiseData[$counter]["rcData"] = RmPmCatMaster::select(
@@ -172,25 +150,19 @@ class DashboardController extends Controller {
             
             // DATE RANGE
             if ($filter == "1day") {
-            
                 $startDate = Carbon::today();
                 $endDate = Carbon::today();
                 $groupFormat = "%H"; // Hour Wise
-            
             } elseif ($filter == "1month") {
-            
                 $startDate = Carbon::now()->subDays(29);
                 $endDate = Carbon::today();
                 $groupFormat = "%d-%m"; // Date Wise
-            
             } else {
-            
                 // DEFAULT 7 DAYS
                 $startDate = Carbon::now()->subDays(6);
                 $endDate = Carbon::today();
                 $groupFormat = "%d-%m";
             }
-            
             
             // GET ALL CATEGORY NAMES
             $fgCategories = FgCatMaster::select(
@@ -200,7 +172,6 @@ class DashboardController extends Controller {
                 ->where("is_active", 1)
                 ->get()
                 ->toArray();
-            
             
             // GET DISPATCH DATA
             $dispatchRawData = FgDispatchMaster::select(
@@ -226,15 +197,11 @@ class DashboardController extends Controller {
                 ->get()
                 ->toArray();
             
-            
             // FINAL FORMATTED ARRAY
             $finalDispatchData = [];
-            
             foreach ($dispatchRawData as $row) {
-            
                 $day = $row["dispatch_day"];
                 $category = $row["fg_cat_name"];
-            
                 $finalDispatchData[$day][$category] = $row["total_qty"];
             }
             
@@ -282,8 +249,6 @@ class DashboardController extends Controller {
                 $productionGroupFormat = "%d-%m";
             }
             
-            
-            
             // GET PRODUCTION DATA
             $productionRawData = FgStockTransaction::select(
                     DB::raw("
@@ -322,12 +287,9 @@ class DashboardController extends Controller {
             
             // FINAL ARRAY FORMAT
             $finalProductionData = [];
-            
             foreach ($productionRawData as $row) {
-            
                 $day = $row["production_day"];
                 $category = $row["fg_cat_name"];
-            
                 $finalProductionData[$day][$category] =
                     $row["total_qty"];
             }
@@ -346,11 +308,9 @@ class DashboardController extends Controller {
             $data["maxProductionQty"] = $maxProductionQty;
             $data["selectedProductionFilter"] = $productionFilter;
             
-            
             // ---------------- PRODUCTION GRAPH DATA ENDS -------------
 
             // echo "<pre>";print_r($data);die();
-
             return view("dashboard.adminDash", $data);
         }
 
@@ -393,7 +353,6 @@ class DashboardController extends Controller {
         $data["rmpmConsumedData"] = [];
 
         foreach ($rmPmData as $rmPm) {
-
             $mainStock = [
                 "id" => $rmPm->id,
                 "rm_pm_name" => $rmPm->rm_pm_name,
@@ -407,7 +366,6 @@ class DashboardController extends Controller {
             ];
 
             $categories = $rmPmCategories[$rmPm->id] ?? [];
-
             foreach ($categories as $cat) {
 
                 // Main Warehouse Stock
@@ -453,9 +411,7 @@ class DashboardController extends Controller {
         );
 
         $data["fgData"] = [];
-
         foreach ($fgData as $fg) {
-
             $fgItem = [
                 "id" => $fg->id,
                 "fg_name" => $fg->fg_name,
@@ -463,9 +419,7 @@ class DashboardController extends Controller {
             ];
 
             $categories = $fgCategories[$fg->id] ?? [];
-
             foreach ($categories as $cat) {
-
                 $fgItem["fgcData"][] = [
                     "fg_cat_name"   => $cat->fg_cat_name,
                     "stock_quantity" => $fgStocks[$cat->id] ?? 0
@@ -491,24 +445,17 @@ class DashboardController extends Controller {
             ->first();
 
         $data["shiftData"] = $shiftData;
-
         if ($shiftData) {
-
             if ($shiftData->shift_over_status == 0) {
-
                 if (!$request->session()->has('shift_from')) {
-
                     $request->session()->put('shift_from', $shiftData->shift_from);
                     $request->session()->put('shift_to', $shiftData->shift_to);
                 }
 
             } else {
-
                 $request->session()->forget(['shift_from', 'shift_to']);
             }
         }
-
-        
 
         return view("dashboard.warehouseDash", $data);
     }

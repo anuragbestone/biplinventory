@@ -13,7 +13,6 @@ use App\Models\RmPmCatMaster;
 class RejectionUpdateController extends Controller
 {
     public function rejectionUpdate() {
-
         $data["rejectionData"] = RejectionMaster::select(
             "id",
             "total_rejection",
@@ -56,7 +55,6 @@ class RejectionUpdateController extends Controller
         ->first()->toArray();
 
         if ($data["rm_pm_stock_transaction_out_id"]) {
-            
             $transactionIdsArr = json_decode($data["rm_pm_stock_transaction_out_id"]);
             $rejectionData = [];
             $counter = 0;
@@ -71,7 +69,6 @@ class RejectionUpdateController extends Controller
                     ->leftjoin("rm_pm_master", "rm_pm_cat_master.rm_pm_id", "=", "rm_pm_master.id")
                     ->where("rm_pm_stock_transaction_out.id", $trData)
                     ->first();
-
                 $counter++;
             }
 

@@ -51,10 +51,7 @@
   --text-light: #6b7a99;
   --border: #e5eaf2;
 
-
   --bs-body-bg: transparent !important;
-
-
 
   /* Font Sizes */
   --fs-xs: 12px;
@@ -866,10 +863,6 @@ h5.main-heading {
     opacity:0.9;
 }
 
-
-
-
-
 /* Login Css */
 
 
@@ -1278,25 +1271,6 @@ g.raphael-group-OWoiSXkv {
     display: none !important;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* production Css */
 
 
@@ -1477,20 +1451,6 @@ g.raphael-group-OWoiSXkv {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Total Finish Goods Css */
 
 .card-custom {
@@ -1539,16 +1499,6 @@ g.raphael-group-OWoiSXkv {
 .table-custom tr {
     border-bottom: #ccc 1px solid;
 }
-
-
-
-
-
-
-
-
-
-
 
 /* header responsive Css */
 
@@ -1631,9 +1581,6 @@ g.raphael-group-OWoiSXkv {
      margin-top:25px;
      border-radius: 0px 0px 20px 20px;
 }
-
-
-
 
 /* RMPM Page Css */
 
@@ -1838,8 +1785,6 @@ g.raphael-group-OWoiSXkv {
     color: #0b448f; /* tera theme blue */
 }
 
-
-
 .table-scroll{
     max-height: 250px;  /* height control */
     overflow-y: auto;
@@ -1853,8 +1798,6 @@ g.raphael-group-OWoiSXkv {
 .rejection-line span {
     font-size: 20px;
 }
-
-
 
 /* Production Line Css */
 
@@ -1956,7 +1899,6 @@ g.raphael-group-OWoiSXkv {
     z-index:5;
 }
 
-
 .update-badge .dot{
     height:8px;
     width:8px;
@@ -1965,7 +1907,6 @@ g.raphael-group-OWoiSXkv {
     display:inline-block;
     margin-right:6px;
 }
-
 
 .red-badge{
     background:#fdecea;   /* light red bg */
@@ -2013,8 +1954,6 @@ g.raphael-group-OWoiSXkv {
     border: #ccc solid 1px;
     border-radius: 10px;
 }
-
-
 
 /* Delete Button */
 .delete-btn{
@@ -2153,9 +2092,6 @@ h6.fillerhead {
     font-size: 13px;
     margin-bottom: 5px;
 }
-
-
-
 
 /* Manutu Ji Css */
 
@@ -2470,18 +2406,6 @@ h5.am-section-title {
     100% { transform: rotate(0deg); }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 .am-rejection-card {
     background: #fff;
     border: 1px solid #91bbff;
@@ -2509,8 +2433,6 @@ h5.am-section-title {
     display: none;
     background: #f9fbff;
 }
-
-
 
 /* Inner table */
 .am-inner-table th {
@@ -2545,25 +2467,6 @@ h5.am-section-title {
     font-size: 12px;
     resize: none;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .am-main-table thead th {
     background: #b3b3b3;  /* light grey-blue */
@@ -2750,9 +2653,6 @@ td:nth-child(4) {
     background: #e8e8e8;
 }
 
-
-
-
 /* 🔵 BACKDROP (sab modals ke liye) */
 .modal-backdrop.show {
     background: rgba(47, 111, 214, 0.35) !important; /* blue tint */
@@ -2795,16 +2695,10 @@ td:nth-child(4) {
     filter: invert(1);
 }
 
-
-
 /* BUTTONS (optional polish) */
 .modal button {
     border-radius: 8px;
 }
-
-
-
-
 
 .header-spacer {
     width: 120px;
@@ -2862,8 +2756,6 @@ color-mix(in srgb, #2874f0 95%, var(--choices-darken, black));
 .material-box input[type="number"] {
     background: #fff;
 }
-
-
 
 /* profile page css */
 
@@ -3020,8 +2912,6 @@ color-mix(in srgb, #2874f0 95%, var(--choices-darken, black));
     opacity: 0.9;
 }
 
-
-
 .pm-edit-profile-img {
     position: relative;
     width: 90px;
@@ -3082,19 +2972,9 @@ color-mix(in srgb, #2874f0 95%, var(--choices-darken, black));
     border-radius:2px;
 }
 
-
 input.custom-field {
     background-color: #fff !important;
 }
-
-
-
-
-
-
-
-
-
 
 /* role permission css */
 
@@ -3218,8 +3098,6 @@ input.custom-field {
     scroll-behavior: smooth;
 }
 
-
-
 /* scrollbar track */
 .role-permission-main .table-container::-webkit-scrollbar {
     height: 4px;
@@ -3248,16 +3126,12 @@ input.custom-field {
     color: #fff !important;
 }
 
-
 #permissionModal input[type="checkbox"] {
     width: 18px;
     height: 18px;
     accent-color: #2f6fd6;
     cursor: pointer;
 }
-
-
-
 
 /* warehosue page Css */
 
@@ -3407,18 +3281,6 @@ input.custom-field {
     width: 120px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 /* OVERALL */
 .wh-overall {
     text-align: center;
@@ -3509,21 +3371,6 @@ input.custom-field {
     padding: 6px 12px;
     border-radius: 6px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* RM PM Procurement Css */
 .rm-row.stockreportrmpm {
@@ -3756,11 +3603,6 @@ input.custom-field {
     margin-top: 20px;
 }
 
-
-
-
-
-
 .overall-status-table th:nth-child(1),
 .overall-status-table td:nth-child(1) {
     width: 30px;
@@ -3816,10 +3658,6 @@ input.custom-field {
     margin-bottom: 4px;
 }
 
-
-
-
-
 .overall-status-table-main th:nth-child(1),
 .overall-status-table-main td:nth-child(1) {
     width: 30px;
@@ -3838,17 +3676,6 @@ input.custom-field {
 .overall-status-table-main td:nth-child(4) {
     width: 30px;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /* Production Issue Css */
 
@@ -3930,10 +3757,6 @@ textarea.custom-field.form-control {
 .production-table td:nth-child(4) {
     width: 350px;
 }
-
-
-
-
 
 /* Setting Page Css */
 
@@ -4045,13 +3868,6 @@ textarea.custom-field.form-control {
     border-radius: 6px;
 }
 
-
-
-
-
-
-
-
 /* WRAP */
 .custom-input {
     position: relative;
@@ -4100,35 +3916,6 @@ textarea.custom-field.form-control {
     color: #0d6efd;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* User Css All Pages */
 
 .user-orders th:nth-child(2), .user-orders td:nth-child(2) {
@@ -4155,9 +3942,6 @@ textarea.custom-field.form-control {
     width: 110px;
 }
 
-
-
-
 .tooltip-box {
     position: relative;
     display: inline-block;
@@ -4183,8 +3967,6 @@ textarea.custom-field.form-control {
 .tooltip-inner{
     color:#fff !important;
 }
-
-
 
 /* Production line user css */
 
@@ -4403,8 +4185,6 @@ textarea.custom-field.form-control {
     }
 }
 
-
-
 /* FG Stock Page Css */
 .fg-stock {
     padding: 20px;
@@ -4470,15 +4250,19 @@ textarea.custom-field.form-control {
 .fg-stocks th:nth-child(3), .fg-stocks td:nth-child(3) {
     width: 350px;
 }
+
 .fg-stocks th:nth-child(4), .fg-stocks td:nth-child(4) {
     width: 140px;
 }
+
 .fg-stocks th:nth-child(5), .fg-stocks td:nth-child(5) {
     width: 170px;
 }
+
 .fg-stocks th:nth-child(6), .fg-stocks td:nth-child(6) {
     width: 120px;
 }
+
 .fg-stocks th:nth-child(7), .fg-stocks td:nth-child(7) {
     width: 100px;
 }
@@ -4487,12 +4271,9 @@ textarea.custom-field.form-control {
     margin-bottom: 15px;
 }
 
-
 td.text-start.heading {
     font-weight: bold;
 }
-
-
 
 /* RMPM user page css */
 
@@ -4578,10 +4359,6 @@ td.text-start.heading {
     }
 }
 
-
-
-
-
 /* user Dashboard Css */
 
 .user-dashboard {
@@ -4656,8 +4433,6 @@ td.text-start.heading {
         flex-direction: column;
     }
 }
-
-
 
 .dt-box {
     width: 100%;
@@ -4856,13 +4631,11 @@ a.buttonshift.align-items-right.gap-2 {
     width: 200px;
 }
 
-
 .card.pb-20 {
     padding: 15px;
     margin-bottom:20px;
     background-color: #fff;
 }
-
 
 .menu-item.active .dropdown-item {
     font-weight: bold !important;
@@ -4922,8 +4695,6 @@ a.buttonshift.align-items-right.gap-2 {
     transform: translateX(-50%) translateY(0);
 }
 
-
-
 .table-responsive {
     overflow: hidden;
 }
@@ -4946,8 +4717,6 @@ a.buttonshift.align-items-right.gap-2 {
     overflow-y: auto;
 }
 
-
-
 nav.flex.items-center.justify-between {
     padding: 30px 0px;
 }
@@ -4960,20 +4729,15 @@ nav.flex.items-center.justify-between svg{
     display: none !important;
 }
 
-
-
 #rejectionTable {
     width: 100% !important;
     table-layout: fixed;
 }
 
-
-
 .rejection-update th:nth-child(1),
 .rejection-update td:nth-child(1) {
     width: 38px;
 }
-
 
 .rejection-update th:nth-child(2),
 .rejection-update td:nth-child(2) {
@@ -4995,7 +4759,6 @@ nav.flex.items-center.justify-between svg{
     width: 110px;
 }
 
-
 .ordertable th:nth-child(1),
 .ordertable td:nth-child(1) {
     width: 32px;
@@ -5011,7 +4774,6 @@ nav.flex.items-center.justify-between svg{
     width: 80px;
 }
 
-
 .ordertable th:nth-child(4),
 .ordertable td:nth-child(4) {
     width: 140px;
@@ -5025,10 +4787,12 @@ nav.flex.items-center.justify-between svg{
 .ordertable td:nth-child(6) {
     width: 140px;
 }
+
 .ordertable th:nth-child(7),
 .ordertable td:nth-child(7) {
     width: 160px;
 }
+
 .wh-overall span{
     color:#2563eb !important;
 }
@@ -5051,15 +4815,9 @@ nav.flex.items-center.justify-between svg{
     display: block;
 }
 
-
-
-
-
 .label{
     margin-bottom:5px;
 }
-
-
 
 .table-pad{
     padding:20px;
@@ -5080,7 +4838,6 @@ nav.flex.items-center.justify-between svg{
     width: 80px;
 }
 
-
 .adminrmpmtable th:nth-child(4),
 .adminrmpmtable td:nth-child(4) {
     width: 140px;
@@ -5098,12 +4855,6 @@ nav.flex.items-center.justify-between svg{
 .adminrmpmtable td:nth-child(7) {
     width: 160px;
 }
-
-
-
-
-
-
 
 .rejectionupdateadmin th:nth-child(1),
 .rejectionupdateadmin td:nth-child(1) {
@@ -5134,15 +4885,6 @@ nav.flex.items-center.justify-between svg{
 .rejectionupdateadmin td:nth-child(6) {
     width: 80px;
 }
-
-
-
-
-
-
-
-
-
 
 .order-tableadmin th:nth-child(1),
 .order-tableadmin td:nth-child(1) {
@@ -5298,13 +5040,6 @@ nav.flex.items-center.justify-between svg{
     }
 }
 
-
-
-
-
-
-
-
 .icon-btn{
     width:45px;
     height:45px;
@@ -5448,14 +5183,10 @@ nav.flex.items-center.justify-between svg{
     }
 }
 
-
-
-
 .rmpm-dash-card h3 {
     font-size: 15px;
     font-weight: bold;
 }
-
 
 .quantity-box{
     background:#fff;
@@ -5473,8 +5204,6 @@ nav.flex.items-center.justify-between svg{
     color:#0d6efd;
     font-weight:700;
 }
-
-
 
 .plu-inner-card{
     position:relative;
@@ -5499,7 +5228,6 @@ nav.flex.items-center.justify-between svg{
     width:100%;
     height:100%;
     min-height:180px;
-
     display:flex;
     justify-content:center;
     align-items:center;
@@ -5517,10 +5245,8 @@ nav.flex.items-center.justify-between svg{
     align-items:center;
     justify-content:center;
     gap:8px;
-
     font-size:20px;
     font-weight:600;
-
     text-align:center;
 }
 
@@ -5543,10 +5269,7 @@ nav.flex.items-center.justify-between svg{
         font-size:16px;
         padding:14px 18px;
     }
-
 }
-
-
 
 .stock-details th:nth-child(1),
 .stock-details td:nth-child(1) {
@@ -5561,4 +5284,14 @@ nav.flex.items-center.justify-between svg{
 .stock-details th:nth-child(3),
 .stock-details td:nth-child(3) {
     width: 250px;
+}
+
+.shifttablereport th:nth-child(1),
+.shifttablereport td:nth-child(1) {
+    width: 32px;
+}
+
+.shifttablereport th:nth-child(5),
+.shifttablereport td:nth-child(5) {
+    width: 130px;
 }

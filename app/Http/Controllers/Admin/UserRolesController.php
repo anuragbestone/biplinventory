@@ -12,7 +12,6 @@ class UserRolesController extends Controller
 {
 
     public function userRole() {
-
         $data["roleData"] = RoleMaster::select("id", "role_name", "is_active")
             ->where("is_active", 1)
             ->get()->toArray(); 
@@ -21,7 +20,6 @@ class UserRolesController extends Controller
     }
 
     public function getUserDetailsOfRoleId(Request $request) {
-
         $userList = UserMaster::select("full_name", "email")
             ->where("role_id", $request->roleID)
             ->get()
