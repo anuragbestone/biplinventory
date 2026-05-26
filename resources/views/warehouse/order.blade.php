@@ -57,7 +57,12 @@
                                     {{ $oValues["order"]["order_dispatch_status"] == 0 ? 'Pending' : 'Processed' }}</span></td>
                                 <td>
 
-                                    <button class="os-edit-btn has-tooltip" onclick="dispatchOrder('{{ $oValues['order']['order_id'] }}')" title="Dispatch" data-bs-placement="top">
+                                    <button class="os-edit-btn has-tooltip" 
+                                        onclick="dispatchOrder('{{ $oValues['order']['order_id'] }}')" 
+                                        title="Dispatch" 
+                                        data-bs-placement="top"
+                                        {{ $oValues["order"]["order_dispatch_status"] == 1 ? "disabled" : "" }}
+                                        >
                                         <i class="fa-solid fa-truck"></i>
                                     </button>
 
@@ -113,9 +118,9 @@
                         <label class="text-center">Order Details</label>
                         <!-- HEADER -->
                         <div class="row text-center fw-bold mb-2 border-bottom pb-2">
-                            <div class="col-4">SKU</div>
-                            <div class="col-4">QTY</div>
-                            
+                            <div class="col-3">SKU</div>
+                            <div class="col-3">Given QTY</div>
+                            <div class="col-6">Achieved QTY</div>
                         </div>
 
                         <!-- DYNAMIC DATA -->
@@ -186,14 +191,33 @@
                     $.each(orderDetails, function(index, item){
 
                         html += `
-                            <div class="row text-center border-bottom py-2">
-                                <div class="col-6 border-end">
+                            <div class="row text-center border-bottom py-2 align-items-center">
+
+                                <div class="col-3 border-end">
                                     ${item.fg_cat_name}
                                 </div>
 
-                                <div class="col-6">
-                                    ${item.fg_quantity}
+                                <div class="col-3 border-end">
+                                    ${item.fg_quantity} cases
                                 </div>
+
+                                <div class="col-6">
+                                    <div class="row g-2">
+
+                                        <div class="col-8">
+                                            <input type="number" name="fgCatId[${item.fg_cat_id}]" max="${item.fg_quantity}" value="${item.fg_quantity}" class="form-control">
+                                        </div>
+
+                                        <div class="col-4">
+                                            <input type="text"
+                                                class="form-control text-center"
+                                                value="cases"
+                                                readonly>
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </div>
                         `;
                     });

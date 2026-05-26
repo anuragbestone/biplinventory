@@ -4,67 +4,6 @@
 {{-- @php echo "<pre>"; print_r($productionLineData); @endphp --}}
 <div class="main-card content shadow-sm">
 
-
-    {{-- <div class="production-line-user">
-        <div class="row justify-content-center">
-            @if ($productionLineData)
-                @php $counter = 1; @endphp
-                @foreach ($productionLineData as $pData)
-            <div class="col-md-6">
-                <div class="plu-card h-100">
-                    <div class="dt-box">
-                    <div class="dt-shiftfrom">
-                        <label>Shift From</label>
-                        <input type="datetime-local" class="dt-input"></div>
-                    <div class="dt-shifto">
-                        <label>Shift To</label>
-                        <input type="datetime-local" class="dt-input"></div>
-                    </div>
-                    <!-- TIMER -->
-                    <div class="plu-timer">
-                        <span id="timer_{{ $counter }}">05:00</span>
-                    </div>
-
-                    <!-- HEADING -->
-                    <h5 class="plu-title">
-                    {{ $pData["line_name"] }}
-                </h5>
-
-                    <!-- FORM -->
-                    <form method="post" action="{{ url("warehouse/uploadProduction") }}">
-                        @csrf
-                        <div class="plu-inner-card">
-                            <h6>Details</h6>
-                            @foreach ($pData["fg"] as $fData)
-                            <div class="plu-row 1ltr">
-                                <input type="text" value="{{ $fData["fg_cat_name"] }}" readonly>
-                                <input type="number" name="{{ $fData["id"] }}[]" placeholder="Enter Qty">
-                                <input type="text" value="Kg" readonly>
-                            </div>
-                            @endforeach
-                        </div>
-
-                        <div class="text-center mt-4">
-                            <button type="button" onclick="updateProduction({{ $counter }})" class="plu-submit-btn" disabled>Submit</button>
-                        </div>
-
-                    </form>
-
-                    <!-- START STOP -->
-                    <div class="plu-actions">
-                        <button id="startBtn_{{ $counter }}" onclick="startTimer({{ $counter }})" class="plu-start">Start</button>
-                        <button id="stopBtn_{{ $counter }}" class="plu-stop" onclick="stopTimer({{ $counter }})" disabled>Stop</button>
-                    </div>
-
-                </div>
-            </div>
-                @endforeach
-            @endif
-
-        </div>
-    </div> --}}
-
-
     <div class="production-line-user">
         <div class="row justify-content-center">
 
@@ -98,7 +37,28 @@
                         <div class="plu-timer">
                             <span id="timer_{{ $counter }}">02:00</span>
                         </div>
-
+                        <div class="selectline pt-2 pb-2">
+                            <label>Select FG:</label>
+                            <select
+                                name="selected_fg"
+                                class="form-select custom-field fg-select"
+                                id="fg_select_{{ $counter }}"
+                            >
+                                <option value="">
+                                    Select FG
+                                </option>
+                                @foreach ($pData["fg"] as $fData)
+                                    <option
+                                        value="{{ $fData['id'] }}"
+                                        data-name="qty[{{ $fData['id'] }}]"
+                                        data-max="{{ $fData['max_quantity'] }}"
+                                        data-fg="{{ $fData['fg_cat_name'] }}"
+                                    >
+                                        {{ $fData["fg_cat_name"] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         <!-- FORM -->
                         <form id="form_{{ $counter }}" class="generalformloader">
 
@@ -106,24 +66,34 @@
 
                             <input type="hidden" class="productionLine" name="productionLine" value="{{ $pData["id"] }}">
                             <div class="plu-inner-card marbo h-100">
-                                <h6>Details</h6>
 
-                                @foreach ($pData["fg"] as $fData)
+                                <h6 class="detail-heading">Details</h6>
+                                <div class="rmpm-user-row pt-4">
+                                    <input
+                                        type="number"
+                                        inputmode="decimal"
+                                        step="0.001"
+                                        class="qty-input"
+                                        id="qty_input_{{ $counter }}"
+                                        min="0"
+                                        placeholder="Enter Qty"
+                                        disabled
+                                    >
+                                    <input value="cases" readonly>
+                                </div>
+                                <div class="quantity-wrapper">
 
-                                <div class="plu-row">
-
-                                    <input type="text" value="{{ $fData['fg_cat_name'] }}" readonly>
-                                    <input type="number" min="0" max="{{ $fData["max_quantity"] }}" step="0.01" name="qty[{{ $fData['id'] }}]" placeholder="Enter Qty" class="qty-input" disabled>
-                                    <input type="text" value="Cases" readonly>
+                                    <div class="quantity-box shadow-sm">
+                                        Total Quantity:
+                                        <span id="totalQty_{{ $counter }}">0 Cases</span>
+                                    </div>
 
                                 </div>
-
-                                @endforeach
 
                             </div>
 
                             <!-- SUBMIT -->
-                            <div class="text-center mt-4">
+                            <div class="text-center mt-5">
                                 <button type="button" onclick="updateProduction({{ $counter }})" class="plu-submit-btn" id="submitBtn_{{ $counter }}" disabled>
                                     Submit
                                 </button>
@@ -207,14 +177,13 @@
 
 
 <script>
-    let productionDelayFlags = @json($productionDelayFlags);
 
+    let productionDelayFlags = @json($productionDelayFlags);
     // STORE ALL INTERVALS
     let intervals = {};
 
     // PAGE LOAD
     document.addEventListener("DOMContentLoaded", function() {
-
         // DISABLE KEYBOARD ENTRY
         document.querySelectorAll('.dt-input').forEach(input => {
             input.addEventListener('keydown', function(e){
@@ -222,49 +191,44 @@
             });
         });
 
+        // DISABLE START BUTTON INITIALLY
+        document.querySelectorAll('.plu-start').forEach(button => {
+            button.disabled = true;
+        });
+
         // TRACK IF ANY DELAY FOUND
         let hasDelay = false;
 
         // CHECK DELAY FLAGS
         document.querySelectorAll('.productionLine').forEach(input => {
-
             let productionLineId = input.value;
-
             let card = input.closest('.plu-card');
-
             let timer = card.querySelector('.plu-timer span');
-
             let counter = card.id.split('_')[1];
 
             // DELAY EXISTS
             if(productionDelayFlags[productionLineId] == 1)
             {
                 hasDelay = true;
-
                 // DISABLE CARD
                 disableCard(counter);
-
                 // RED BORDER
                 card.style.border = "2px solid red";
-
                 // RED TIMER
                 timer.style.color = "red";
-
                 // SHOW ISSUE BOX
                 document.querySelector('.user-production-issue')
                     .style.display = 'flex';
 
                 // AUTO SELECT CURRENT LINE
                 let lineSelect = document.querySelector(
-                    'select[name="production_lin_id"]'
+                    'select[name="production_line_id"]'
                 );
-
                 if(lineSelect)
                 {
                     lineSelect.value = productionLineId;
                 }
             }
-
         });
 
         // SHOW ALERT ONLY ONCE
@@ -274,10 +238,9 @@
                 "Production time exceeded for one or more lines. Kindly upload the reason."
             );
         }
-
     });
 
-
+    // DISABLE CARD
     function disableCard(counter)
     {
         let card = document.getElementById(
@@ -288,37 +251,31 @@
         card.querySelectorAll(
             'input, button, select, textarea'
         ).forEach(element => {
-
             element.disabled = true;
-
         });
-
         // VISUAL EFFECT
         card.style.opacity = "0.7";
-
         // ADD CLASS
         card.classList.add('disabled-card');
     }
 
-
-
-    // ENABLE COMPLETE CARD
-    function enableCard(counter) {
-        let card = document.getElementById('card_' + counter);
-
+    // ENABLE CARD
+    function enableCard(counter)
+    {
+        let card = document.getElementById(
+            'card_' + counter
+        );
         // ENABLE ALL INPUTS
-        card.querySelectorAll('input, button, select, textarea')
-            .forEach(element => {
-
+        card.querySelectorAll(
+            'input, button, select, textarea'
+        ).forEach(element => {
             element.disabled = false;
-
         });
 
-        // RESET DEFAULT BUTTON STATE
+        // RESET BUTTON STATE
         document.getElementById(
             'stopBtn_' + counter
         ).disabled = true;
-
         document.getElementById(
             'submitBtn_' + counter
         ).disabled = true;
@@ -328,34 +285,121 @@
         card.style.pointerEvents = "auto";
     }
 
+    // FG CHANGE
+    $(".fg-select").change(function(){
+        let select = $(this);
+        let counter =
+            select.attr("id").split("_")[2];
+        let selectedOption =
+            select.find(":selected");
+        let fgId =
+            selectedOption.val();
+        let inputName =
+            selectedOption.data("name");
+        let maxQty =
+            selectedOption.data("max");
+        let qtyInput =
+            $("#qty_input_" + counter);
+        let startBtn =
+            $("#startBtn_" + counter);
+
+        // RESET VALUES
+        qtyInput.val('');
+        $("#totalQty_" + counter)
+            .html("0 Cases");
+
+        // NO FG SELECTED
+        if(fgId == "")
+        {
+            qtyInput.prop("disabled", true);
+            startBtn.prop("disabled", true);
+            qtyInput.removeAttr("name");
+            qtyInput.removeAttr("max");
+            return;
+        }
+
+        // SET INPUT DETAILS
+        qtyInput.attr("name", inputName);
+        qtyInput.attr("max", maxQty);
+
+        qtyInput.prop("disabled", true);
+
+        // ENABLE START
+        startBtn.prop("disabled", false);
+    });
+
+    // LIVE TOTAL QUANTITY
+    $(".qty-input").on("keyup change", function(){
+
+        let qty =
+            parseFloat($(this).val()) || 0;
+        let counter =
+            $(this).attr("id").split("_")[2];
+        $("#totalQty_" + counter)
+            .html(qty + " Cases");
+
+    });
+
 
     // START TIMER
     function startTimer(counter)
     {
-        let timerElement = document.getElementById('timer_' + counter);
-        let startBtn = document.getElementById('startBtn_' + counter);
-        let stopBtn = document.getElementById('stopBtn_' + counter);
-        let submitBtn = document.getElementById('submitBtn_' + counter);
-        let form = document.getElementById('form_' + counter);
+        let timerElement =
+            document.getElementById(
+                'timer_' + counter
+            );
+        let startBtn =
+            document.getElementById(
+                'startBtn_' + counter
+            );
+        let stopBtn =
+            document.getElementById(
+                'stopBtn_' + counter
+            );
+        let submitBtn =
+            document.getElementById(
+                'submitBtn_' + counter
+            );
+        let form =
+            document.getElementById(
+                'form_' + counter
+            );
+        let fgSelect =
+            document.getElementById(
+                'fg_select_' + counter
+            );
+        let qtyInput =
+            document.getElementById(
+                'qty_input_' + counter
+            );
+
+        // FG VALIDATION
+        if(fgSelect.value == "")
+        {
+            alert("Please select FG");
+            return;
+        }
 
         // GET PRODUCTION LINE ID
         let productionLine =
-            form.querySelector('.productionLine').value;
+            form.querySelector(
+                '.productionLine'
+            ).value;
 
-        // AJAX CALL
+        // AJAX
         $.ajax({
             url: "{{ url('warehouse/startProductionTimerWhatsapp') }}",
             type: "GET",
             data: {
                 production_line_id: productionLine
             },
-
             success: function(response)
             {
-                console.log("Timer start recorded");
+                console.log(
+                    "Timer start recorded"
+                );
                 console.log(response);
             },
-
             error: function(error)
             {
                 console.log(error);
@@ -368,10 +412,11 @@
             return;
         }
 
-        // ENABLE INPUTS
-        form.querySelectorAll('.qty-input').forEach(input => {
-            input.disabled = false;
-        });
+        // LOCK FG
+        fgSelect.disabled = true;
+
+        // ENABLE INPUT
+        qtyInput.disabled = false;
 
         // ENABLE DATETIME
         let shiftInputs = document.querySelectorAll(
@@ -391,19 +436,25 @@
         startCountdown(counter, 120);
     }
 
-
-
-    // COUNTDOWN FUNCTION
+    // COUNTDOWN
     function startCountdown(counter, totalSeconds)
     {
-        let timerElement = document.getElementById('timer_' + counter);
-        intervals[counter] = setInterval(function(){
-            let minutes = Math.floor(totalSeconds / 60);
-            let seconds = totalSeconds % 60;
+        let timerElement =
+            document.getElementById(
+                'timer_' + counter
+            );
+
+        intervals[counter] =
+            setInterval(function(){
+            let minutes =
+                Math.floor(totalSeconds / 60);
+            let seconds =
+                totalSeconds % 60;
             timerElement.innerHTML =
                 String(minutes).padStart(2,'0')
                 + ":"
                 + String(seconds).padStart(2,'0');
+
             totalSeconds--;
 
             // TIMER COMPLETE
@@ -412,59 +463,62 @@
                 clearInterval(intervals[counter]);
                 delete intervals[counter];
                 timerElement.innerHTML = "00:00";
+
                 document.getElementById(
                     'startBtn_' + counter
                 ).disabled = false;
+
                 document.getElementById(
                     'stopBtn_' + counter
                 ).disabled = true;
 
+                // FORM
+                let form =
+                    document.getElementById(
+                        'form_' + counter
+                    );
 
-                // CURRENT FORM
-                let form = document.getElementById(
-                    'form_' + counter
-                );
-
-                // GET PRODUCTION LINE
+                // PRODUCTION LINE
                 let productionLine =
-                    form.querySelector('.productionLine').value;
+                    form.querySelector(
+                        '.productionLine'
+                    ).value;
 
-                // CURRENT CARD
-                let card = document.getElementById(
-                    'card_' + counter
-                );
+                // CARD
+                let card =
+                    document.getElementById(
+                        'card_' + counter
+                    );
 
-                // RED ALERT UI
-                card.style.border = "2px solid red";
-                timerElement.style.color = "red";
+                // ALERT UI
+                card.style.border =
+                    "2px solid red";
+                timerElement.style.color =
+                    "red";
 
-                // DISABLE COMPLETE CARD
+                // DISABLE CARD
                 disableCard(counter);
 
-
-                // ALERT MESSAGE
+                // ALERT
                 alert(
                     "Production time exceeded its limit. Kindly upload the reason."
                 );
 
-
                 // SHOW ISSUE BOX
-                document.querySelector('.user-production-issue')
-                    .style.display = 'flex';
-
+                document.querySelector(
+                    '.user-production-issue'
+                ).style.display = 'flex';
 
                 // AUTO SELECT LINE
                 let lineSelect = document.querySelector(
-                    'select[name="production_lin_id"]'
+                    'select[name="production_line_id"]'
                 );
-
                 if(lineSelect)
                 {
                     lineSelect.value = productionLine;
                 }
 
-
-                // AJAX GET REQUEST
+                // AJAX ALERT
                 $.ajax({
                     url: "{{ url('warehouse/productionDelayAlert') }}",
                     type: "GET",
@@ -486,303 +540,407 @@
         },1000);
     }
 
-
-
     // STOP TIMER
     function stopTimer(counter)
     {
         clearInterval(intervals[counter]);
+
         delete intervals[counter];
-        let timerElement = document.getElementById(
-            'timer_' + counter
-        );
-        let startBtn = document.getElementById(
-            'startBtn_' + counter
-        );
-        let stopBtn = document.getElementById(
-            'stopBtn_' + counter
-        );
-        let submitBtn = document.getElementById(
-            'submitBtn_' + counter
-        );
-        let form = document.getElementById(
-            'form_' + counter
-        );
+
+        let timerElement =
+            document.getElementById(
+                'timer_' + counter
+            );
+        let startBtn =
+            document.getElementById(
+                'startBtn_' + counter
+            );
+        let stopBtn =
+            document.getElementById(
+                'stopBtn_' + counter
+            );
+        let submitBtn =
+            document.getElementById(
+                'submitBtn_' + counter
+            );
+        let form =
+            document.getElementById(
+                'form_' + counter
+            );
+        let fgSelect =
+            document.getElementById(
+                'fg_select_' + counter
+            );
+        let qtyInput =
+            document.getElementById(
+                'qty_input_' + counter
+            );
 
         // GET PRODUCTION LINE ID
         let productionLine =
-            form.querySelector('.productionLine').value;
+            form.querySelector(
+                '.productionLine'
+            ).value;
 
-        // AJAX CALL
+        // AJAX
         $.ajax({
             url: "{{ url('warehouse/stopProductionTimer') }}",
             type: "GET",
             data: {
                 production_line_id: productionLine
             },
-
             success: function(response)
             {
                 console.log("Timer stopped");
+
                 console.log(response);
             },
-
             error: function(error)
             {
                 console.log(error);
             }
+
         });
 
         // RESET TIMER
         timerElement.innerHTML = "02:00";
         timerElement.style.color = "";
 
-        // RESET CARD BORDER
+        // RESET BORDER
         document.getElementById(
             'card_' + counter
         ).style.border = "";
 
-        // BUTTON RESET
-        startBtn.disabled = false;
+        // RESET BUTTONS
+        startBtn.disabled = true;
         stopBtn.disabled = true;
         submitBtn.disabled = true;
 
-        // RESET INPUTS
-        form.querySelectorAll('.qty-input').forEach(input => {
-            input.value = '';
-            input.disabled = true;
+        // ENABLE FG SELECT AGAIN
+        fgSelect.disabled = false;
+        fgSelect.selectedIndex = 0;
 
-        });
+        // RESET INPUT
+        qtyInput.value = '';
+        qtyInput.disabled = true;
+        qtyInput.removeAttribute('name');
+        qtyInput.removeAttribute('max');
+        qtyInput.style.border = "";
+
+        // RESET TOTAL
+        document.getElementById(
+            'totalQty_' + counter
+        ).innerHTML = "0 Cases";
 
         // HIDE ISSUE BOX
-        document.querySelector('.user-production-issue')
-            .style.display = 'none';
+        document.querySelector(
+            '.user-production-issue'
+        ).style.display = 'none';
     }
 
-
-
-    // SUBMIT FUNCTION
-    function updateProduction(counter)
-    {
-        let form = document.getElementById(
+    // SUBMIT PRODUCTION
+function updateProduction(counter)
+{
+    let form =
+        document.getElementById(
             'form_' + counter
         );
 
-        let qtyInputs = form.querySelectorAll(
+    let qtyInput =
+        form.querySelector(
             '.qty-input'
         );
 
-        let shiftInputs = document.querySelectorAll(
+    let fgSelect =
+        document.getElementById(
+            'fg_select_' + counter
+        );
+
+    let shiftInputs =
+        document.querySelectorAll(
             '#card_' + counter + ' .dt-input'
         );
 
-        let productionLine =
-            form.querySelector(".productionLine").value;
-        let shiftFrom = shiftInputs[0].value;
-        let shiftTo = shiftInputs[1].value;
+    let productionLine =
+        form.querySelector(
+            ".productionLine"
+        ).value;
 
-        // SHIFT FROM VALIDATION
-        if(shiftFrom == '')
-        {
-            alert("Please select Shift From");
-            return;
-        }
+    let shiftFrom =
+        shiftInputs[0].value;
 
-        // SHIFT TO VALIDATION
-        if(shiftTo == '')
-        {
-            alert("Please select Shift To");
-            return;
-        }
+    let shiftTo =
+        shiftInputs[1].value;
 
-        // DATE VALIDATION
-        let fromDate = new Date(shiftFrom);
-        let toDate = new Date(shiftTo);
-        if(toDate <= fromDate)
-        {
-            alert(
-                "Shift To should be greater than Shift From"
-            );
-            return;
-        }
+    // FG VALIDATION
+    if(fgSelect.value == "")
+    {
+        alert("Please select FG");
 
+        return;
+    }
 
-        // QTY VALIDATION
-        let hasQty = false;
-        let hasInvalidQty = false;
-
-        qtyInputs.forEach(input => {
-
-            let value = parseFloat(input.value) || 0;
-
-            let max = parseFloat(input.max) || 0;
-
-            // CHECK IF ANY VALUE ENTERED
-            if(value > 0)
-            {
-                hasQty = true;
-            }
-
-            // MAX VALIDATION
-            if(value > max)
-            {
-                hasInvalidQty = true;
-
-                input.style.border = "2px solid red";
-
-                alert(
-                    "Entered quantity cannot be greater than "
-                    + max
-                );
-
-                return;
-            }
-            else
-            {
-                input.style.border = "";
-            }
-
-        });
-
-        if(!hasQty)
-        {
-            alert("Kindly enter some quantity");
-            return;
-        }
-
-        if(hasInvalidQty)
-        {
-            return;
-        }
-
-        // FORM DATA
-        let formData = new FormData(form);
-        formData.append('shift_from', shiftFrom);
-        formData.append('shift_to', shiftTo);
-        formData.append(
-            "productionLine",
-            productionLine
+    // SHIFT FROM VALIDATION
+    if(shiftFrom == '')
+    {
+        alert(
+            "Please select Shift From"
         );
 
-        // CURRENT CARD
-        let card = document.getElementById(
+        return;
+    }
+
+    // SHIFT TO VALIDATION
+    if(shiftTo == '')
+    {
+        alert(
+            "Please select Shift To"
+        );
+
+        return;
+    }
+
+    // DATE VALIDATION
+    let fromDate =
+        new Date(shiftFrom);
+
+    let toDate =
+        new Date(shiftTo);
+
+    if(toDate <= fromDate)
+    {
+        alert(
+            "Shift To should be greater than Shift From"
+        );
+
+        return;
+    }
+
+    // QUANTITY VALIDATION
+    let value =
+        parseFloat(qtyInput.value) || 0;
+
+    let max =
+        parseFloat(qtyInput.max) || 0;
+
+    // EMPTY QTY
+    if(value <= 0)
+    {
+        alert(
+            "Kindly enter quantity"
+        );
+
+        return;
+    }
+
+    // MAX VALIDATION
+    if(value > max)
+    {
+        qtyInput.style.border =
+            "2px solid red";
+
+        alert(
+            "Entered quantity cannot be greater than "
+            + max
+        );
+
+        return;
+    }
+    else
+    {
+        qtyInput.style.border = "";
+    }
+
+    // IMPORTANT
+    // ENABLE FIELD BEFORE FORM DATA
+    qtyInput.disabled = false;
+
+    // CREATE FORM DATA
+    let formData =
+        new FormData(form);
+
+    formData.append(
+        'shift_from',
+        shiftFrom
+    );
+
+    formData.append(
+        'shift_to',
+        shiftTo
+    );
+
+    formData.append(
+        "productionLine",
+        productionLine
+    );
+
+    // CURRENT CARD
+    let card =
+        document.getElementById(
             'card_' + counter
         );
 
-        // FREEZE COMPLETE CARD
-        card.style.pointerEvents = "none";
-        card.style.opacity = "0.7";
+    // FREEZE CARD
+    card.style.pointerEvents =
+        "none";
 
-        // DISABLE ALL BUTTONS
-        card.querySelectorAll('button')
+    card.style.opacity =
+        "0.7";
+
+    // DISABLE BUTTONS
+    card.querySelectorAll('button')
         .forEach(button => {
 
-            button.disabled = true;
+        button.disabled = true;
 
-        });
+    });
 
-        // AJAX
-        $.ajax({
-            url: "{{ url('warehouse/uploadProduction') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN':
-                    $('meta[name="csrf-token"]').attr('content')
-            },
+    // AJAX
+    $.ajax({
 
-            beforeSend: function(){
-                console.log("Submitting...");
-            },
+        url: "{{ url('warehouse/uploadProduction') }}",
 
-            success: function(response)
+        type: "POST",
+
+        data: formData,
+
+        processData: false,
+
+        contentType: false,
+
+        headers: {
+            'X-CSRF-TOKEN':
+                $('meta[name="csrf-token"]')
+                .attr('content')
+        },
+
+        beforeSend: function(){
+
+            console.log(
+                "Submitting..."
+            );
+
+        },
+
+        success: function(response)
+        {
+            console.log(response);
+
+            // UNFREEZE CARD
+            card.style.pointerEvents =
+                "auto";
+
+            card.style.opacity =
+                "1";
+
+            if(response.status == "ok")
             {
+                alert(response.message);
 
-                // UNFREEZE CARD
-                card.style.pointerEvents = "auto";
-                card.style.opacity = "1";
+                // CLEAR TIMER
+                clearInterval(
+                    intervals[counter]
+                );
 
-                // KEEP START BUTTON DISABLED
+                delete intervals[counter];
+
+                // RESET INPUT
+                qtyInput.value = '';
+
+                // RESET TOTAL
+                document.getElementById(
+                    'totalQty_' + counter
+                ).innerHTML = "0 Cases";
+
+                // RESET TIMER
+                document.getElementById(
+                    'timer_' + counter
+                ).innerHTML = "02:00";
+
+                // RESET UI
+                document.getElementById(
+                    'card_' + counter
+                ).style.border = "";
+
+                document.getElementById(
+                    'timer_' + counter
+                ).style.color = "";
+
+                // KEEP FG LOCKED
+                fgSelect.disabled = true;
+
+                // BUTTON STATE
                 document.getElementById(
                     'startBtn_' + counter
                 ).disabled = true;
 
-                // ENABLE STOP BUTTON
                 document.getElementById(
                     'stopBtn_' + counter
                 ).disabled = false;
 
-                // ENABLE SUBMIT BUTTON
                 document.getElementById(
                     'submitBtn_' + counter
                 ).disabled = false;
 
-                if(response.status == "ok")
-                {
-                    alert(response.message);
-
-                    // CLEAR TIMER
-                    clearInterval(intervals[counter]);
-
-                    delete intervals[counter];
-
-                    // RESET QTY ONLY
-                    form.querySelectorAll('.qty-input')
-                        .forEach(input => {
-
-                        input.value = '';
-
-                    });
-
-                    // RESET TIMER UI
-                    document.getElementById(
-                        'timer_' + counter
-                    ).innerHTML = "02:00";
-
-                    // REMOVE ALERT UI
-                    document.getElementById(
-                        'card_' + counter
-                    ).style.border = "";
-
-                    document.getElementById(
-                        'timer_' + counter
-                    ).style.color = "";
-
-                    // HIDE ISSUE BOX
-                    // document.querySelector(
-                    //     '.user-production-issue'
-                    // ).style.display = 'none';
-
-                    // RESTART TIMER
-                    startCountdown(counter, 120);
-                }
-                else
-                {
-                    alert(response.message);
-                }
-            },
-
-            error: function(xhr)
-            {
-                console.log(xhr);
-                if(
-                    xhr.responseJSON
-                    &&
-                    xhr.responseJSON.message
-                )
-                {
-                    alert(xhr.responseJSON.message);
-                }
-                else
-                {
-                    alert("Something went wrong");
-                }
+                // RESTART TIMER
+                startCountdown(counter, 120);
             }
+            else
+            {
+                alert(response.message);
 
-        });
-    }
+                // ENABLE BUTTONS AGAIN
+                document.getElementById(
+                    'stopBtn_' + counter
+                ).disabled = false;
+
+                document.getElementById(
+                    'submitBtn_' + counter
+                ).disabled = false;
+            }
+        },
+
+        error: function(xhr)
+        {
+            console.log(xhr);
+
+            // UNFREEZE
+            card.style.pointerEvents =
+                "auto";
+
+            card.style.opacity =
+                "1";
+
+            // ENABLE BUTTONS AGAIN
+            document.getElementById(
+                'stopBtn_' + counter
+            ).disabled = false;
+
+            document.getElementById(
+                'submitBtn_' + counter
+            ).disabled = false;
+
+            if(
+                xhr.responseJSON
+                &&
+                xhr.responseJSON.message
+            )
+            {
+                alert(
+                    xhr.responseJSON.message
+                );
+            }
+            else
+            {
+                alert(
+                    "Something went wrong"
+                );
+            }
+        }
+
+    });
+
+}
 
 </script>
 

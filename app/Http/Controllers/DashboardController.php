@@ -70,9 +70,14 @@ class DashboardController extends Controller {
     public function showDashboard(Request $request) {
         if ($request->session()->get("role_id") != 3) {
 
+            // ------ Bottle Data Starts
             $productionLineData = ProductionLineMaster::select("id", "line_name")
                 ->where("is_active", 1)
                 ->get()->toArray();
+
+            
+
+            // ------ Bottle Data Ends
 
             $data["fgData"] = FgStockMaster::select(
                     "fg_cat_master.fg_cat_name",

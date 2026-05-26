@@ -1,38 +1,139 @@
-@extends("layouts.app") @section("mainContent")
+@extends("layouts.app") 
+@section("mainContent")
 
 
 <style>
-    .graph-area {
+.graph-area {
     display: flex;
     align-items: flex-end;
     gap: 30px;
     overflow-x: auto;
 }
-
+ 
 .day-group {
     min-width: 120px;
 }
-
+ 
 .bars {
     display: flex;
     align-items: flex-end;
-    gap: 5px;
+    gap: 35px;
     height: 300px;
+    padding-right: 30px;
 }
-
+ 
 .bar {
     width: 22px;
     border-radius: 8px 8px 0 0;
     position: relative;
     transition: 0.3s;
 }
-
+ 
 .bar small {
     position: absolute;
     top: -22px;
-    left: -5px;
+    left: 10px;
     font-size: 11px;
     white-space: nowrap;
+}
+
+
+
+
+.bottle-mask{
+  position:absolute;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+
+  /* 🔥 MAGIC LINE */
+  -webkit-mask-image: url("{{ asset("assets") }}/images/sdsd.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+
+  mask-image: url("{{ asset("assets") }}/images/sdsd.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  
+}
+
+.bottle-mask500ml{
+  position:absolute;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+
+  /* 🔥 MAGIC LINE */
+  -webkit-mask-image: url("{{ asset("assets") }}/images/500ml.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+
+  mask-image: url("{{ asset("assets") }}/images/500ml.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  
+}
+
+.bottle-mask200ml{
+  position:absolute;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+
+  /* 🔥 MAGIC LINE */
+  -webkit-mask-image: url("{{ asset("assets") }}/images/200ml.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+
+  mask-image: url("{{ asset("assets") }}/images/200ml.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  
+}
+
+.bottle-mask200mpink{
+  position:absolute;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+
+  /* 🔥 MAGIC LINE */
+  -webkit-mask-image: url("{{ asset("assets") }}/images/200mlneeri.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+
+  mask-image: url("{{ asset("assets") }}/images/200mlneeri.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  
+}
+
+
+.bottle-mask2ltr{
+  position:absolute;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+
+  /* 🔥 MAGIC LINE */
+  -webkit-mask-image: url("{{ asset("assets") }}/images/2ltrbottle.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+
+  mask-image: url("{{ asset("assets") }}/images/2ltrbottle.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  
 }
 </style>
 
@@ -56,142 +157,268 @@
         </div>
 
         <div class="row pt-4">
+<!-- LEFT CARD -->
+<div class="col-md-6">
+<div class="bottle-card shadow-sm">
+<!-- Alert -->
+<div class="d-flex align-items-center justify-content-between">
+<button class="alert-btn">
+<i class="bi bi-exclamation-triangle-fill"></i>
+<span>Alert</span>
+</button>
+ 
+                                    <div class="status-box">
+<span class="status-label">Status:</span>
+ 
+                                        <span class="status-indicator deactive"></span>
+ 
+                                        <span class="status-time">6 min Ago</span>
+</div>
+</div>
+ 
+                                <div class="linetext">
+<h3 class="mt-2 fw-light-custom">Company Owned Contractor Operated Line</h3>
+<p class="small text-muted"><b>Total 1700 Cases</b></p>
+</div>
+ 
+                                <div class="p-3 mt-5" style="border-radius: 20px; background: #eef3fb59; border: #fff solid 1px">
+<div class="size-tabs group-left">
+ <div class="size-item">
+ <button class="tab-btn active" data-target="ltr1">1L</button>
+<span class="case-text">1200 Cases</span>
+</div>
+      <div class="size-item">
+ <button class="tab-btn" data-target="ltr2">2L</button>
+<span class="case-text">1200 Cases</span>
+</div> 
 
+ 
+      </div>
 
-            <!-- LEFT CARD -->
-            <div class="col-md-6">
-                <div class="bottle-card shadow-sm">
-                    <!-- Alert -->
-                    <div class="d-flex align-items-center justify-content-between">
-                        <button class="alert-btn">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                            <span id="">Line Is Off</span>
-                        </button>
+ 
+<!-- DIVS -->
+<div id="ltr1" class="tab-content active">
+<div class="bottlemain bottlemain1ltr">
+<!-- BUTTONS -->
+ 
+                                    <div class="bottle">
+<audio
+                                            id="waterSound"
+                                            src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
+></audio>
+ 
+                                        <div class="bottle-wrapper">
+<div class="bottle oneltr">
+<div class="bottle-mask">
+<div class="levels" id="levels"></div>
+ 
+                                                    <div class="water" id="water">
+<div class="surface"></div>
+<div class="bubbles">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</div>
+<img src="{{ asset("assets") }}/images/sdsd.svg" alt="" class="imgbottlebestone" />
+</div>
+ 
+                                            <div class="indicators" id="indicators"></div>
+</div>
+</div>
+</div>
+</div>
+ 
+<div id="ltr2" class="tab-content">
+<div class="bottlemain bottlemain2ltr">
+<!-- BUTTONS -->
+ 
+                                    <div class="bottle">
+<audio
+                                            id="waterSound"
+                                            src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
+></audio>
+ 
+                                        <div class="bottle-wrapper">
+<div class="bottle twoltr">
+<div class="bottle-mask2ltr">
+<div class="levels" id="levels"></div>
+ 
+                                                    <div class="water" id="water">
+<div class="surface"></div>
+<div class="bubbles">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</div>
+<img src="{{ asset("assets") }}/images/2ltrbottle.svg" alt="" class="imgbottlebestone" />
+</div>
+ 
+                                            <div class="indicators" id="indicators"></div>
+</div>
+</div>
+</div>
+</div>
+ 
+ 
+                    
+</div>
+</div>
+</div>
+ 
+                        <!-- RIGHT CARD -->
+<div class="col-md-6">
+<div class="bottle-card shadow-sm">
+<!-- Alert -->
+<div class="d-flex align-items-right justify-content-end">
+<div class="status-box lineb">
+<span class="status-label">Status:</span>
+ 
+                                        <span class="status-indicator active"></span>
+ 
+                                        <span class="status-time">2 min Ago</span>
+</div>
+</div>
+ 
+                                <div class="linetext">
+<h3 class="mt-2 fw-light-custom">Company Owned Company Operated Line</h3>
+<p class="small text-muted"><b>Total 1700 Cases</b></p>
+</div>
+ 
+                                <div class="p-3 mt-5" style="border-radius: 20px; background: #eef3fb59; border: #fff solid 1px">
+<div class="size-tabs group-right">
+ <div class="size-item">
+ <button class="tab-btn active" data-target="ml200">200ml</button>
+<span class="case-text">1200 Cases</span>
+</div>
+       <div class="size-item">
+ <button class="tab-btn" data-target="mlpink200">200ml Pink</button>
+<span class="case-text">1200 Cases</span>
+</div>
+<div class="size-item">
+ <button class="tab-btn" data-target="ml500">500ml</button>
+<span class="case-text">1200 Cases</span>
+</div>
 
-                        <div class="status-box">
-                            <span class="status-label">Status:</span>
-
-                            <span class="status-indicator deactive"></span>
-
-                            <span class="status-time">6 min Ago</span>
-                        </div>
-                    </div>
-
-                    <div class="linetext">
-                        <h3 class="mt-2 fw-light-custom">Company Owned Contractor Operated Line</h3>
-                        <p class="small text-muted"><b>Total 1700 Cases</b></p>
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="size-tabs mb-3">
-                        <div class="size-item active">
-                            <button class="size-btn">1 Ltr</button>
-                            <span class="case-text">1200 Cases</span>
-                        </div>
-
-                        <div class="size-item">
-                            <button class="size-btn">2 Ltr</button>
-                            <span class="case-text">600 Cases</span>
-                        </div>
-                    </div>
-                    <div class="bottlemain">
-                        <div class="bottle">
-                            <audio id="waterSound" src="https://bestoneindia.com/plantbottle/universfield-fill-water-192164.mp3"></audio>
-
-                            <div class="bottle-wrapper">
-                                <div class="bottle">
-                                    <div class="bottle-mask">
-                                        <div class="levels" id="levels"></div>
-
-                                        <div class="water" id="water">
-                                            <div class="surface"></div>
-                                            <div class="bubbles">
-                                                <span></span>
-                                                <span></span>
-                                                <span></span>
-                                                <span></span>
-                                                <span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <img src="{{ asset("assets") }}/images/sdsd.svg" alt="" class="imgbottlebestone" />
-                                </div>
-
-                                <div class="indicators" id="indicators"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!-- RIGHT CARD -->
-            <div class="col-md-6">
-                <div class="bottle-card shadow-sm">
-                    <!-- Alert -->
-                    <div class="d-flex align-items-right justify-content-end">
-                        <div class="status-box lineb">
-                            <span class="status-label">Status:</span>
-
-                            <span class="status-indicator active"></span>
-
-                            <span class="status-time">2 min Ago</span>
-                        </div>
-                    </div>
-
-                    <div class="linetext">
-                        <h3 class="mt-2 fw-light-custom">Company Owned Contractor Operated Line</h3>
-                        <p class="small text-muted"><b>Total 1700 Cases</b></p>
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="size-tabs mb-3">
-                        <div class="size-item active">
-                            <button class="size-btn">200ml</button>
-                            <span class="case-text">1200 Cases</span>
-                        </div>
-
-                        <div class="size-item">
-                            <button class="size-btn pink">200ml</button>
-                            <span class="case-text">600 Cases</span>
-                        </div>
-
-                        <div class="size-item">
-                            <button class="size-btn">500ml</button>
-                            <span class="case-text">600 Cases</span>
-                        </div>
-                    </div>
-                    <div class="bottlemain">
-                        <div class="bottle">
-                            <audio id="waterSound" src="https://bestoneindia.com/plantbottle/universfield-fill-water-192164.mp3"></audio>
-
-                            <div class="bottle-wrapper">
-                                <div class="bottle">
-                                    <div class="bottle-mask">
-                                        <div class="levels" id="levels"></div>
-
-                                        <div class="water" id="water">
-                                            <div class="surface"></div>
-                                            <div class="bubbles">
-                                                <span></span>
-                                                <span></span>
-                                                <span></span>
-                                                <span></span>
-                                                <span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <img src="{{ asset("assets") }}/images/sdsd.svg" alt="" class="imgbottlebestone" />
-                                </div>
-
-                                <div class="indicators" id="indicators"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+ 
+      </div>
+ 
+<!-- DIVS -->
+<div id="ml200" class="tab-content active">
+<div class="bottlemain bottlemain200ml">
+<!-- BUTTONS -->
+ 
+                                    <div class="bottle">
+<audio
+                                            id="waterSound"
+                                            src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
+></audio>
+ 
+                                        <div class="bottle-wrapper">
+<div class="bottle twohundml">
+<div class="bottle-mask">
+<div class="levels" id="levels"></div>
+ 
+                                                    <div class="water" id="water">
+<div class="surface"></div>
+<div class="bubbles">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</div>
+<img src="{{ asset("assets") }}/images/200ml.svg" alt="" class="imgbottlebestone" />
+</div>
+ 
+                                            <div class="indicators" id="indicators"></div>
+</div>
+</div>
+</div>
+</div>
+ 
+<div id="mlpink200" class="tab-content">
+<div class="bottlemain bottlemain200mlpink">
+<!-- BUTTONS -->
+ 
+                                    <div class="bottle">
+<audio
+                                            id="waterSound"
+                                            src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
+></audio>
+ 
+                                        <div class="bottle-wrapper">
+<div class="bottle twohundpinkml">
+<div class="bottle-mask200mpink">
+<div class="levels" id="levels"></div>
+ 
+                                                    <div class="water" id="water">
+<div class="surface"></div>
+<div class="bubbles">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</div>
+<img src="{{ asset("assets") }}/images/200mlneeri.svg" alt="" class="imgbottlebestone" />
+</div>
+ 
+                                            <div class="indicators" id="indicators"></div>
+</div>
+</div>
+</div>
+</div>
+ 
+<div id="ml500" class="tab-content">
+<div class="bottlemain bottlemain500ml">
+<!-- BUTTONS -->
+ 
+                                    <div class="bottle">
+<audio
+                                            id="waterSound"
+                                            src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
+></audio>
+ 
+                                        <div class="bottle-wrapper">
+<div class="bottle fivehundml">
+<div class="bottle-mask500ml">
+<div class="levels" id="levels"></div>
+ 
+                                                    <div class="water" id="water">
+<div class="surface"></div>
+<div class="bubbles">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</div>
+<img src="{{ asset("assets") }}/images/500ml.svg" alt="" class="imgbottlebestone" />
+</div>
+ 
+                                            <div class="indicators" id="indicators"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
     </div>
 
     <div class="main-finishmaterial mt-4">

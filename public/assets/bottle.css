@@ -5,24 +5,6 @@
   height:100%;
 }
 
-.bottle-mask{
-  position:absolute;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-
-  /* 🔥 MAGIC LINE */
-  -webkit-mask-image: url("./images/sdsd.svg");
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-
-  mask-image: url("./images/sdsd.svg");
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
-  
-}
 
 /* water */
 .water{
@@ -31,7 +13,7 @@
   width:100%;
   height:0;
   background: linear-gradient(to top,#2ea6df,#6ed0ff);
-  border-radius: 0 0 40px 40px;
+  border-radius: 0 0 -10px 30px;
   opacity: 0.9;
 }
 
@@ -60,8 +42,8 @@
 
 .lvl{
   position:absolute;
-  left:15%;
-  width:70%;
+  left: 38%;
+  width: 29%;
   height:2px;
   background:#cbd5e1;
 }
@@ -120,7 +102,7 @@
 /* popup */
 .popup{
   position:absolute;
-  left:-175px;
+  left:-155px;
   background:#2563eb;
   color:#fff;
   padding: 5px 13px;
@@ -134,18 +116,188 @@
   opacity:1;
   box-shadow:0 0 10px #2563eb;
 }
-div#ind0 {
-    margin-bottom: -42px;
+
+
+
+div#ind-b1-0 {
+    margin-bottom: 13px;
 }
-div#ind1 {
-    margin-bottom: -30px;
+div#ind-b1-1 {
+    margin-bottom: -28px;
 }
-div#ind2 {
-    margin-bottom: -18px;
+div#ind-b1-2 {
+    margin-bottom: -93px;
 }
-div#ind3 {
-    margin-bottom: -10px;
+div#ind-b1-3 {
+    margin-bottom: -131px;
 }
+
+div#lvl-b1-0 {
+    margin-bottom: -23px;
+}
+div#lvl-b1-1 {
+    margin-bottom: -33px;
+}
+div#lvl-b1-2 {
+    margin-bottom: -60px;
+}
+div#lvl-b1-3 {
+    margin-bottom: -67px;
+}
+
+div#pop-b1-0 {
+    margin-bottom: 8px;
+}
+div#pop-b1-1 {
+    margin-bottom: -31px;
+}
+div#pop-b1-2 {
+    margin-bottom: -93px;
+}
+div#pop-b1-3 {
+    margin-bottom: -133px;
+}
+
+
+
+
+
+
+
+
+
+
+div#lvl-b2-0 { margin-bottom: 20px; }
+div#lvl-b2-1 { margin-bottom: 0px; }
+div#lvl-b2-2 { margin-bottom: -45px; }
+div#lvl-b2-3 { margin-bottom: -90px; }
+
+
+
+div#ind-b2-0 { margin-bottom: 18px; }
+div#ind-b2-1 { margin-bottom: -5px; }
+div#ind-b2-2 { margin-bottom: -59px; }
+div#ind-b2-3 { margin-bottom: -111px; }
+
+div#pop-b2-0 { margin-bottom: 13px; }
+div#pop-b2-1 { margin-bottom: -7px; }
+div#pop-b2-2 { margin-bottom: -55px; }
+div#pop-b2-3 { margin-bottom: -109px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+div#lvl-b200-0 { margin-bottom: -43px; }
+div#lvl-b200-1 { margin-bottom: -45px; }
+div#lvl-b200-2 { margin-bottom: -52px; }
+div#lvl-b200-3 { margin-bottom: -50px; }
+
+
+
+div#ind-b200-0 { margin-bottom: 3px; }
+div#ind-b200-1 { margin-bottom: -55px; }
+div#ind-b200-2 { margin-bottom: -136px; }
+div#ind-b200-3 { margin-bottom: -193px; }
+
+div#pop-b200-0 { margin-bottom: 3px; }
+div#pop-b200-1 { margin-bottom: -55px; }
+div#pop-b200-2 { margin-bottom: -139px; }
+div#pop-b200-3 { margin-bottom: -198px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+div#lvl-bpink-0 { margin-bottom: -21px; }
+div#lvl-bpink-1 { margin-bottom: -32px; }
+div#lvl-bpink-2 { margin-bottom: -50px; }
+div#lvl-bpink-3 { margin-bottom: -59px; }
+
+
+
+div#ind-bpink-0 { margin-bottom: 32px; }
+div#ind-bpink-1 { margin-bottom: -38px; }
+div#ind-bpink-2 { margin-bottom: -127px; }
+div#ind-bpink-3 { margin-bottom: -193px; }
+
+div#pop-bpink-0 { margin-bottom: 27px;background-color: #ff00b1 !important; }
+div#pop-bpink-1 { margin-bottom: -39px;background-color: #ff00b1 !important; }
+div#pop-bpink-2 { margin-bottom: -124px;background-color: #ff00b1 !important; }
+div#pop-bpink-3 { margin-bottom: -188px;background-color: #ff00b1 !important;  
+}
+
+
+div#pop-bpink-0{
+    box-shadow: none !important;
+}
+div#pop-bpink-1{
+    box-shadow: none !important;
+}
+div#pop-bpink-2{
+    box-shadow: none !important;
+}
+div#pop-bpink-3{
+    box-shadow: none !important;
+}
+
+#ind-bpink-0.indicator.active .line, #ind-bpink-0.indicator.active .dot{
+    background-color: #ff00b1 !important;
+}
+#ind-bpink-0.indicator.active .line, #ind-bpink-0.indicator.active .dot{
+    background-color: #ff00b1 !important;
+}
+#ind-bpink-0.indicator.active .line, #ind-bpink-0.indicator.active .dot{
+    background-color: #ff00b1 !important;
+}
+
+#ind-bpink-0.indicator.active .line, #ind-bpink-0.indicator.active .dot{
+    background-color: #ff00b1 !important;
+}
+
+
+div#lvl-b500-0 { margin-bottom: -21px; }
+div#lvl-b500-1 { margin-bottom: -32px; }
+div#lvl-b500-2 { margin-bottom: -50px; }
+div#lvl-b500-3 { margin-bottom: -59px; }
+
+
+
+div#ind-b500-0 { margin-bottom: 24px; }
+div#ind-b500-1 { margin-bottom: -33px; }
+div#ind-b500-2 { margin-bottom: -107px; }
+div#ind-b500-3 { margin-bottom: -161px; }
+
+div#pop-b500-0 { margin-bottom: 17px; }
+div#pop-b500-1 { margin-bottom: -37px; }
+div#pop-b500-2 { margin-bottom: -115px; }
+div#pop-b500-3 { margin-bottom: -163px; }
+
+
+
+
+
+
+
+
 svg{
   position:absolute;
   width:100%;
@@ -218,3 +370,117 @@ img.imgbottlebestone {
   align-items:center;
   
 }
+
+
+
+
+
+
+.size-tabs{
+  display:flex;
+  gap:12px;
+}
+
+/* base button */
+.tab-btn{
+  border:none;
+  padding: 4px 15px;
+  border-radius:25px;
+  font-weight:600;
+  font-size:14px;
+  cursor:pointer;
+  background:#dbe3f1;
+  color:#3b4a6b;
+  transition:0.3s;
+}
+.tab-content{
+  display:none;
+}
+
+.tab-content.active{
+  display:block;
+}
+/* active colors (by position) */
+.tab-btn.active:nth-child(1){
+  background:#3b6fd8; /* blue */
+  color:#fff;
+}
+.tab-btn.active:nth-child(2){
+    background:#3b6fd8; /* blue */
+  color:#fff;
+}
+.tab-btn.pink.active:nth-child(2) {
+  background:#ff0a78; /* pink */
+  color:#fff;
+}
+
+.tab-btn.active:nth-child(3){
+  background:#3b6fd8; /* blue again */
+  color:#fff;
+}
+
+/* hover effect */
+.tab-btn:hover{
+  transform:scale(1.05);
+}
+.tab-content{
+  display:none;
+}
+
+.tab-content.active{
+  display:block;
+}
+
+.tab-btn.active{
+  background:blue;
+  color:#fff;
+}
+
+
+.bottle.oneltr {
+    width: 110px;
+}
+
+
+.bottle.twohundpinkml {
+    width: 95px;
+}
+.bottle.fivehundml {
+    width: 80px;
+}
+.bottle.twohundml {
+    width: 65px;
+}
+.bottle.twoltr {
+    height: 473px;
+}
+
+
+
+
+
+
+
+
+
+/*button[data-target="mlpink200"] {*/
+/*    background-color: #ff00b1;*/
+/*    color: white;*/
+/*}*/
+
+button[data-target="mlpink200"].active {
+    background-color: #ff00b1 !important;
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+

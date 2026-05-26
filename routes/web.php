@@ -99,7 +99,7 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::post("/rejectionUpdateDo", [RejectionUpdateController::class, "rejectionUpdateDo"]);
     Route::get("/getSingleRejectionData", [RejectionUpdateController::class, "getSingleRejectionData"]);
 
-    Route::get("/orderNDispatch", [OrderNDispatchController::class, "orderNDispatch"]);
+    Route::get("/orderNDispatch", [OrderNDispatchController::class, "orderNDispatch"])->name("orderNDispatch");
     Route::post("/generateOrder", [OrderNDispatchController::class, "generateOrder"]);
     Route::get("/getOrderDetailsData", [OrderNDispatchController::class, "getOrderDetailsData"]);
 

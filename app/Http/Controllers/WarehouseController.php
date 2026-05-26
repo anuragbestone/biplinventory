@@ -1134,7 +1134,8 @@ class WarehouseController extends Controller {
     public function getOrderDetailsDataByOrderCode(Request $request) {
 
         $data["orderDetails"] = OrderDetails::select(
-                "fg_cat_master.fg_cat_name", 
+                "fg_cat_master.fg_cat_name",
+                "order_details.fg_cat_id",
                 "order_details.fg_quantity"
                 )
                 ->leftjoin("fg_cat_master", "order_details.fg_cat_id", "fg_cat_master.id")
@@ -1156,28 +1157,31 @@ class WarehouseController extends Controller {
     }
 
     public function dispatchOrder(Request $request) {
+        
         if ($request->dispatch_status == "completed") {
             $orderedFG = OrderDetails::select("fg_cat_id", "fg_quantity")
                 ->where("order_id", $request->input("order_id"))
                 ->get()->toArray();
 
             if ($orderedFG) {
-
+                $totalCases = 0;
                 foreach ($orderedFG as $oValues) {
                     // ----- Update FG Stock Master
                     $stockQuantity = FgStockMaster::select("stock_quantity")->where("fg_cat_id", $oValues["fg_cat_id"])->first();
 
                     FgStockMaster::where("fg_cat_id", $oValues["fg_cat_id"])
                         ->update([
-                            "stock_quantity" => $stockQuantity->stock_quantity - $oValues["fg_quantity"]
+                            "stock_quantity" => $stockQuantity->stock_quantity - $request->fgCatId[$oValues["fg_cat_id"]]
                         ]);
 
                     // ----- Update Fg Dispatched Master
                     FgDispatchMaster::create([
                         "order_id" => $request->input("order_id"),
                         "fg_cat_id" => $oValues["fg_cat_id"],
-                        'fg_quantity' => $oValues["fg_quantity"],
+                        'fg_quantity' => $request->fgCatId[$oValues["fg_cat_id"]],
                     ]);
+
+                    $totalCases = $totalCases + $request->fgCatId[$oValues["fg_cat_id"]];
                 }
 
                 OrderMaster::where("order_id", $request->input("order_id"))
@@ -1186,6 +1190,15 @@ class WarehouseController extends Controller {
                         "order_dispatch_status" => 1,
                         "order_dispatch_date_achieved" => Carbon::now()->format("Y-m-d")
                     ]);
+
+
+                NotificationMaster::create([
+                    "route_address" => "notification",
+                    "main_address" => "orderNDispatch",
+                    "notification_title" => "Order Dispatched",
+                    "notification_msg" => "Order Details: \nTotal Cases: ".$totalCases."\n",
+                    "is_clicked" => 0
+                ]);
 
                 return back()->with("success", "Order Dispatched Successfully");
 
