@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\FgPgFormulaController;
 use App\Http\Controllers\Admin\OrderNDispatchController;
 use App\Http\Controllers\Admin\ThresholdController;
 
+use App\Http\Controllers\Admin\ShiftReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,6 +108,9 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
 
     Route::get("/stockReport", [StockReportController::class, "stockReport"])->name("stockReport");
     Route::get("/stockReport/rmPmWarehouseStock", [StockReportController::class, "rmPmWarehouseStock"])->name("stockReport/rmPmWarehouseStock");
+
+    Route::get("/shiftReport", [ShiftReportController::class, "shiftReport"])->name("shiftReport");
+
     Route::get("/admin/stockreportexcel",[StockReportController::class, "stockReportExcel"]);
     
 

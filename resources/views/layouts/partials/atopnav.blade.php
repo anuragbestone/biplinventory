@@ -27,6 +27,7 @@
                     <li><a class="dropdown-item" href="{{ url("stockReport/rmPmWarehouseStock") }}">Stock Report (Warehouse)</a></li>
                     <li><a class="dropdown-item" href="{{ url("stockReport") }}">Stock Report (Procured)</a></li>
                     <li><a class="dropdown-item" href="{{ url("productionReport") }}">Production Report</a></li>
+                    <li><a class="dropdown-item" href="{{ url("shiftReport") }}">Shift Report</a></li>
                 </ul>
             </div>
             <div class="dropdown">
