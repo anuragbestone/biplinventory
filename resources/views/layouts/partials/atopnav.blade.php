@@ -78,7 +78,7 @@
                     <!-- Count -->
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                         style="font-size:10px;" id="notificationCount">
-                        3
+                        0
                     </span>
                 </div>
 

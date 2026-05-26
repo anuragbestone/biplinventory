@@ -95,7 +95,7 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::post("/updateThresholdRmPm", [ThresholdController::class, "updateThresholdRmPm"]);
     Route::post("/updateThresholdProduction", [ThresholdController::class, "updateThresholdProduction"]);
 
-    Route::get("/rejectionUpdate", [RejectionUpdateController::class, "rejectionUpdate"]);
+    Route::get("/rejectionUpdate", [RejectionUpdateController::class, "rejectionUpdate"])->name("rejectionUpdate");
     Route::post("/rejectionUpdateDo", [RejectionUpdateController::class, "rejectionUpdateDo"]);
     Route::get("/getSingleRejectionData", [RejectionUpdateController::class, "getSingleRejectionData"]);
 

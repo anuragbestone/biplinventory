@@ -5545,3 +5545,20 @@ nav.flex.items-center.justify-between svg{
     }
 
 }
+
+
+
+.stock-details th:nth-child(1),
+.stock-details td:nth-child(1) {
+    width: 32px;
+}
+
+.stock-details th:nth-child(2),
+.stock-details td:nth-child(2) {
+    width: 120px;
+}
+
+.stock-details th:nth-child(3),
+.stock-details td:nth-child(3) {
+    width: 250px;
+}

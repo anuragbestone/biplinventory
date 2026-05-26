@@ -14,6 +14,8 @@ use App\Models\RmPmMaster;
 use App\Models\RmPmCatMaster;
 use App\Models\RmPmStockMaster;
 
+use App\Models\RmPmStockWarehouseTransactionMaster;
+
 use App\Exports\StockReportExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -76,6 +78,25 @@ class StockReportController extends Controller
         }
         
 
+        $counter = 0;
+        foreach ($dates as $d) {
+            $dailyStockWarehouseData[$counter]["date"] = $d;
+            $dailyStockWarehouseData[$counter]["data"] = RmPmStockWarehouseTransactionMaster::select(
+                "rm_pm_cat_master.rm_pm_cat_name",
+                "rm_pm_cat_master.cat_unit",
+                "rm_pm_master.rm_pm_name",
+                "rm_pm_stock_warehouse_transaction_master.stock_quantity"
+            )
+            ->leftjoin("rm_pm_cat_master", "rm_pm_stock_warehouse_transaction_master.rm_pm_cat_id", "=", "rm_pm_cat_master.id")
+            ->leftjoin("rm_pm_master", "rm_pm_cat_master.rm_pm_id", "=", "rm_pm_master.id")
+            ->where("rm_pm_stock_warehouse_transaction_master.is_active", 1)
+            ->wheredate("rm_pm_stock_warehouse_transaction_master.created_at", $d)
+            ->get()->toarray();
+            
+            $counter++;
+        }
+
+        $data["dailyStockWarehouseData"] = $dailyStockWarehouseData;
         $data["rmPmStockWiseData"] = $rmPmStockWiseData;
         $data["dailyStockTransactionData"] = $dailyStockTransactionInData;
         

@@ -895,6 +895,8 @@ class WarehouseController extends Controller {
             }
 
             $whatsAppDetailMessage = "";
+            $totalRejection = 0;
+            $rejectionCount = 0;
             foreach ($request->input("catId") as $cValues => $values) {
                 
                 if (!empty($values)) {
@@ -917,6 +919,9 @@ class WarehouseController extends Controller {
                             "shift_to" => $shiftTo,
                             "uploaded_by_user_id" => $request->session()->get("userID")
                         ]);
+
+                        $totalRejection = $totalRejection + floatval($request->input("rejection_percentage")[$cValues]);
+                        $rejectionCount = $rejectionCount + 1;
 
                         if (!empty($request->total_rejection)) {
                             $rm_pm_cat_id[] = $stockOut->id;
@@ -956,6 +961,14 @@ class WarehouseController extends Controller {
                     "approved_status" => 0
                 ]);
             }
+
+            NotificationMaster::create([
+                "route_address" => "notification",
+                "main_address" => "rejectionUpdate",
+                "notification_title" => "Rejection Added",
+                "notification_msg" => "Rejection Details: \nTotal Rejection: ".($totalRejection / $rejectionCount),
+                "is_clicked" => 0
+            ]);
 
             // WhatsApp Service -- Starts
 

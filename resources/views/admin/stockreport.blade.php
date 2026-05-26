@@ -150,10 +150,89 @@
             </div>
         </div>
     </div>
+    
 
 
 
+    <div class="rmpm-procurement-main">
+        <h5 class="text-center section-title m-0 flex-grow-1 pb-5">RM/PM Stock Detail</h5>
+        <div class="rmpm-table-wrap">
+            <div class="card bg-white">
+                <div class="table-responsive table-pad">
+                    <table class="table stock-details table-bordered">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Date</th>
+                            <th>Overall</th>
+                        </tr>
+                    </thead>
 
+                    <tbody>
+                        
+                        
+                        @if ($dailyStockWarehouseData)
+                            @php $counter = 1  @endphp
+                            @foreach ($dailyStockTransactionData as $dData)
+                                @if ($dData["data"])
+                        <!-- ROW 1 -->
+                        <tr class="rmpm-rows">
+                            <td>{{ $counter++ }}</td>
+                            <td>
+                                <strong>{{ $dData["date"] }}</strong>
+                            </td>
+
+                            <td>
+                                <div class="rmpm-card">
+                                    <div class="rmpm-card rmpm-toggle">Detail</div>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <!-- EXPAND -->
+                        <tr class="rmpm-expand">
+                            <td colspan="3">
+                                <div class="rmpm-expand-box">
+                                    <table class="table rmpm-inner-table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>Category</th>
+                                                <th>Type</th>
+                                                <th>Total Added</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @php $subCounter = 1  @endphp
+                                            @foreach ($dData["data"] as $detailsD)
+                                            <tr>
+                                                <td>{{ $subCounter++ }}</td>
+                                                <td>{{ $detailsD["rm_pm_name"] }}</td>
+                                                <td>{{ $detailsD["rm_pm_cat_name"] }}</td>
+                                                <td>
+                                                    {{ $detailsD["stock_quantity"] }}
+                                                    <span class="rmpm-badge">{{ $detailsD["cat_unit"] }}</span>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                                @endif
+                            @endforeach
+                        @endif
+                       
+                    </tbody>
+                </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
     
 
     <div class="modal fade" id="procuredModal">
@@ -223,5 +302,6 @@
         });
     });
 </script>
+
 
 @endsection
