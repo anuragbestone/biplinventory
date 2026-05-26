@@ -121,7 +121,10 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::get("/permissions", [PermissionsController::class, "permissions"]);
     Route::get("/email", [EmailController::class, "email"]);
     Route::get("/whatsAppMesaging", [WhatsAppMessagingController::class, "whatsAppMessaging"]);
+
     Route::get("/productionIssue", [ProductionIssuesController::class, "productionIssue"]);
+    Route::post("/productionIssueDo", [ProductionIssuesController::class, "productionIssueDo"]);
+
     Route::get("/admin/profile", [ProfileController::class, "getProfileData"]);
     
     Route::get("/fgPmFormula", [FgPgFormulaController::class, "showfgPmFormula"]);

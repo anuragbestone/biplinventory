@@ -1,84 +1,45 @@
 @extends("layouts.app")
-
 @section("mainContent")
 
 <div class="main-card content shadow-sm">
     <div class="production-issue">
-        <h4 class="text-center mb-3">Production Issues</h4>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="m-0">Production Issues</h5>
+
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createModal">
+                Create
+            </button>
+        </div>
         <div class="card bg-white">
             <div class="table-responsive">
                 <table class="table production-table table-bordered">
                     <thead>
                         <tr>
                             <th>S.No</th>
-                            <th>Date</th>
-                            <th>Issue Type</th>
-                            <th>Remarks</th>
+                            <th>Issue Name</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <!-- ROW 1 -->
-                        <tr>
-                            <td>1</td>
-                            <td>28/04/2026</td>
-                            <td>Labour / Staff</td>
-                            <td>
-                                <textarea class="pi-textarea" readonly>
-                                    Lorem ipsum dolor sit amet...</textarea>
-                            </td>
-                            <td><span class="badge bg-success">Approved</span></td>
-                            <td>
-                                <button class="pi-btn edit" data-bs-toggle="modal" data-bs-target="#issueModal">
-                                    <i class="fa fa-pen"></i>
-                                </button>
-                                <button class="pi-btn delete">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        @if ($productionIssueData)
+                            @php $counter = 1 @endphp
+                            @foreach ($productionIssueData as $pData)
+                                <tr>
+                                    <td>{{ $counter++ }}</td>
+                                    <td>{{ $pData["production_issue_types"] }}</td>
+                                    
+                                    <td><span class="badge bg-{{ $pData["is_active"] == 1 ? 'success' : 'danger' }}">{{ $pData["is_active"] == 1 ? 'Active' : 'Inactive' }}</span></td>
+                                    <td>
+                                        <button class="pi-btn edit" data-bs-toggle="modal" data-bs-target="#issueModal">
+                                            <i class="fa fa-pen"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
 
-                        <!-- ROW 2 -->
-                        <tr>
-                            <td>2</td>
-                            <td>29/04/2026</td>
-                            <td>Machine Problem</td>
-                            <td>
-                                <textarea class="pi-textarea" readonly>
-                                    Machine breakdown due to overload...</textarea>
-                            </td>
-                            <td><span class="badge bg-danger">Rejected</span></td>
-                            <td>
-                                <button class="pi-btn edit" data-bs-toggle="modal" data-bs-target="#issueModal">
-                                    <i class="fa fa-pen"></i>
-                                </button>
-                                <button class="pi-btn delete">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
-
-                        <!-- ROW 3 -->
-                        <tr>
-                            <td>3</td>
-                            <td>30/04/2026</td>
-                            <td>Light Problem</td>
-                            <td>
-                                <textarea class="pi-textarea" readonly>
-                                    Lighting issue in production area...</textarea>
-                            </td>
-                            <td><span class="badge bg-danger">Rejected</span></td>
-                            <td>
-                                <button class="pi-btn edit" data-bs-toggle="modal" data-bs-target="#issueModal">
-                                    <i class="fa fa-pen"></i>
-                                </button>
-                                <button class="pi-btn delete">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -123,6 +84,30 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="createModal">
+        <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5>Generate Order Now</h5>
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="{{ url("productionIssueDo") }}" class="generalformloader" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <label>Issue Type</label>
+                            <input name="issue_type" type="text" class="form-control mb-3" required>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 </div>
 
 @endsection

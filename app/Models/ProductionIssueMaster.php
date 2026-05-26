@@ -12,7 +12,8 @@ class ProductionIssueMaster extends Model
     protected $table = "production_issue_master";
 
     protected $fillable = [
-        "production_issue_types"
+        "production_issue_types",
+        "issue_slug"
     ];
 
     protected $casts = [
