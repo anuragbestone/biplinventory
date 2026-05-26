@@ -1,7 +1,5 @@
 @extends("layouts.app")
-
 @section("mainContent")
-
 
 <style>
     .production-chart {
@@ -76,7 +74,6 @@
             <div class="d-flex align-items-center justify-content-between flex-wrap pb-5">
                 <!-- Left spacer -->
                 <div class="header-spacer"></div>
-
                 <div class="production-header">
                     <h2>Production Stats</h2>
                     <p>Last 7 Days Production</p>
@@ -88,11 +85,9 @@
                             <option value="7days" {{ $selectedFilter == '7days' ? 'selected' : '' }}>
                                 Last 7 Days
                             </option>
-                    
                             <option value="month" {{ $selectedFilter == 'month' ? 'selected' : '' }}>
                                 Last Month
                             </option>
-                    
                             <option value="year" {{ $selectedFilter == 'year' ? 'selected' : '' }}>
                                 Last Year
                             </option>
@@ -112,13 +107,9 @@
 
                 <!-- Graph Area -->
                 <div class="graph-area">
-
                     @foreach ($productionGraphData as $graph)
-                
                         <div class="day-group">
-                
                             <div class="bars">
-                
                                 @php
                                     $colors = [
                                         "bar1",
@@ -129,15 +120,11 @@
                                     ];
                 
                                     $maxHeight = 100;
-                
                                     $maxStock = 2000;
                                 @endphp
-                
                                 @forelse ($graph["data"] as $index => $item)
-                
                                     @php
                                         $height = ($item["stock_quantity"] / $maxStock) * $maxHeight;
-                
                                         if ($height < 5) {
                                             $height = 5;
                                         }
@@ -146,32 +133,23 @@
                                             $height = 100;
                                         }
                                     @endphp
-                
                                     <div class="bar {{ $colors[$index % count($colors)] }}"
                                         style="height: {{ $height }}%">
-                
                                         <small>
                                             {{ $item["fg_cat_name"] }}
                                         </small>
-                
                                     </div>
-                
                                 @empty
-                
                                     <div class="bar bar1" style="height:5%">
                                         <small>0</small>
                                     </div>
-                
                                 @endforelse
-                
                             </div>
                 
                             <h4>
                                 {{ \Carbon\Carbon::parse($graph["date"])->format('d M') }}
                             </h4>
-                
                         </div>
-                
                     @endforeach
                 
                 </div>
@@ -218,9 +196,7 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    
                     @if ($productionData)
                         @php $counter = 1 @endphp
                         @foreach ($productionData as $pData)
@@ -228,7 +204,6 @@
                     <tr>
                         <td>{{ $counter++ }}</td>
                         <td>{{ $pData["date"] }}</td>
-
                         <td>
                             <div class="os-cards-wrap">
                                 <!-- CARD 1 -->
@@ -248,7 +223,6 @@
                                 </div>
                             </div>
                         </td>
-
                         <td>
                             <button class="os-edit-btn">
                                 <i class="fa-solid fa-pen-to-square"></i>

@@ -2,10 +2,8 @@
 @section("mainContent")
 
 <div class="main-card content shadow-sm">
-
     <div class="rmpm-user-main-entry">
         <h2 class="text-center section-title m-0 flex-grow-1 pb-5">RM/PM Threshold</h2>
-
             <form  class="generalformloader" method="post" action="{{ url("updateThresholdRmPm") }}">
                 @csrf
                 <div class="row">
@@ -33,7 +31,6 @@
                                                     value="{{ $rcData["max_quantity"] }}"
                                                     placeholder="Enter Qty"
                                                 >
-
                                                 <input
                                                     value="{{ $rcData['cat_unit'] }}"
                                                     readonly
@@ -46,15 +43,12 @@
                         @endforeach
                     @endif
                 </div>
-
                 <div class="text-center mt-3">
                     <button type="submit" class="rmpm-user-submit-btn">
                         Submit
                     </button>
                 </div>
-
             </form>
-
     </div>
 
     <div class="threshold-main-stock">
@@ -67,7 +61,6 @@
                     <span>May Quantity</span>
                     <span>Cases</span>
                 </div>
-
                 <!-- BODY -->
                 <div class="threshold-body">
                     @if ($fgCatData)
@@ -79,7 +72,6 @@
                             </div>
                         @endforeach
                     @endif
-                    
                 </div>
                 <!-- FOOTER -->
                 <div class="threshold-footer">
@@ -88,8 +80,6 @@
             </div>
         </form>
     </div>
-
-
 
 </div>
 

@@ -68,43 +68,33 @@
 
         <!-- RIGHT ICONS -->
         <div class="d-flex align-items-center">
-            
             <!-- Notification -->
             <!-- Notification Bell -->
             <div class="dropdown position-relative" id="notificationWrapper">
-
                 <!-- Bell Icon -->
                 <div class="icon-btn position-relative" id="notificationBell" style="cursor:pointer;">
                     <i class="bi bi-bell fs-4"></i>
-
                     <!-- Count -->
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                         style="font-size:10px;" id="notificationCount">
                         0
                     </span>
                 </div>
-
                 <!-- Auto Alert -->
                 <div class="notification-toast shadow" id="notificationToast">
                     <div class="fw-bold">New Notification</div>
                     <small>Your order has been approved.</small>
                 </div>
-
                 <!-- Dropdown -->
                 <div class="notification-dropdown shadow-lg" id="notificationDropdown">
-
                     <div class="notification-header">
                         Notifications
                     </div>
-
                     <div class="notification-list">
-
                         <div class="p-3 text-center">
                             Loading Notifications...
                         </div>
-
                     </div>
-
                 </div>
             </div>
 
@@ -113,18 +103,15 @@
                 <div class="icon-btn dropdown-toggle" data-bs-toggle="dropdown">
                     <i class="bi bi-person"></i>
                 </div>
-
                 <ul class="dropdown-menu dropdown-menu-end mt-2">
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url("admin/profile") }}">
                             <i class="bi bi-person-circle"></i> Profile
                         </a>
                     </li>
-
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
-
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="{{ url("logout") }}">
                             <i class="bi bi-box-arrow-right"></i> Logout

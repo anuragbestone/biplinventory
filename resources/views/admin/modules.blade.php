@@ -30,7 +30,6 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @if ($moduleData)
                                 @php $counter = 1 @endphp
@@ -88,7 +87,6 @@
 <script>
 
     $(document).ready(function () {
-
         $('#modalTable').DataTable({
             responsive: true,
             autoWidth: false,

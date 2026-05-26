@@ -42,17 +42,14 @@
                     <label>Full Name</label>
                     <div class="pm-value">{{ $profileData->full_name }}</div>
                 </div>
-
                 <div class="pm-field">
                     <label>Email</label>
                     <div class="pm-value">{{ $profileData->email }}</div>
                 </div>
-
                 <div class="pm-field">
                     <label>Contact</label>
                     <div class="pm-value">{{ $profileData->contact_number }}</div>
                 </div>
-
                 <div class="pm-field">
                     <label>Whatsapp No</label>
                     <div class="pm-value">{{ $profileData->whatsapp_contact }}</div>
@@ -69,7 +66,6 @@
                     <h6>Edit Profile</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <div class="modal-body">
                     <!-- Profile Image Edit -->
                     <div class="pm-edit-profile-img">
@@ -84,7 +80,6 @@
                     <input class="pm-input" placeholder="Email" />
                     <input class="pm-input" placeholder="Contact" />
                     <input class="pm-input" placeholder="Whatsapp No" />
-
                     <button class="pm-submit">Submit</button>
                 </div>
                 <div class="modal-footer"></div>
@@ -100,13 +95,11 @@
                     <h6>Change your password</h6>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <div class="modal-body">
                     <div class="pm-pass-wrap">
                         <input type="password" class="pm-input" placeholder="Current Password" />
                         <i class="fa-solid fa-eye pm-toggle"></i>
                     </div>
-
                     <div class="pm-pass-wrap">
                         <input type="password" class="pm-input" placeholder="New Password" />
                         <i class="fa-solid fa-eye pm-toggle"></i>
@@ -121,7 +114,6 @@
     document.querySelectorAll(".pm-toggle").forEach((icon) => {
                     icon.addEventListener("click", function () {
                         let input = this.previousElementSibling;
-
                         if (input.type === "password") {
                             input.type = "text";
                             this.classList.replace("fa-eye", "fa-eye-slash");

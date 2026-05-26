@@ -1,7 +1,6 @@
 @extends("layouts.app") 
 @section("mainContent")
 
-
 <style>
 .graph-area {
     display: flex;
@@ -9,11 +8,9 @@
     gap: 30px;
     overflow-x: auto;
 }
- 
 .day-group {
     min-width: 120px;
 }
- 
 .bars {
     display: flex;
     align-items: flex-end;
@@ -21,14 +18,12 @@
     height: 300px;
     padding-right: 30px;
 }
- 
 .bar {
     width: 22px;
     border-radius: 8px 8px 0 0;
     position: relative;
     transition: 0.3s;
 }
- 
 .bar small {
     position: absolute;
     top: -22px;
@@ -36,9 +31,6 @@
     font-size: 11px;
     white-space: nowrap;
 }
-
-
-
 
 .bottle-mask{
   position:absolute;
@@ -83,13 +75,11 @@
   width:100%;
   height:100%;
   overflow:hidden;
-
   /* 🔥 MAGIC LINE */
   -webkit-mask-image: url("{{ asset("assets") }}/images/200ml.svg");
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
-
   mask-image: url("{{ asset("assets") }}/images/200ml.svg");
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -489,7 +479,6 @@
                         @endif
                     </p>
                 </div>
-    
                 <!-- FILTER -->
                 <div>
                     <form method="GET">
@@ -517,9 +506,7 @@
                 </div>
             </div>
     
-    
             <div class="production-chart">
-    
                 <!-- Y AXIS -->
                 <div class="y-axis">
                     <span>{{ $maxDispatchQty }}</span>
@@ -528,7 +515,6 @@
                     <span>{{ round($maxDispatchQty * 0.25) }}</span>
                     <span>0</span>
                 </div>
-    
     
                 <!-- GRAPH -->
                 <div class="graph-area">
@@ -541,7 +527,6 @@
                             "bar5 pink"
                         ];
                     @endphp
-    
                     @foreach($dispatchGraphData as $day => $dispatchValues)
                         <div class="day-group">
                             <div class="bars">
@@ -578,9 +563,7 @@
                     <div class="d-flex align-items-center justify-content-between flex-wrap pb-5">
                         <!-- Left spacer -->
                         <div class="header-spacer"></div>
-
                         <h5 class="text-center section-title m-0 flex-grow-1">Total RM/PM Stock</h5>
-
                         <!-- Right Button -->
                         <div>
                             <a href="{{ url("stockReport") }}"><button class="btn btn-primary btn-sm">Details</button></a>
@@ -618,7 +601,6 @@
                         </div>
                     @endforeach
                 @endif
-
             </div>
                 </div>
             </div>
@@ -693,7 +675,6 @@
             </div>
         </div>
     </div>
-
     
     <!-- Production Graph Starts --->
     <div class="production-stats-main mt-4">

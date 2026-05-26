@@ -1,5 +1,3 @@
-
-
 <script>
     $(document).ready(function () {
         $(".water-white-bg").ripples({
@@ -16,7 +14,6 @@
         $(".water-white-bg").append('<div class="water-color-overlay"></div>');
     });
 </script>
-
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -47,7 +44,6 @@
 @endif
 
 <script>
-
     document.addEventListener("submit", function (e) {
         const form = e.target;
         // Only target forms having this class
@@ -80,29 +76,23 @@
             {
                 // CURRENT ELEMENT
                 let element = document.activeElement;
-
                 // ALLOW TEXTAREA ENTER
                 if(element.tagName === "TEXTAREA")
                 {
                     return;
                 }
-
                 // PREVENT FORM SUBMIT
                 e.preventDefault();
-
                 // GET ALL FOCUSABLE ELEMENTS
                 let focusable = Array.from(
                     document.querySelectorAll(
                         'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])'
                     )
                 ).filter(el => el.offsetParent !== null);
-
                 // CURRENT INDEX
                 let index = focusable.indexOf(element);
-
                 // NEXT ELEMENT
                 let nextElement = focusable[index + 1];
-
                 // MOVE FOCUS
                 if(nextElement)
                 {
@@ -120,49 +110,32 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ripples/0.5.3/jquery.ripples.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
-
 <!-- DataTables JS -->
 <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
 <!-- DataTables Bootstrap 5 -->
 <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 
-
-
-
 <script>
-
     function hitApiToGetNotifications() {
-
         $.ajax({
             url: "{{ url('/getNotificationUpdates') }}",
             type: "GET",
-
             success: function(response) {
-
                 console.log(response);
-
                 if(response.status == "success") {
-
                     let notificationData = response.notificationData;
-
                     let html = '';
-
                     // Notification Count
                     $("#notificationCount").text(notificationData.length);
-
                     // No Data
                     if(notificationData.length == 0) {
-
                         html = `
                             <div class="p-3 text-center">
                                 No Notifications Found
                             </div>
                         `;
-
                     } else {
-
                         $.each(notificationData, function(index, item){
                             // Convert Date
                             let createdDate = new Date(item.created_at);
@@ -210,7 +183,6 @@
 
                     // CHECK ANY NEW NOTIFICATION
                     let hasNewNotification = notificationData.some(item => item.is_clicked == 0);
-
                     if(hasNewNotification) {
                         $("#notificationToast").html(`
                             <div class="fw-bold">
@@ -253,48 +225,35 @@
 
 
     $(document).ready(function(){
-
         const bell = $("#notificationBell");
         const dropdown = $("#notificationDropdown");
-
         // First Call
         hitApiToGetNotifications();
-
         // Every 15 Seconds
         setInterval(function () {
             hitApiToGetNotifications();
         }, 15000);
-
-
         // Bell Animation
         bell.addClass("bell-ring");
-
         setTimeout(function(){
             bell.removeClass("bell-ring");
         }, 2000);
 
-
         // Toggle Dropdown
         bell.click(function(e){
-
             e.stopPropagation();
-
             dropdown.fadeToggle(200);
-
         });
 
 
         // Close Dropdown
         $(document).click(function(e){
-
             if(
                 !$(e.target).closest("#notificationWrapper").length
             ){
                 dropdown.fadeOut(200);
             }
-
         });
-
     });
 
 </script>

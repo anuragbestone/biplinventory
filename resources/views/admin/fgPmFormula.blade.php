@@ -53,7 +53,6 @@
                                 <tr>
                                     <td>{{ $counter++ }}</td>
                                     <td>{{ $fData["fg_cat_name"] }} ({{ $fData["fg_name"] }})</td>
-
                                     @if ($rmPmData)
                                         @foreach ($rmPmData as $rData)
                                             <td>
@@ -65,7 +64,6 @@
                                             </td>
                                         @endforeach
                                     @endif
-
                                 </tr>
                             @endforeach
                         @endif

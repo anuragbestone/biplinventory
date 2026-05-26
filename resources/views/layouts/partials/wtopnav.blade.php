@@ -42,25 +42,21 @@
                 </div>
 
                 <ul class="dropdown-menu dropdown-menu-end mt-2">
-                    
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url("warehouse/profile") }}">
                             <i class="bi bi-person-circle"></i> Profile
                         </a>
                     </li>
-
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url("warehouse/deleteShift") }}">
                             <i class="bi bi-person-circle"></i> Delete Shift (Dev)
                         </a>
                     </li>
-
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url("warehouse/addOrderDev") }}">
                             <i class="bi bi-person-circle"></i> Add Order (Dev)
                         </a>
                     </li>
-
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="{{ url("logout") }}">
                             <i class="bi bi-box-arrow-right"></i> Logout

@@ -1,9 +1,7 @@
 @extends("layouts.app")
 @section("mainContent")
 
-
 <style>
-
     #orderTable th,
     #orderTable td {
         vertical-align: middle;
@@ -13,19 +11,15 @@
     .dataTables_wrapper {
         overflow-x: auto;
     }
-
 </style>
 
     <div class="main-card content shadow-sm">
         <div class="orders">
-
             <!-- CARD -->
             <div class="card p-3 bg-white">
-
                 <!-- HEADER -->
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="m-0">Orders</h5>
-
                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#generateOrderModal">
                         Generate Order
                     </button>
@@ -34,7 +28,6 @@
                 <!-- TABLE -->
                 <div class="table-responsive">
                     <table id="orderTable" class="table table-bordered ordertable order-tableadmin text-center">
-
                         <thead>
                             <tr>
                                 <th>S.No</th>
@@ -47,7 +40,6 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @if ($orderData)
                                 @php $counter = 1 @endphp
@@ -79,10 +71,8 @@
                                 @endforeach
                             @endif
                         </tbody>
-
                     </table>
                 </div>
-
             </div>
         </div>
 
@@ -90,14 +80,11 @@
         <div class="modal fade" id="infoModal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <h5>Information</h5>
                         <button class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-
                     <div class="modal-body">
-
                         <!-- ORDER INFO -->
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -127,7 +114,6 @@
 
                             <!-- DYNAMIC DATA -->
                             <div id="infoSkuContainer">
-
                             </div>
 
                         </div>
@@ -139,9 +125,7 @@
                             rows="3"
                             id="info_dispatch_address"
                             readonly></textarea>
-
                     </div>
-
                 </div>
             </div>
         </div>
@@ -151,7 +135,6 @@
         <div class="modal fade" id="generateOrderModal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <h5>Generate Order Now</h5>
                         <button class="btn-close" data-bs-dismiss="modal"></button>
@@ -159,22 +142,17 @@
                     <form action="{{ url("generateOrder") }}" class="generalformloader" method="post">
                         @csrf
                         <div class="modal-body">
-
                             <!-- ORDER DATE -->
                             <label>Order Date</label>
                             <input name="order_date" type="date" class="form-control mb-3" required>
-
                             <!-- ORDER QTY -->
                             <label>Order Quantity</label>
-
                             <div class="card bg-white p-0 mb-3 custom-case-card">
-
                                 <!-- HEADER -->
                                 <div class="d-flex justify-content-between border-bottom fw-bold p-2">
                                     <span>SKU</span>
                                     <span>QTY</span>
                                 </div>
-
                                 @if ($fgCatData)
                                     @foreach ($fgCatData as $fData)
                                 <!-- ROW 1 -->
@@ -184,7 +162,6 @@
                                 </div>
                                     @endforeach
                                 @endif
-
                             </div>
 
                             <!-- DISPATCH DATE -->
@@ -196,7 +173,6 @@
                             <textarea class="form-control" name="dispatch_address" rows="3" required></textarea>
 
                         </div>
-
                         <div class="modal-footer">
                             <button class="btn btn-primary" type="submit">Submit</button>
                         </div>

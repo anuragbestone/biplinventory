@@ -1,7 +1,6 @@
 @extends("layouts.app")
 @section("mainContent")
 
-
 <div class="main-card content shadow-sm">
     <div class="warehouse-main">
         <h4 class="wh-title">Rejection Update</h4>
@@ -19,7 +18,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
                         @if ($rejectionData)
                             @php $counter = 1 @endphp
                             @foreach ($rejectionData as $rejectionValues)
@@ -41,7 +39,6 @@
 
                                         $average = count($percentages) ? array_sum($percentages) / count($percentages) : 0;
                                     @endphp
-
                                     <td class="wh-center">{{ number_format($average, 2) }}%</td>
                                     <td>
                                         <div class="wh-card">
@@ -67,7 +64,6 @@
                                 </tr>
                             @endforeach
                         @endif
-
                     </tbody>
                 </table>
             </div>
@@ -99,24 +95,20 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="wh-field">
                             <label>Rejection</label>
                             <input type="text" value="2%" id="total_rejection" class="wh-input" readonly/>
                         </div>
-
                         <div class="wh-field">
                             <label>User Remarks</label>
                             <textarea class="wh-input" id="user_remark" readonly></textarea>
                         </div>
                         <input type="hidden" name="rejection_id" id="rejection_id">
                     </div>
-
                     <div class="modal-footer">
                         <button type="submit" name="action" value="approve" class="wh-approve">
                             Approve
                         </button>
-
                         <button type="submit" name="action" value="reject" class="wh-reject">
                             Reject
                         </button>
@@ -134,7 +126,6 @@
                     <h4 class="text-center">Rejection Detail</h4>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <!-- BODY -->
                 <div class="modal-body">
                     <!-- OVERALL % -->
@@ -142,12 +133,10 @@
                         <span class="text-white">Overall</span>
                         <button class="wh-overall-btn" id="overallRejectionBtn">0%</button>
                     </div>
-
                     <!-- MAIN CARD -->
                     <div class="wh-detail-card">
                         <h6 class="wh-card-title">Company Owned Contractor Operated Line</h6>
                         <div class="wh-section">
-
                             <table class="wh-inner-table">
                                 <thead>
                                     <tr>
@@ -187,13 +176,11 @@
     });
 
     function openRejectModal(rejectionId, shiftFrom, shiftTo, rejectionPercentage, remark) {
-
         document.getElementById("shift_from").value = shiftFrom;
         document.getElementById("shift_to").value = shiftTo;
         document.getElementById("total_rejection").value = rejectionPercentage;
         document.getElementById("user_remark").value = remark;
         document.getElementById("rejection_id").value = rejectionId;
-
         let rejectModal = new bootstrap.Modal(document.getElementById('rejectModal'));
         rejectModal.show();
     }
@@ -246,7 +233,6 @@
                     alert("No Data Available!!");
                 }
             },
-
             error: function(error) {
                 console.log(error);
             }

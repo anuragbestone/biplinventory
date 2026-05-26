@@ -1,5 +1,4 @@
 @extends("layouts.app")
-
 @section("mainContent")
 
 <div class="main-card content shadow-sm">
@@ -39,7 +38,6 @@
                                     @endforeach
                                 </div>
                             </div>
-
                         </div>
                     @endforeach
                 @endif
@@ -110,20 +108,15 @@
                                 </div>
                             </td>
                         </tr>
-                        
                                 @endif
                             @endforeach
                         @endif
-                       
                     </tbody>
                 </table>
                 </div>
-                
             </div>
         </div>
     </div>
-    
-
 </div>
 
 <script>

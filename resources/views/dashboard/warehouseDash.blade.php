@@ -1,11 +1,8 @@
 @extends("layouts.app")
-
 @section("mainContent")
 
             <div class="main-card content shadow-sm">
-
     <div class="user-dashboard">
-
         <div class="row">
             <div class="col-md-11">
                 <!-- HEADER -->
@@ -14,7 +11,6 @@
                     <p>Monitor stock, production & operations</p>
                 </div>
             </div>
-
             @if (empty($shiftData) || $shiftData->shift_over_status == 1)
             <div class="col-md-1">
                 <a class="buttonshift align-items-right gap-2" href="#" data-bs-toggle="modal" data-bs-target="#shiftModal"> <i class="fa fa-calendar"></i> Shift </a>
@@ -22,15 +18,11 @@
             @endif
         </div>
         
-        
         <!-- SECTIONS -->
         <div class="mt-4">
-
             <div class="rmpm-dashboard">
-
                 <!-- RM/PM Stock CARD -->
                 <div class="rmpm-dash-card">
-
                     <div class="header-box">
                         <img src="{{ asset("assets") }}/images/rmpmstock.png" alt="img">
                         <div>
@@ -39,20 +31,16 @@
                         </div>
                     </div>
                     <div class="rmpm-box">
-
                         <!-- HEADER ROW -->
                         <div class="rmpm-row rmpm-head">
                             <span>RM/PM</span>
                             <span>QTY</span>
                         </div>
-
                         <div class="rmpm-divider"></div>
-
                         @if ($rmpmData)
                             @foreach ($rmpmData as $rData)
                         <div class="blockcard">
                             <div class="rmpm-subtitle">{{ $rData["rm_pm_name"] }}</div>
-
                             <div class="rmpm-divider dotted"></div>
                             @if ($rData["rcData"])
                                 @foreach ($rData["rcData"] as $rcData)
@@ -65,14 +53,10 @@
                         </div>
                             @endforeach
                         @endif
-
                     </div>
-
                 </div>
-
                 <!-- RM/PM Procured (Remaining) CARD -->
                 <div class="rmpm-dash-card">
-
                     <div class="header-box">
                         <img src="{{ asset("assets") }}/images/rmpmstock.png" alt="img">
                         <div>
@@ -81,20 +65,16 @@
                         </div>
                     </div>
                     <div class="rmpm-box">
-
                         <!-- HEADER ROW -->
                         <div class="rmpm-row rmpm-head">
                             <span>RM/PM</span>
                             <span>QTY</span>
                         </div>
-
                         <div class="rmpm-divider"></div>
-
                         @if ($rmpmConsumedData)
                             @foreach ($rmpmConsumedData as $rData)
                         <div class="blockcard">
                             <div class="rmpm-subtitle">{{ $rData["rm_pm_name"] }}</div>
-
                             <div class="rmpm-divider dotted"></div>
                             @if ($rData["rcData"])
                                 @foreach ($rData["rcData"] as $rcData)
@@ -107,14 +87,11 @@
                         </div>
                             @endforeach
                         @endif
-
                     </div>
-
                 </div>
 
                 <!-- FG CARD -->
                 <div class="rmpm-dash-card">
-
                     <div class="header-box">
                         <img src="{{ asset("assets") }}/images/bottleimg.png" alt="img">
                         <div>
@@ -122,17 +99,13 @@
                                 <h3>Total FG</h3></div>
                         </div>
                     </div>
-
                     <div class="rmpm-box">
-
                         <!-- HEADER -->
                         <div class="rmpm-row rmpm-head">
                             <span>FG</span>
                             <span>QTY</span>
                         </div>
-
                         <div class="rmpm-divider"></div>
-
                         @if ($fgData)
                             @foreach ($fgData as $fData)
                         <div class="blue-card">
@@ -147,19 +120,11 @@
                         </div>
                             @endforeach
                         @endif
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-        
-
-        
     </div>
-
 </div>
 
 
@@ -182,7 +147,6 @@
                                 <input type="datetime-local" name="shift_from" id="shift_from" class="dt-input">
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="rmpm-field">
                                 <label>Shift To</label>
@@ -190,12 +154,10 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="rmpm-field">
 
                     </div>
                 </div>
-
                 <!-- FOOTER -->
                 <div class="modal-footer rmpm-footer">
                     <button class="rmpm-approve" type="submit">Submit</button>
@@ -208,32 +170,25 @@
 @if (empty($shiftData) || $shiftData->shift_over_status == 1)
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-
         let shiftModal =
             new bootstrap.Modal(
                 document.getElementById('shiftModal')
             );
-
         shiftModal.show();
-
     });
 </script>
 @endif
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-
         const shiftFrom = document.getElementById("shift_from");
         const shiftTo = document.getElementById("shift_to");
-
         // DISABLE KEYBOARD ENTRY
         document.querySelectorAll(".dt-input").forEach(input => {
-
             // Prevent typing
             input.addEventListener("keydown", function(e){
                 e.preventDefault();
             });
-
             // Prevent paste
             input.addEventListener("paste", function(e){
                 e.preventDefault();
@@ -242,10 +197,8 @@
 
         // WHEN SHIFT FROM CHANGES
         shiftFrom.addEventListener("change", function () {
-
             // Set minimum value for shift_to
             shiftTo.min = this.value;
-
             // Reset shift_to if smaller than shift_from
             if (shiftTo.value && shiftTo.value <= this.value) {
                 shiftTo.value = "";
@@ -254,7 +207,6 @@
 
         // FORM VALIDATION
         document.querySelector("form").addEventListener("submit", function(e){
-
             if (shiftFrom.value === "" || shiftTo.value === "") {
                 alert("Please select both shift timings.");
                 e.preventDefault();

@@ -1,5 +1,4 @@
 @extends("layouts.app")
-
 @section("mainContent")
 
 <div class="main-card content shadow-sm">

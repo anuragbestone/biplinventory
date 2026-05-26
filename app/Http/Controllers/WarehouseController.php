@@ -757,7 +757,6 @@ class WarehouseController extends Controller {
         $data["filter"] = 0;
 
         // ---- Filter Hit Starts
-
         if ($request->has('filter')) {
             $data["selected_production_line_id"] = $request->input("production_line_id");
             $data["fg_id"] = $request->input("fg");
@@ -771,7 +770,6 @@ class WarehouseController extends Controller {
             $data["fg_id"] = 0;
             $data["fg_cat_id"] = 0;
         }
-
         // ---- Filter Hit Ends
         
         $data["fgData"] = FgMaster::select("id", "fg_name")
@@ -816,12 +814,10 @@ class WarehouseController extends Controller {
                 }
 
                 $data["filter"] = 1;
-
             } else {
                 return redirect()->route("dashboard")->with("error", "data not found!!!");
             }
         }
-
         return view("warehouse.rejection", $data);
     }
 
@@ -909,7 +905,6 @@ class WarehouseController extends Controller {
             ]);
 
             // WhatsApp Service -- Starts
-
             $message =
                 "📉 *RM/PM STOCK USED* \n\n".
                 "👤 *Updated By:* \n".

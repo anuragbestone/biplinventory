@@ -1,12 +1,10 @@
 @extends("layouts.app")
-
 @section("mainContent")
 
 <div class="main-card content shadow-sm">
     <div class="role-permission-main">
         <h4 class="rpm-title">Role Permission Matrix</h4>
         <p class="rpm-sub">C = Create | R = Read | U = Update | D = Delete | E = Edit</p>
-
         <div class="table-container">
             <table class="rpm-table">
                 <thead>

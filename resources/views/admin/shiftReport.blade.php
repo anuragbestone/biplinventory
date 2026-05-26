@@ -23,7 +23,6 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @if ($shiftData)
                                 @php $counter = 1 @endphp
@@ -49,7 +48,6 @@
 <script>
                 
     $(document).ready(function () {
-
         $('#shiftReport').DataTable({
             responsive: true,
             autoWidth: false,
@@ -64,7 +62,6 @@
                 }
             ]
         });
-
     });
 
 </script>

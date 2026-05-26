@@ -1,19 +1,14 @@
 @extends("layouts.app")
-
 @section("mainContent")
 
 <div class="main-card content shadow-sm">
     <div class="fg-stock">
-
         <div class="fg-card">
-
             <!-- HEADING -->
             <h2 class="text-center pb-5">FG Stock</h2>
-
             <div class="fg-stocks-datewise">
                 <div class="fg-shift-box">
                     <div class="row">
-
                         <!-- SHIFT FROM -->
                         <div class="col-md-6 text-center">
                             <label>Shift From</label>
@@ -23,7 +18,6 @@
                                 <strong>08:00 AM</strong>
                             </div>
                         </div>
-
                         <!-- SHIFT TO -->
                         <div class="col-md-6 text-center">
                             <label>Shift To</label>
@@ -33,14 +27,11 @@
                                 <strong>08:00 PM</strong>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
                 <!-- TABLE -->
                 <div class="table-responsive mt-3">
                     <table class="table fg-stocks table-bordered text-center">
-
                         <thead>
                             <tr>
                                 <th>S.No</th>
@@ -52,7 +43,6 @@
                                 <th>Closing Qty</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             <tr>
                                 <td>1</td>
@@ -64,7 +54,6 @@
                                 <td>800 Cases</td>
                             </tr>
                         </tbody>
-
                     </table>
                 </div>
             </div>
@@ -72,7 +61,6 @@
             <div class="fg-stocks-datewise">
                 <div class="fg-shift-box">
                     <div class="row">
-
                         <!-- SHIFT FROM -->
                         <div class="col-md-6 text-center">
                             <label>Shift From</label>
@@ -82,7 +70,6 @@
                                 <strong>08:00 AM</strong>
                             </div>
                         </div>
-
                         <!-- SHIFT TO -->
                         <div class="col-md-6 text-center">
                             <label>Shift To</label>
@@ -92,14 +79,12 @@
                                 <strong>08:00 PM</strong>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
                 <!-- TABLE -->
                 <div class="table-responsive mt-3">
                     <table class="table fg-stocks table-bordered text-center">
-
                         <thead>
                             <tr>
                                 <th>S.No</th>
@@ -111,7 +96,6 @@
                                 <th>Closing Qty</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             <tr>
                                 <td>1</td>
@@ -123,12 +107,9 @@
                                 <td>800 Cases</td>
                             </tr>
                         </tbody>
-
                     </table>
                 </div>
             </div>
-
-
 
 
         </div>
