@@ -573,10 +573,33 @@ class WarehouseController extends Controller {
                 "stock_quantity" => $request->production_quantity,
                 "shift_from" => $request->session()->get("shift_from"),
                 "shift_to" => $request->session()->get("shift_to"),
+                "production_line" => $request->productionLineId,
                 "uploaded_by_id" => $request->session()->get("userID"),
             ]);
 
             // ------ Update Production Timer Master
+
+            ProductionTimerMaster::where("production_line_id", $request->productionLineId)
+                ->where("production_status", 1)
+                ->update([
+                    "production_stop_time" => Carbon::now(),
+                    "production_status" => 0
+                ]);
+
+            // ------- Create New Production Timer Master
+
+            ProductionTimerMaster::create([
+                "shift_from" => $request->session()->get("shift_from"),
+                "shift_to" => $request->session()->get("shift_to"),
+                "counter_id" => $request->productionLineId,
+                "fgId" => $request->fgID,
+                "production_start_time" => Carbon::now(),
+                "production_line_id" => $request->productionLineId,
+                "production_timer_seconds" => 300,
+                "production_status" => 1
+            ]);
+
+            return back()->with("success", "New Production Uploaded");
 
         } else {
             return back()->with("error", "0 Quantity was found!!");
