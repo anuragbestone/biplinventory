@@ -21,7 +21,7 @@ use App\Models\FgStockMaster;
 use App\Models\FgStockTransaction;
 use App\Models\ProductionIssueMaster;
 use App\Models\ProductionLineMaster;
-use App\Models\ProductionLineStatus;
+use App\Models\ProductionLineDelayStatus;
 use App\Models\ProductionIssueRecorded;
 use App\Models\ProductionTimerMaster;
 use App\Models\RejectionMaster;
@@ -390,49 +390,97 @@ class WarehouseController extends Controller {
         }
     }
 
-    public function startProductionTimerWhatsapp(Request $request, WhatsAppService $whatsapp) {
+    public function updateProductionTime(Request $request, WhatsAppService $whatsapp) {
         $lineName = ProductionLineMaster::where(
             "id",
             $request->input("production_line_id")
-        )->value("line_name");
+            )->value("line_name");
 
-        NotificationMaster::create([
-            "route_address" => "notification",
-            "main_address" => "dashboard",
-            "notification_title" => "Production Has Been Started At ".Carbon::now()->format("d F Y h:i A"),
-            "notification_msg" => "Production Started At ".$lineName,
-            "is_clicked" => 0
-        ]);
-        
-        // ----
-        ProductionTimerMaster::create([
-            "production_line_id" => $request->input("production_line_id"),
-            "shift_from" => $request->session()->get("shift_from"),
-            "shift_to" => $request->session()->get("shift_to"),
-            "production_start_time" => Carbon::now(),
-            "production_line_id" => $request->input("production_line_id"),
-            "production_timer_seconds" => 120,
-            "production_status" => 1
-        ]);
-        // ----
+        if ($request->production_status == "start") {
 
-        // WhatsApp Service -- Starts
-        $message =
-            "🏭 *PRODUCTION STARTED* \n\n".
-            "📍 *Production Line:* \n".
-            "*".$lineName."*\n\n".
-            "🕒 *Start Time:* \n".
-            Carbon::now()->format(
-                "d F Y h:i A"
-            )."\n\n".
-            "⚙️ Production activity has started successfully.";
+            NotificationMaster::create([
+                "route_address" => "notification",
+                "main_address" => "dashboard",
+                "notification_title" => "Production Has Been Started At ".Carbon::now()->format("d F Y h:i A"),
+                "notification_msg" => "Production Started At ".$lineName,
+                "is_clicked" => 0
+            ]);
+            
+            ProductionTimerMaster::create([
+                "production_line_id" => $request->input("production_line_id"),
+                "shift_from" => $request->session()->get("shift_from"),
+                "shift_to" => $request->session()->get("shift_to"),
+                "counter_id" => $request->counter_id,
+                "fgId" => $request->fg_id,
+                "production_start_time" => Carbon::now(),
+                "production_line_id" => $request->input("production_line_id"),
+                "production_timer_seconds" => 300,
+                "production_status" => 1
+            ]);
+            
+            // WhatsApp Service -- Starts
 
-        $response = $whatsapp->sendMessage(
-            "919311676180",
-            $message
-        );
+            // $message =
+            //     "🏭 *PRODUCTION STARTED* \n\n".
+            //     "📍 *Production Line:* \n".
+            //     "*".$lineName."*\n\n".
+            //     "🕒 *Start Time:* \n".
+            //     Carbon::now()->format(
+            //         "d F Y h:i A"
+            //     )."\n\n".
+            //     "⚙️ Production activity has started successfully.";
 
-        // WhatsApp Service -- Ends
+            // $response = $whatsapp->sendMessage(
+            //     "919311676180",
+            //     $message
+            // );
+
+            // WhatsApp Service -- Ends
+
+            return response()->json([
+                "status" => "success",
+                "data" => [
+                    "production_time" => Carbon::now(),
+                    "production_timer_seconds" => 300
+                ]
+            ]);
+
+        }
+
+        if ($request->production_status == "stop") {
+
+        }
+
+    }
+
+    public function getProductionTimerUpdate() {
+        $productionData = ProductionTimerMaster::select(
+            "counter_id",
+            "fgId",
+            "production_start_time",
+            "production_stop_time",
+            "production_timer_seconds",
+            "production_line_id",
+            "production_status"
+        )
+        ->where("production_status", 1)
+        ->get();
+
+        if ($productionData) {
+
+            $data = [
+                "status" => "success",
+                "productionData" => $productionData
+            ];
+        } else {
+            $data = [
+                "status" => "error",
+                "productionData" => []
+            ];
+        }
+
+        return response()->json($data);
+
     }
 
     public function stopProductionTimer(Request $request, WhatsAppService $whatsapp) {
@@ -462,13 +510,6 @@ class WarehouseController extends Controller {
         // WhatsApp Service -- Ends
     }
 
-    public function rmpmstock() {
-        return view("warehouse.rmpmstock");
-    }
-
-    public function fgstock() {
-        return view("warehouse.fgstock");
-    }
 
     public function production() {
         $data["productionIssueData"] = ProductionIssueMaster::select("id", "production_issue_types")
@@ -481,7 +522,7 @@ class WarehouseController extends Controller {
         if ($data["productionLineData"]) {
             $counter = 0;
             foreach ($data["productionLineData"] as $pData) {
-                $data["productionDelayFlags"][$pData["id"]] = ProductionLineStatus::where("production_line_id", $pData["id"])
+                $data["productionDelayFlags"][$pData["id"]] = ProductionLineDelayStatus::where("production_line_id", $pData["id"])
                     ->where("line_status", 1)
                     ->exists() ? 1 : 0;
 
@@ -635,51 +676,58 @@ class WarehouseController extends Controller {
 
         $productionLineId = $request->production_line_id;
 
-        // Store delay status
-        ProductionLineStatus::create([
-            "production_line_id" => $productionLineId,
-            "line_status" => 1
-        ]);
+        // Check For Existing Alert
+        $delayStatus = ProductionLineDelayStatus::where("production_line_id", $productionLineId)
+            ->where("line_status", 1)
+            ->exists();
 
-        // Fetch line name safely
-        $line = ProductionLineMaster::select("line_name")
-                    ->where("id", $productionLineId)
-                    ->first();
+        if (!$delayStatus) {
+            // Store delay status
+            ProductionLineDelayStatus::create([
+                "production_line_id" => $productionLineId,
+                "line_status" => 1
+            ]);
 
-        $lineName = $line ? $line->line_name : "Unknown Line";
+            // Fetch line name safely
+            $line = ProductionLineMaster::select("line_name")
+                        ->where("id", $productionLineId)
+                        ->first();
 
-        // WhatsApp Message
+            $lineName = $line ? $line->line_name : "Unknown Line";
 
-        $message =
-            "🚨 *PRODUCTION TIME EXCEEDED* 🚨 \n\n".
-            "📍 *Production Line:* \n".
-            "*{$lineName}*\n\n".
-            "👤 *Reported By:* \n".
-            $request->session()->get("full_name")."\n\n".
-            "🕒 *Shift From:* \n".
-            Carbon::parse(
-                $request->session()->get("shift_from")
-            )->format("d F Y h:i A")."\n\n".
-            "🕔 *Shift To:* \n".
-            Carbon::parse(
-                $request->session()->get("shift_to")
-            )->format("d F Y h:i A")."\n\n".
-            "⚠️ Production time limit has been exceeded.\n".
-            "Kindly check and upload the production issue reason immediately.";
+            // WhatsApp Message
 
-        // Send WhatsApp
-        $response = $whatsapp->sendMessage(
-            "919311676180",
-            $message
-        );
+            $message =
+                "🚨 *PRODUCTION TIME EXCEEDED* 🚨 \n\n".
+                "📍 *Production Line:* \n".
+                "*{$lineName}*\n\n".
+                "👤 *Reported By:* \n".
+                $request->session()->get("full_name")."\n\n".
+                "🕒 *Shift From:* \n".
+                Carbon::parse(
+                    $request->session()->get("shift_from")
+                )->format("d F Y h:i A")."\n\n".
+                "🕔 *Shift To:* \n".
+                Carbon::parse(
+                    $request->session()->get("shift_to")
+                )->format("d F Y h:i A")."\n\n".
+                "⚠️ Production time limit has been exceeded.\n".
+                "Kindly check and upload the production issue reason immediately.";
+
+            // Send WhatsApp
+            $response = $whatsapp->sendMessage(
+                "919311676180",
+                $message
+            );
+        }
 
         // Optional failure handling
-        if (!$response || $response->failed()) {
-            return response()->json([
-                "status" => "error",
-                "message" => "WhatsApp alert failed"
-            ], 500);
-        }
+        // if (!$response || $response->failed()) {
+        //     return response()->json([
+        //         "status" => "error",
+        //         "message" => "WhatsApp alert failed"
+        //     ], 500);
+        // }
 
         return response()->json([
             "status" => "ok",
@@ -696,11 +744,18 @@ class WarehouseController extends Controller {
             "added_by_id" => $request->session()->get("userID")
         ]);
 
-        ProductionLineStatus::where("production_line_id", $request->input("production_line_id"))
+        ProductionLineDelayStatus::where("production_line_id", $request->input("production_line_id"))
             ->where("line_status", 1)
             ->update([
                 "line_status" => 0
         ]);
+
+        ProductionTimerMaster::where("production_line_id", $request->production_line_id)
+            ->where("production_status", 1)
+            ->update([
+                "production_status" => 0,
+                "production_stop_time" => Carbon::now()
+            ]);
 
         // Fetch line name safely
         $line = ProductionLineMaster::select("line_name")
@@ -743,14 +798,22 @@ class WarehouseController extends Controller {
         );
 
         // Optional failure handling
-        if (!$response || $response->failed()) {
-            return response()->json([
-                "status" => "error",
-                "message" => "WhatsApp alert failed"
-            ], 500);
-        }
+        // if (!$response || $response->failed()) {
+        //     return response()->json([
+        //         "status" => "error",
+        //         "message" => "WhatsApp alert failed"
+        //     ], 500);
+        // }
 
         return redirect()->route("warehouse/production")->with("Production Line Issue Recorded");
+    }
+
+    public function rmpmstock() {
+        return view("warehouse.rmpmstock");
+    }
+
+    public function fgstock() {
+        return view("warehouse.fgstock");
     }
 
     public function rejection(Request $request) {

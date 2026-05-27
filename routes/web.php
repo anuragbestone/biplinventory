@@ -71,8 +71,9 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
         Route::get("/warehouse/productionDelayAlert", [WarehouseController::class, "productionDelayAlert"]);
         Route::post("/warehouse/productionIssueUpload", [WarehouseController::class, "productionIssueUpload"]);
 
-        Route::get("/warehouse/startProductionTimerWhatsapp", [WarehouseController::class, "startProductionTimerWhatsapp"]);
-        Route::get("/warehouse/stopProductionTimer", [WarehouseController::class, "stopProductionTimer"]);
+        Route::get("/warehouse/updateProductionTime", [WarehouseController::class, "updateProductionTime"]);
+        Route::get("/warehouse/getProductionTimerUpdate", [WarehouseController::class, "getProductionTimerUpdate"]);
+        // Route::get("/warehouse/stopProductionTimer", [WarehouseController::class, "stopProductionTimer"]);
 
         Route::get("/warehouse/rejection", [WarehouseController::class, "rejection"]);
         Route::post("/warehouse/uploadRejection", [WarehouseController::class, "uploadRejection"]);

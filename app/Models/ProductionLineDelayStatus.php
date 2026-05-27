@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductionLineStatus extends Model
+class ProductionLineDelayStatus extends Model
 {
     use HasFactory;
 
-    protected $table = "production_line_status";
+    protected $table = "production_line_delay_status";
 
     protected $fillable = [
         "production_line_id",

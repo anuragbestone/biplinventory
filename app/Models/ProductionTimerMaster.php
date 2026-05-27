@@ -14,6 +14,8 @@ class ProductionTimerMaster extends Model
     protected $fillable = [
         "shift_from",
         "shift_to",
+        "counter_id",
+        "fgId",
         "production_start_time",
         "production_stop_time",
         "production_line_id",
