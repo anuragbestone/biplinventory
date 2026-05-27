@@ -548,124 +548,130 @@ class WarehouseController extends Controller {
     }
 
     public function uploadProduction(Request $request, WhatsAppService $whatsapp) {
-        try {
-            $shiftFrom = Carbon::parse($request->shift_from);
-            $shiftTo = Carbon::parse($request->shift_to);
-            $productionLineId = $request->productionLine;
-            $qtyData = $request->qty;
+        if (!empty($request->production_quantity)) {
 
-            // VALIDATE QTY EXISTS
-            if(empty($qtyData))
-            {
-                return response()->json([
-                    "status" => "error",
-                    "message" => "No quantity found"
-                ]);
-            }
+            try {
+                $shiftFrom = Carbon::parse($request->shift_from);
+                $shiftTo = Carbon::parse($request->shift_to);
+                $productionLineId = $request->productionLine;
+                $qtyData = $request->qty;
 
-            $whatsAppProductionDetails = "";
-            foreach($qtyData as $fgId => $qty)
-            {
-                // SKIP EMPTY OR ZERO QTY
-                if(empty($qty) || $qty <= 0)
+                // VALIDATE QTY EXISTS
+                if(empty($qtyData))
                 {
-                    continue;
-                }
-
-                // CHECK STOCK
-                $fgStockStatus = FGStockMaster::select(
-                        "id",
-                        "stock_quantity"
-                    )
-                    ->where("fg_cat_id", $fgId)
-                    ->first();
-
-                // UPDATE STOCK
-                if($fgStockStatus)
-                {
-                    FGStockMaster::where("fg_cat_id", $fgId)
-                        ->update([
-                            "stock_quantity" =>
-                                $fgStockStatus->stock_quantity + $qty
-                        ]);
-                }
-                else
-                {
-                    FGStockMaster::create([
-                        "fg_cat_id" => $fgId,
-                        "stock_quantity" => $qty
+                    return response()->json([
+                        "status" => "error",
+                        "message" => "No quantity found"
                     ]);
                 }
 
-                // INSERT TRANSACTION
-                FGStockTransaction::create([
-                    "fg_cat_id" => $fgId,
-                    "stock_quantity" => $qty,
-                    "production_line_id" => $productionLineId,
-                    "shift_from" => $shiftFrom,
-                    "shift_to" => $shiftTo,
-                    "uploaded_by_id" =>
-                        $request->session()->get('userID')
+                $whatsAppProductionDetails = "";
+                foreach($qtyData as $fgId => $qty)
+                {
+                    // SKIP EMPTY OR ZERO QTY
+                    if(empty($qty) || $qty <= 0)
+                    {
+                        continue;
+                    }
+
+                    // CHECK STOCK
+                    $fgStockStatus = FGStockMaster::select(
+                            "id",
+                            "stock_quantity"
+                        )
+                        ->where("fg_cat_id", $fgId)
+                        ->first();
+
+                    // UPDATE STOCK
+                    if($fgStockStatus)
+                    {
+                        FGStockMaster::where("fg_cat_id", $fgId)
+                            ->update([
+                                "stock_quantity" =>
+                                    $fgStockStatus->stock_quantity + $qty
+                            ]);
+                    }
+                    else
+                    {
+                        FGStockMaster::create([
+                            "fg_cat_id" => $fgId,
+                            "stock_quantity" => $qty
+                        ]);
+                    }
+
+                    // INSERT TRANSACTION
+                    FGStockTransaction::create([
+                        "fg_cat_id" => $fgId,
+                        "stock_quantity" => $qty,
+                        "production_line_id" => $productionLineId,
+                        "shift_from" => $shiftFrom,
+                        "shift_to" => $shiftTo,
+                        "uploaded_by_id" =>
+                            $request->session()->get('userID')
+                    ]);
+
+                    $fgWData = FgCatMaster::select("fg_cat_master.fg_cat_name", "fg_master.fg_name")
+                        ->join("fg_master", "fg_master.id", "=", "fg_cat_master.fg_id")
+                        ->where("fg_cat_master.id", $fgId)
+                        ->first();
+
+                        $whatsAppProductionDetails .=
+                            "▪️ *".$fgWData->fg_cat_name."*\n".
+                            "   ".$fgWData->fg_name."\n".
+                            "   Produced Qty: *".$qty." KG*\n\n";
+
+                }
+
+                // GET LINE NAME
+                $lineName = ProductionLineMaster::where(
+                    "id",
+                    $productionLineId
+                )->value("line_name");
+
+                // WhatsApp Service -- Starts
+                $message =
+                    "🏭 *PRODUCTION UPDATE* \n\n".
+                    "📍 *Production Line:* \n".
+                    "*".$lineName."*\n\n".
+                    "👤 *Updated By:* \n".
+                    $request->session()->get("full_name")."\n\n".
+                    "🕒 *Shift From:* \n".
+                    Carbon::parse(
+                        $request->session()->get("shift_from")
+                    )->format("d F Y h:i A")."\n\n".
+                    "🕔 *Shift To:* \n".
+                    Carbon::parse(
+                        $request->session()->get("shift_to")
+                    )->format("d F Y h:i A")."\n\n".
+                    "📋 *Production Details:* \n".
+                    "━━━━━━━━━━━━━━\n".
+                    $whatsAppProductionDetails.
+                    "━━━━━━━━━━━━━━\n\n".
+                    "✅ Production stock updated successfully.";
+
+                $response = $whatsapp->sendMessage(
+                    "919311676180",
+                    $message
+                );
+
+                // WhatsApp Service -- Ends
+
+                return response()->json([
+                    "status" => "ok",
+                    "message" => "Production uploaded successfully"
                 ]);
 
-                $fgWData = FgCatMaster::select("fg_cat_master.fg_cat_name", "fg_master.fg_name")
-                    ->join("fg_master", "fg_master.id", "=", "fg_cat_master.fg_id")
-                    ->where("fg_cat_master.id", $fgId)
-                    ->first();
-
-                    $whatsAppProductionDetails .=
-                        "▪️ *".$fgWData->fg_cat_name."*\n".
-                        "   ".$fgWData->fg_name."\n".
-                        "   Produced Qty: *".$qty." KG*\n\n";
-
+            }
+            catch(\Exception $e)
+            {
+                return response()->json([
+                    "status" => "error",
+                    "message" => $e->getMessage()
+                ]);
             }
 
-            // GET LINE NAME
-            $lineName = ProductionLineMaster::where(
-                "id",
-                $productionLineId
-            )->value("line_name");
-
-            // WhatsApp Service -- Starts
-            $message =
-                "🏭 *PRODUCTION UPDATE* \n\n".
-                "📍 *Production Line:* \n".
-                "*".$lineName."*\n\n".
-                "👤 *Updated By:* \n".
-                $request->session()->get("full_name")."\n\n".
-                "🕒 *Shift From:* \n".
-                Carbon::parse(
-                    $request->session()->get("shift_from")
-                )->format("d F Y h:i A")."\n\n".
-                "🕔 *Shift To:* \n".
-                Carbon::parse(
-                    $request->session()->get("shift_to")
-                )->format("d F Y h:i A")."\n\n".
-                "📋 *Production Details:* \n".
-                "━━━━━━━━━━━━━━\n".
-                $whatsAppProductionDetails.
-                "━━━━━━━━━━━━━━\n\n".
-                "✅ Production stock updated successfully.";
-
-            $response = $whatsapp->sendMessage(
-                "919311676180",
-                $message
-            );
-
-            // WhatsApp Service -- Ends
-
-            return response()->json([
-                "status" => "ok",
-                "message" => "Production uploaded successfully"
-            ]);
-
-        }
-        catch(\Exception $e)
-        {
-            return response()->json([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ]);
+        } else {
+            return back()->with("error", "0 Quantity was found!!");
         }
     }
 

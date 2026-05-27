@@ -98,7 +98,7 @@
                         <form id="" method="post" action="{{ url("warehouse/uploadProduction") }}" class="generalformloader">
                             @csrf
                             <input type="hidden" name="fgID" id="productionFgId_{{ $counter }}">
-                            <input type="hidden" class="productionLine" name="productionLineId" value="{{ $pData["id"] }}">
+                            <input type="hidden" class="productionLine" name="productionLineId" id="productionLineId_{{ $counter }}" value="{{ $pData["id"] }}">
                             <div class="plu-inner-card marbo h-100">
                                 <h6 class="detail-heading">Details</h6>
                                 <div class="rmpm-user-row pt-4">
@@ -111,11 +111,12 @@
                                         id="qty_input_{{ $counter }}"
                                         min="1"
                                         placeholder="Enter Qty"
+                                        required
                                         disabled
                                     >
                                     <input value="cases" readonly>
                                 </div>
-                                <div class="quantity-wrapper">
+                                <div class="aman">
                                     <div class="quantity-box shadow-sm">
                                         Total Quantity:
                                         <span id="totalQty_{{ $counter }}">0 Cases</span>
@@ -125,7 +126,7 @@
 
                             <!-- SUBMIT -->
                             <div class="text-center mt-5">
-                                <button type="button" onclick="updateProduction({{ $counter }})" class="plu-submit-btn" id="submitBtn_{{ $counter }}" disabled>
+                                <button type="submit" class="plu-submit-btn" id="submitBtn_{{ $counter }}" disabled>
                                     Submit
                                 </button>
                             </div>
@@ -211,7 +212,7 @@
                             $("#fg_select_" + pData.counter_id).prop("disabled", true);
                             $("#qty_input_" + pData.counter_id).prop("disabled", false);
                             $("#fg_select_" + pData.counter_id).val(pData.fgId);
-                            $("#productionFgId_" + counterID).val(pData.fgId);
+                            $("#productionFgId_" + pData.counter_id).val(pData.fgId);
 
                         } else {
                             // ---- Update Exceeded Limit
@@ -322,7 +323,7 @@
                 production_status: "start",
                 counter_id: counterID,
                 fg_id: $("#fg_select_" + counterID).val(),
-                production_line_id: $("#productionFgId_" + counterID).val()
+                production_line_id: $("#productionLineId_" + counterID).val()
             },
             success: function(response)
             {
@@ -330,7 +331,7 @@
                     console.log(response.data);
 
                     // ---- Disable/Enable Buttons
-                    $("#productionFgId_" + counterID).val($("fg_select_" + counterID).val());
+                    $("#productionFgId_" + counterID).val($("#fg_select_" + counterID).val());
                     $("#startBtn_" + counterID).prop("disabled", true);
                     $("#submitBtn_" + counterID).prop("disabled", false);
                     $("#stopBtn_" + counterID).prop("disabled", false);
