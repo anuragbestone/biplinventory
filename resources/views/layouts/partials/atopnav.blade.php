@@ -36,9 +36,7 @@
                 </div>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{{ url("orderNDispatch") }}">Order & Dispatch</a></li>
-                </ul>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ url("salesTarget") }}">Sales</a></li>
+                    <li><a class="dropdown-item" href="{{ url("salesTarget") }}">Sales Target</a></li>
                 </ul>
             </div>
 

@@ -24,6 +24,8 @@ use App\Http\Controllers\Admin\ThresholdController;
 
 use App\Http\Controllers\Admin\ShiftReportController;
 
+use App\Http\Controllers\Admin\SalesTargetController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

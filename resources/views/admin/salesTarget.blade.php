@@ -27,7 +27,7 @@
 
                 <!-- TABLE -->
                 <div class="table-responsive">
-                    <table id="orderTable" class="table table-bordered ordertable order-tableadmin text-center">
+                    <table id="salesTable" class="table table-bordered ordertable order-tableadmin text-center">
                         <thead>
                             <tr>
                                 <th>S.No</th>
@@ -142,11 +142,11 @@
                         <div class="modal-body">
                             <!-- TARGET DATE -->
                             <label>Target Date</label>
-                            <input name="target_date" type="date" class="form-control mb-3" required>
+                            <input name="target_date" type="date" class="form-control mb-3" min="{{ date("Y-m-d") }}" required>
                             
                             <!-- TARGET QTY -->
                             <label>Target Quantity</label>
-                            <input type="number" name="target_quantity">
+                            <input type="number" class="form-control" name="target_quantity" placeholder="cases" min="1">
 
                             <!-- TARGET USER -->
                             <label for="">Employee</label>
@@ -154,7 +154,7 @@
                                 <option value="">Select User</option>
                                 @if ($userData)
                                     @foreach ($userData as $uData)
-                                        <option value="{{ $uData["id"] }}">{{ $uData["full_name"] - $uData["email"] }}</option>
+                                        <option value="{{ $uData["id"] }}">{{ $uData["full_name"] ." - ". $uData["email"] }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -175,7 +175,7 @@
 
     $(document).ready(function () {
 
-        $('#orderTable').DataTable({
+        $('#salesTable').DataTable({
             responsive: true,
             autoWidth: false,
             pageLength: 10,
