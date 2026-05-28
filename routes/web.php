@@ -105,6 +105,9 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::post("/generateOrder", [OrderNDispatchController::class, "generateOrder"]);
     Route::get("/getOrderDetailsData", [OrderNDispatchController::class, "getOrderDetailsData"]);
 
+    Route::get("/salesTarget", [SalesTargetController::class, "getSalesTargetData"])->name("salesTarget");
+    Route::post("/generateTarget", [SalesTargetController::class, "generateTarget"]);
+
     Route::get("/rmPmProcurementUpdate", [RmPmProcurementUpdateController::class, "rmPmProcurementUpdate"]);
 
     Route::get("/stockReport", [StockReportController::class, "stockReport"])->name("stockReport");
