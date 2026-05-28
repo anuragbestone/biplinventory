@@ -192,6 +192,7 @@
 
                         // ---- Check Timer Running or Expired
                         if (productionEndTime > currentTime) {
+                            $("#totalQty_" + pData.counter_id).html(`${response.totalStock[pData.production_line_id]} Cases`);
                             console.log("Timer Still Running");
 
                             // ---- Remaining Seconds
@@ -312,6 +313,38 @@
         } else {
             setStartTimer(counterID);
         }
+    }
+
+    // ------- On Click of stop timer
+    function stopTimer(counterID) {
+        $.ajax({
+            url: "{{ url('warehouse/updateProductionTime') }}",
+            type: "GET",
+            data: {
+                production_status: "stop",
+                production_line_id: $("#productionLineId_" + counterID).val()
+            },
+            success: function(response)
+            {
+                if (response.status == "success") {
+                    console.log(response.data);
+
+                    // ---- Disable/Enable Buttons
+                    $("#productionFgId_" + counterID).val("");
+                    $("#startBtn_" + counterID).prop("disabled", false);
+                    $("#submitBtn_" + counterID).prop("disabled", true);
+                    $("#stopBtn_" + counterID).prop("disabled", true);
+                    $("#fg_select_" + counterID).prop("disabled", false);
+                    $("#qty_input_" + counterID).prop("disabled", true);
+
+                    
+                }
+            },
+            error: function(error)
+            {
+                console.log(error);
+            }
+        });
     }
 
     // ---- Start Timer API

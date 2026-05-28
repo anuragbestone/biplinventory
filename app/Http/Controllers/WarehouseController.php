@@ -466,11 +466,32 @@ class WarehouseController extends Controller {
         ->where("production_status", 1)
         ->get();
 
+        $productionLine = ProductionLineMaster::select("id", "line_name")
+            ->where("is_active", 1)
+            ->get()->toArray();
+
+        $totalStock = [];
+        if ($productionLine) {
+            foreach ($productionLine as $pLine) {
+                $totalStock[$pLine["id"]] = FgStockTransaction::leftJoin(
+                    "fg_cat_master",
+                    "fg_cat_master.id",
+                    "=",
+                    "fg_stock_transaction.fg_cat_id"
+                )
+                ->where("fg_cat_master.production_line_id", $pLine["id"])
+                ->whereDate("fg_stock_transaction.created_at", Carbon::today())
+                ->sum("fg_stock_transaction.stock_quantity");
+
+            }
+        }
+
         if ($productionData) {
 
             $data = [
                 "status" => "success",
-                "productionData" => $productionData
+                "productionData" => $productionData,
+                "totalStock" => $totalStock
             ];
         } else {
             $data = [
@@ -573,7 +594,7 @@ class WarehouseController extends Controller {
                 "stock_quantity" => $request->production_quantity,
                 "shift_from" => $request->session()->get("shift_from"),
                 "shift_to" => $request->session()->get("shift_to"),
-                "production_line" => $request->productionLineId,
+                "production_line_id" => $request->productionLineId,
                 "uploaded_by_id" => $request->session()->get("userID"),
             ]);
 
