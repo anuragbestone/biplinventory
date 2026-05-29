@@ -930,7 +930,7 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                             $("#fg_status_" + item.counter.id + "_" + item.productionData.fgId).show();
                             $("#selected_fg_option_" + item.counter.id + "_" + item.productionData.fgId).addClass("active");
                             $("#" + item.productionData.main_id).addClass("active");
-                            
+
                             const activeBottle = document.querySelector("#" + item.productionData.main_id + ".bottlemain");
                             if(activeBottle){
                                 startBottle(activeBottle);
@@ -985,23 +985,6 @@ document.querySelectorAll(".size-tabs").forEach(group => {
             getProductionStatus();
         }, 10000);
     });
-
-
-    function productionLineStartedChanges(counter_id) {
-        $("#production_line_status_" + counter_id).show();
-
-        $("#production_line_alert_" + counter_id).show();
-        
-        $("#production_line_last_active_" + counter_id).show();
-        $("#production_line_last_active_" + counter_id).html("");
-    }
-
-    function productionLineEndedChanges() {
-        $("#production_line_status_" + counter_id).hide();
-        
-        $("#production_line_alert_" + counter_id).hide();
-        $("#production_line_last_active_" + counter_id).hide();
-    }
 
 </script>
 <!-- Bottle JS Ends --->
