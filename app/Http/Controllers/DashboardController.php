@@ -16,6 +16,9 @@ use App\Models\FgStockTransaction;
 use App\Models\FgDispatchMaster;
 use App\Models\ProductionLineMaster;
 use App\Models\NotificationMaster;
+use App\Models\FgCatBottleHtml;
+
+use App\Models\ProductionTimerMaster;
 
 use Carbon\Carbon;
 
@@ -64,12 +67,43 @@ class DashboardController extends Controller {
 
     public function showDashboard(Request $request) {
         if ($request->session()->get("role_id") != 3) {
+
+
             // ------ Bottle Data Starts
             $productionLineData = ProductionLineMaster::select("id", "line_name")
                 ->where("is_active", 1)
                 ->get()->toArray();
+            
+            $data["productionLineData"] = $productionLineData;
+
+            if ($productionLineData) {
+                $counter = 0;
+                foreach ($productionLineData as $pLineData) {
+                    $data["productionLineDataFG"][$counter]["productionLineDetails"] = $pLineData;
+                    $data["productionLineDataFG"][$counter]["fgData"] = FgCatMaster::select(
+                            "fg_cat_master.id",
+                            "fg_cat_master.fg_cat_name",
+                            "fg_master.fg_name",
+                            "fg_cat_bottle_html.main_id",
+                            "fg_cat_bottle_html.main_class",
+                            "fg_cat_bottle_html.sub_class",
+                            "fg_cat_bottle_html.inner_class",
+                            "fg_cat_bottle_html.bottle_image"
+                        )
+                        ->leftJoin("fg_cat_bottle_html", "fg_cat_bottle_html.fg_cat_id", "=", "fg_cat_master.id")
+                        ->leftJoin("fg_master", "fg_master.id", "=", "fg_cat_master.fg_id")
+                        ->where("fg_cat_master.production_line_id", $pLineData["id"])
+                        ->get()->toArray();
+
+                    $counter++;
+                }
+            }
 
             // ------ Bottle Data Ends
+            
+            
+            
+            
             $data["fgData"] = FgStockMaster::select(
                     "fg_cat_master.fg_cat_name",
                     "fg_master.fg_name",
@@ -296,13 +330,15 @@ class DashboardController extends Controller {
             
             // MAX VALUE
             $maxProductionQty = FgStockTransaction::whereBetween(
-                    DB::raw("DATE(created_at)"),
+                DB::raw("DATE(created_at)"),
                     [
                         $productionStartDate->toDateString(),
                         $productionEndDate->toDateString()
                     ]
                 )
                 ->sum("stock_quantity");
+
+                
             
             $data["productionGraphData"] = $finalProductionData;
             $data["maxProductionQty"] = $maxProductionQty;
@@ -310,7 +346,7 @@ class DashboardController extends Controller {
             
             // ---------------- PRODUCTION GRAPH DATA ENDS -------------
 
-            // echo "<pre>";print_r($data);die();
+            //echo "<pre>";print_r($data);die();
             return view("dashboard.adminDash", $data);
         }
 
@@ -459,4 +495,53 @@ class DashboardController extends Controller {
 
         return view("dashboard.warehouseDash", $data);
     }
+
+    public function getProductionStatus() {
+        $productionLineStatus = ProductionTimerMaster::select(
+            "id",
+            "counter_id",
+            "fgId",
+            "production_start_time",
+            "production_line_id",
+            "production_timer_seconds"
+        )
+        ->where("production_status", 1)
+        ->get()->toArray();
+
+
+        $productionLine = ProductionLineMaster::select("id", "line_name")
+            ->where("is_active", 1)
+            ->get()->toArray();
+
+        $totalStock = [];
+        if ($productionLine) {
+            foreach ($productionLine as $pLine) {
+                $fgCatData = FgCatMaster::select("id", "fg_cat_name")
+                    ->where("production_line_id", $pLine["id"])
+                    ->get()->toArray();
+                
+                $counter = 0;    
+                foreach ($fgCatData as $fgValues) {
+                    $totalStock[$pLine["id"]][$counter]["fgData"] = $fgValues;
+                    $totalStock[$pLine["id"]][$counter]["productionQuantity"] = FgStockTransaction::
+                        where("fg_cat_id", $fgValues["id"])
+                        ->whereDate("fg_stock_transaction.created_at", Carbon::today())
+                        ->sum("fg_stock_transaction.stock_quantity");
+                    $counter++;
+                } 
+
+            }
+        }
+
+        $data = [
+            "productionLineStatus" => $productionLineStatus,
+            "totalStock" => $totalStock
+        ];
+
+        return response()->json([
+            "status" => "success",
+            "data" => $data
+        ]);
+    }
+
 }

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\SalesTargetMaster;
 use App\Models\UserMaster;
 
+use Illuminate\Support\Carbon;
+
 class SalesTargetController extends Controller
 {
 
@@ -40,7 +42,7 @@ class SalesTargetController extends Controller
     }
 
     public function generateTarget(Request $request) {
-        echo "<pre>";print_r($request->all());die();
+        // echo "<pre>";print_r($request->all());die();
 
         // ------- Check For Target Month
         $monthStatus = SalesTargetMaster::whereMonth("target_date", date("m", strtotime($request->target_date)))
@@ -66,7 +68,7 @@ class SalesTargetController extends Controller
 
         } else {
             SalesTargetMaster::create([
-                "targate_date" => $request->target_date,
+                "target_date" => $request->target_date,
                 "target_given_date" => Carbon::now(),
                 "user_id" => $request->user_id,
                 "target_quantity" => $request->target_quantity,

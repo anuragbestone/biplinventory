@@ -44,7 +44,7 @@
                                 @foreach($salesData as $salesDetail)
                                 <tr>
                                     <td>{{ $counter++ }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($salesDetail["target_date"])->format("M, y") }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($salesDetail["target_date"])->format("d M, y") }}</td>
                                     <td>{{ $salesDetail["full_name"] }}</td>
                                     <td>
                                         <span class="badge bg-primary">
@@ -52,11 +52,10 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="badge {{ $salesDetail["target_quantity"] == $salesDetail["achieved_target_quantity"] ? "bg-success" : "bg-warning" }}">
+                                        <span class="badge {{ $salesDetail["target_quantity"] == $salesDetail["achieved_target_quantity"] ? "bg-success" : "bg-danger" }}">
                                             {{ $salesDetail["achieved_target_quantity"] }}
                                         </span>
                                     </td>
-                                    <td>
                                     <td>
                                         <button class="btn btn-info btn-sm" onclick="getSalesDetails({{ $salesDetail['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
                                             <i class="fa fa-info"></i>
@@ -182,12 +181,7 @@
             ordering: true,
             searching: true,
             scrollX: true,
-            columnDefs: [
-                {
-                    orderable: false,
-                    targets: [7]
-                }
-            ]
+            
         });
 
     });

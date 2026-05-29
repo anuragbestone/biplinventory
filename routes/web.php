@@ -92,6 +92,8 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     // -- Remaining Routes Start
     Route::get("/notification", [DashboardController::class, "notificationHandler"]);
 
+    Route::get("/getProductionStatus", [DashboardController::class, "getProductionStatus"])->name("getProductionStatus");
+
     Route::get("/getUpdatesOfTheWarehouse", [DashboardController::class, "getUpdatesOfTheWarehouse"]);
     Route::get("/getNotificationUpdates", [DashboardController::class, "getNotificationUpdates"]);
 

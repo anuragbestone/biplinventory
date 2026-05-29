@@ -126,229 +126,90 @@
             </div>
         </div>
         <div class="row pt-4">
-            <!-- LEFT CARD -->
-            <div class="col-md-6">
-                <div class="bottle-card shadow-sm">
-                    <!-- Alert -->
-                    <div class="d-flex align-items-center justify-content-between">
-                        <button class="alert-btn">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                            <span>Alert</span>
-                        </button>
-                        <div class="status-box">
-                            <span class="status-label">Status:</span>
-                            <span class="status-indicator deactive"></span>
-                            <span class="status-time">6 min Ago</span>
-                        </div>
-                    </div>
-                    <div class="linetext">
-                        <h3 class="mt-2 fw-light-custom">Company Owned Contractor Operated Line</h3>
-                        <p class="small text-muted"><b>Total 1700 Cases</b></p>
-                    </div>
-                    <div class="p-3 mt-5" style="border-radius: 20px; background: #eef3fb59; border: #fff solid 1px">
-                        <div class="size-tabs group-left">
-                            <div class="size-item">
-                                <button class="tab-btn active" data-target="ltr1">1L</button>
-                                <span class="case-text">1200 Cases</span>
+
+            @if ($productionLineDataFG)
+                @foreach ($productionLineDataFG as $productionLineValues)
+            
+                    <div class="col-md-6">
+                        <div class="bottle-card shadow-sm">
+                            <!-- Alert -->
+                            <div class="d-flex align-items-center justify-content-between">
+                                <button class="alert-btn" id="production_line_hault_alert_{{ $productionLineValues["productionLineDetails"]["id"] }}" style="display: none;">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    <span>Alert</span>
+                                </button>
+                                <div class="status-box">
+                                    <span class="status-label" id="production_line_status_{{ $productionLineValues["productionLineDetails"]["id"] }}" style="display: none;">Status:</span>
+                                    <span class="status-indicator deactive" id="production_line_alert_{{ $productionLineValues["productionLineDetails"]["id"] }}" style="display: none;"></span>
+                                    <span class="status-time" id="production_line_last_active_{{ $productionLineValues["productionLineDetails"]["id"] }}" style="display: none;">0 min Ago</span>
+                                </div>
                             </div>
-                            <div class="size-item">
-                                <button class="tab-btn" data-target="ltr2">2L</button>
-                                <span class="case-text">1200 Cases</span>
+
+
+                            <div class="linetext">
+                                <h3 class="mt-2 fw-light-custom">{{ $productionLineValues["productionLineDetails"]["line_name"] }}</h3>
+                                <p class="small text-muted" id="production_line_cases_{{ $productionLineValues["productionLineDetails"]["id"] }}"><b>Total 0 Cases</b></p>
+                                <span id="production_line_status_for_inactive_{{ $productionLineValues["productionLineDetails"]["id"] }}">Production Is Not Active For This Line</span><br>
+                                <span id="production_line_fg_{{ $productionLineValues["productionLineDetails"]["id"] }}" style="display: none;">Production Is Active For : 1 Ltr</span>
                             </div>
-                        </div>
-                        <!-- DIVS -->
-                        <div id="ltr1" class="tab-content active">
-                            <div class="bottlemain bottlemain1ltr">
-                                <!-- BUTTONS -->
-                                <div class="bottle">
-                                    <audio
-                                        id="waterSound"
-                                        src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
-                                    ></audio>
-                                    <div class="bottle-wrapper">
-                                        <div class="bottle oneltr">
-                                            <div class="bottle-mask">
-                                                <div class="levels" id="levels"></div>
-                                                <div class="water" id="water">
-                                                    <div class="surface"></div>
-                                                    <div class="bubbles">
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
+
+                            <div class="p-3 mt-5" style="border-radius: 20px; background: #eef3fb59; border: #fff solid 1px">
+                                <div class="size-tabs group-left">
+                                    @if ($productionLineValues["fgData"])
+                                        @foreach ($productionLineValues["fgData"] as $pFGData)
+                                            <div class="size-item" id="fg_status_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $pFGData["id"] }}" style="display: none;">
+                                                <!-- Active function below -->
+                                                <button class="tab-btn" data-target="{{ $pFGData["main_id"] }}">{{ $pFGData["fg_cat_name"] }}</button>
+                                                <span class="case-text">0 Cases</span>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+
+                                <!-- Bottle Html Starts -->
+                                @if ($productionLineValues["fgData"])
+                                    @foreach ($productionLineValues["fgData"] as $bottleData)
+                                        <!-- Active function below -->
+                                        <div id="{{ $bottleData["main_id"] }}" class="tab-content">
+                                            <div class="{{ $bottleData["main_class"] }}">
+                                                <!-- BUTTONS -->
+                                                <div class="bottle">
+                                                    <audio
+                                                        id="waterSound"
+                                                        src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
+                                                    ></audio>
+                                                    <div class="bottle-wrapper">
+                                                        <div class="{{ $bottleData["sub_class"] }}">
+                                                            <div class="{{ $bottleData["inner_class"] }}">
+                                                                <div class="levels" id="levels"></div>
+                                                                <div class="water" id="water">
+                                                                    <div class="surface"></div>
+                                                                    <div class="bubbles">
+                                                                        <span></span>
+                                                                        <span></span>
+                                                                        <span></span>
+                                                                        <span></span>
+                                                                        <span></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <img src="{{ asset("assets") }}/{{ $bottleData["bottle_image"] }}" alt="" class="imgbottlebestone" />
+                                                        </div>
+                                                        <div class="indicators" id="indicators"></div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <img src="{{ asset("assets") }}/images/sdsd.svg" alt="" class="imgbottlebestone" />
                                         </div>
-                                        <div class="indicators" id="indicators"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="ltr2" class="tab-content">
-                            <div class="bottlemain bottlemain2ltr">
-                                <!-- BUTTONS -->
-                                <div class="bottle">
-                                    <audio
-                                        id="waterSound"
-                                        src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
-                                    ></audio>
-                                    <div class="bottle-wrapper">
-                                        <div class="bottle twoltr">
-                                            <div class="bottle-mask2ltr">
-                                                <div class="levels" id="levels"></div>
-                                                <div class="water" id="water">
-                                                    <div class="surface"></div>
-                                                    <div class="bubbles">
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <img src="{{ asset("assets") }}/images/2ltrbottle.svg" alt="" class="imgbottlebestone" />
-                                        </div>
-                                        <div class="indicators" id="indicators"></div>
-                                    </div>
-                                </div>
+                                    @endforeach
+                                @endif
+                                <!-- Bottle Html Ends -->
+
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                @endforeach
+            @endif
 
-            <!-- RIGHT CARD -->
-            <div class="col-md-6">
-                <div class="bottle-card shadow-sm">
-                    <!-- Alert -->
-                    <div class="d-flex align-items-right justify-content-end">
-                        <div class="status-box lineb">
-                            <span class="status-label">Status:</span>
-                            <span class="status-indicator active"></span>
-                            <span class="status-time">2 min Ago</span>
-                        </div>
-                    </div>
-                    <div class="linetext">
-                        <h3 class="mt-2 fw-light-custom">Company Owned Company Operated Line</h3>
-                        <p class="small text-muted"><b>Total 1700 Cases</b></p>
-                    </div>
-
-                    <div class="p-3 mt-5" style="border-radius: 20px; background: #eef3fb59; border: #fff solid 1px">
-                        <div class="size-tabs group-right">
-                            <div class="size-item">
-                                <button class="tab-btn active" data-target="ml200">200ml</button>
-                                <span class="case-text">1200 Cases</span>
-                            </div>
-                            <div class="size-item">
-                                <button class="tab-btn" data-target="mlpink200">200ml Pink</button>
-                                <span class="case-text">1200 Cases</span>
-                            </div>
-                            <div class="size-item">
-                                <button class="tab-btn" data-target="ml500">500ml</button>
-                                <span class="case-text">1200 Cases</span>
-                            </div>
-                        </div>
-
-                        <!-- DIVS -->
-                        <div id="ml200" class="tab-content active">
-                            <div class="bottlemain bottlemain200ml">
-                                <!-- BUTTONS -->
-                                <div class="bottle">
-                                    <audio
-                                        id="waterSound"
-                                        src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
-                                    ></audio>
-                                    <div class="bottle-wrapper">
-                                        <div class="bottle twohundml">
-                                            <div class="bottle-mask">
-                                                <div class="levels" id="levels"></div>
-                                                <div class="water" id="water">
-                                                    <div class="surface"></div>
-                                                    <div class="bubbles">
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <img src="{{ asset("assets") }}/images/200ml.svg" alt="" class="imgbottlebestone" />
-                                        </div>
-                                        <div class="indicators" id="indicators"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="mlpink200" class="tab-content">
-                            <div class="bottlemain bottlemain200mlpink">
-                                <!-- BUTTONS -->
-                                <div class="bottle">
-                                    <audio
-                                        id="waterSound"
-                                        src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
-                                    ></audio>
-                                    <div class="bottle-wrapper">
-                                        <div class="bottle twohundpinkml">
-                                            <div class="bottle-mask200mpink">
-                                                <div class="levels" id="levels"></div>
-                                                <div class="water" id="water">
-                                                    <div class="surface"></div>
-                                                    <div class="bubbles">
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <img src="{{ asset("assets") }}/images/200mlneeri.svg" alt="" class="imgbottlebestone" />
-                                        </div>
-                                        <div class="indicators" id="indicators"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="ml500" class="tab-content">
-                            <div class="bottlemain bottlemain500ml">
-                                <!-- BUTTONS -->
-                                <div class="bottle">
-                                    <audio
-                                        id="waterSound"
-                                        src="https://bestoneindia.com/bottlesui/universfield-fill-water-192164.mp3"
-                                    ></audio>
-                                    <div class="bottle-wrapper">
-                                        <div class="bottle fivehundml">
-                                            <div class="bottle-mask500ml">
-                                                <div class="levels" id="levels"></div>
-                                                <div class="water" id="water">
-                                                    <div class="surface"></div>
-                                                    <div class="bubbles">
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                        <span></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <img src="{{ asset("assets") }}/images/500ml.svg" alt="" class="imgbottlebestone" />
-                                        </div>
-                                        <div class="indicators" id="indicators"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -779,46 +640,46 @@
                let currentIndex = 0;
                let currentHeight = 0;
    
-               function animateTo(targetHeight, index) {
-                   const speed = 0.001;
+            //    function animateTo(targetHeight, index) {
+            //        const speed = 0.001;
    
-                   audio.currentTime = 0;
-                   audio.play();
+            //        audio.currentTime = 0;
+            //        audio.play();
    
-                   function step() {
-                       currentHeight += speed;
-                       water.style.height = currentHeight * 100 + "%";
+            //        function step() {
+            //            currentHeight += speed;
+            //            water.style.height = currentHeight * 100 + "%";
    
-                       if (currentHeight >= targetHeight) {
-                           currentHeight = targetHeight;
+            //            if (currentHeight >= targetHeight) {
+            //                currentHeight = targetHeight;
    
-                           document.getElementById("lvl" + index).classList.add("active");
+            //                document.getElementById("lvl" + index).classList.add("active");
    
-                           const ind = document.getElementById("ind" + index);
-                           ind.classList.add("active");
-                           ind.querySelector(".dot").classList.add("blink");
+            //                const ind = document.getElementById("ind" + index);
+            //                ind.classList.add("active");
+            //                ind.querySelector(".dot").classList.add("blink");
    
-                           const pop = document.getElementById("pop" + index);
-                           pop.classList.add("active");
+            //                const pop = document.getElementById("pop" + index);
+            //                pop.classList.add("active");
    
-                           audio.pause();
+            //                audio.pause();
    
-                           return;
-                       }
+            //                return;
+            //            }
    
-                       requestAnimationFrame(step);
-                   }
+            //            requestAnimationFrame(step);
+            //        }
    
-                   step();
-               }
+            //        step();
+            //    }
    
                // demo
-               setInterval(() => {
-                   if (currentIndex < levels.length) {
-                       animateTo(levels[currentIndex].height, currentIndex);
-                       currentIndex++;
-                   }
-               }, 3000);
+            //    setInterval(() => {
+            //        if (currentIndex < levels.length) {
+            //            animateTo(levels[currentIndex].height, currentIndex);
+            //            currentIndex++;
+            //        }
+            //    }, 3000);
    
                // ðŸ”“ unlock audio
                document.body.addEventListener(
@@ -829,6 +690,84 @@
                    { once: true }
                );
 </script>
+
+<!-- Bottle JS Starts --->
+<script>
+
+    function getProductionStatus() {
+        $.ajax({
+            url: "{{ url('/getProductionStatus') }}",
+            type: "GET",
+            success: function(response) {
+                if (response.data.productionLineStatus) {
+                    response.data.productionLineStatus.forEach(function(item) {
+
+                        let startTime = new Date(item.production_start_time.replace(/-/g, "/"));
+                        let timerSeconds = item.production_timer_seconds;
+                        let endTime = new Date(startTime.getTime() + (timerSeconds * 1000));
+                        let currentTime = new Date();
+                        let diffMilliseconds = currentTime - startTime;
+                        let diffMinutes = Math.floor(diffMilliseconds / (1000 * 60));
+
+                        $("#production_line_status_" + item.counter_id).show();
+                        $("#production_line_last_active_" + item.counter_id).show();
+                        $("#production_line_last_active_" + item.counter_id).html(`${diffMinutes} min's ago`);
+                        $("#production_line_alert_" + item.counter_id).show();
+                        
+                        if (currentTime > endTime) {
+                            $("#production_line_hault_alert_" + item.counter_id).show();
+                            $("#production_line_alert_" + item.counter_id)
+                                .addClass("deactive")
+                                .removeClass("active");
+                        } else {
+                            $("#production_line_alert_" + item.counter_id)
+                                .addClass("active")
+                                .removeClass("deactive");
+                        }
+
+                        
+
+                    });
+                } else {
+                    $("#production_line_status_" + item.counter_id).hide();
+                    $("#production_line_last_active_" + item.counter_id).hide();
+                    $("#production_line_alert_" + item.counter_id).hide();
+                    $("#production_line_hault_alert_" + item.counter_id).hide();
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        getProductionStatus();
+        setInterval(function () {
+            getProductionStatus();
+        }, 10000);
+    });
+
+
+    function productionLineStartedChanges(counter_id) {
+        $("#production_line_status_" + counter_id).show();
+
+        $("#production_line_alert_" + counter_id).show();
+        
+        $("#production_line_last_active_" + counter_id).show();
+        $("#production_line_last_active_" + counter_id).html("");
+    }
+
+    function productionLineEndedChanges() {
+        $("#production_line_status_" + counter_id).hide();
+        
+        $("#production_line_alert_" + counter_id).hide();
+        $("#production_line_last_active_" + counter_id).hide();
+    }
+
+</script>
+<!-- Bottle JS Ends --->
+
 <script>
    document.addEventListener("DOMContentLoaded", function () {
                    const canvas = document.getElementById("pie_chart");
