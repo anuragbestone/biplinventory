@@ -723,6 +723,9 @@
                             $("#production_line_alert_" + item.counter_id)
                                 .addClass("active")
                                 .removeClass("deactive");
+                            $("#production_line_status_for_inactive_" + item.counter_id).html(
+                                `Production Line Time Has Been Exceeded It's Limit`
+                            );
                         }
 
                         
@@ -733,6 +736,7 @@
                     $("#production_line_last_active_" + item.counter_id).hide();
                     $("#production_line_alert_" + item.counter_id).hide();
                     $("#production_line_hault_alert_" + item.counter_id).hide();
+                    $()
                 }
             },
             error: function(error) {

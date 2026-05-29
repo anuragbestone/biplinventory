@@ -497,18 +497,6 @@ class DashboardController extends Controller {
     }
 
     public function getProductionStatus() {
-        $productionLineStatus = ProductionTimerMaster::select(
-            "id",
-            "counter_id",
-            "fgId",
-            "production_start_time",
-            "production_line_id",
-            "production_timer_seconds"
-        )
-        ->where("production_status", 1)
-        ->get()->toArray();
-
-
         $productionLine = ProductionLineMaster::select("id", "line_name")
             ->where("is_active", 1)
             ->get()->toArray();
@@ -516,6 +504,22 @@ class DashboardController extends Controller {
         $totalStock = [];
         if ($productionLine) {
             foreach ($productionLine as $pLine) {
+
+                $pCounter = 0;
+                $productionLineStatus[$pCounter]["productionLineId"] = $pLine;
+                $productionLineStatus[$pCounter]["productionData"] = ProductionTimeMaster::
+                    select(
+                        "id",
+                        "counter_id",
+                        "fgId",
+                        "production_start_time",
+                        "production_line_id",
+                        "production_timer_seconds"
+                    )
+                    ->where("production_status", 1)
+                    ->where("production_line_id", $pLine["id"])
+                    ->get()->toArray();
+
                 $fgCatData = FgCatMaster::select("id", "fg_cat_name")
                     ->where("production_line_id", $pLine["id"])
                     ->get()->toArray();
