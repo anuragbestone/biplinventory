@@ -990,39 +990,40 @@ document.querySelectorAll(".size-tabs").forEach(group => {
 <!-- Bottle JS Ends --->
 
 <script>
-   document.addEventListener("DOMContentLoaded", function () {
-                   const canvas = document.getElementById("pie_chart");
+    document.addEventListener("DOMContentLoaded", function () {
+        const canvas = document.getElementById("pie_chart");
    
-                   if (!canvas) {
-                       console.error("Canvas not found!");
-                       return;
-                   }
+        if (!canvas) {
+            console.error("Canvas not found!");
+            return;
+        }
    
-                   const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d");
    
-                   new Chart(ctx, {
-                       type: "doughnut",
-                       data: {
-                           labels: ["Preform", "Caps", "Label", "Sticker", "LD"],
-                           datasets: [
-                               {
-                                   data: [152, 152, 20, 280, 300],
-                                   backgroundColor: ["#e96b63", "#36b0a9", "#4b5aa6", "#66b08a", "#f4be2c"],
-                                   borderWidth: 0,
-                               },
-                           ],
-                       },
-                       options: {
-                           responsive: true,
-                           maintainAspectRatio: false,
-                           cutout: "65%",
-                           plugins: {
-                               legend: {
-                                   display: false,
-                               },
-                           },
-                       },
-                   });
-               });
+        new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: ["Preform", "Caps", "Label", "Sticker", "LD"],
+                datasets: [
+                    {
+                        data: [152, 152, 20, 280, 300],
+                        backgroundColor: ["#e96b63", "#36b0a9", "#4b5aa6", "#66b08a", "#f4be2c"],
+                        borderWidth: 0,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "65%",
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                },
+            },
+        });
+    });
+    
 </script>
 @endsection
