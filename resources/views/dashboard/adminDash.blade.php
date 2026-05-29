@@ -159,7 +159,11 @@
                                         @foreach ($productionLineValues["fgData"] as $pFGData)
                                             <div class="size-item" id="fg_status_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $pFGData["id"] }}" style="display: none;">
                                                 <!-- Active function below -->
-                                                <button class="tab-btn" data-target="{{ $pFGData["main_id"] }}">{{ $pFGData["fg_cat_name"] }}</button>
+                                                <button 
+                                                    class="tab-btn" id="selected_fg_option_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $pFGData["id"] }}" 
+                                                    data-target="{{ $pFGData["main_id"] }}">
+                                                    {{ $pFGData["fg_cat_name"] }}
+                                                </button>
                                                 <span class="case-text">0 Cases</span>
                                             </div>
                                         @endforeach
@@ -170,7 +174,9 @@
                                 @if ($productionLineValues["fgData"])
                                     @foreach ($productionLineValues["fgData"] as $bottleData)
                                         <!-- Active function below -->
-                                        <div id="{{ $bottleData["main_id"] }}" class="tab-content">
+                                        <div 
+                                            id="{{ $bottleData["main_id"] }}"
+                                            class="tab-content">
                                             <div class="{{ $bottleData["main_class"] }}">
                                                 <!-- BUTTONS -->
                                                 <div class="bottle">
@@ -182,7 +188,9 @@
                                                         <div class="{{ $bottleData["sub_class"] }}">
                                                             <div class="{{ $bottleData["inner_class"] }}">
                                                                 <div class="levels" id="levels"></div>
-                                                                <div class="water" id="water">
+                                                                <div 
+                                                                    class="water fg_water_capacity_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $bottleData["id"] }}" 
+                                                                    id="water">
                                                                     <div class="surface"></div>
                                                                     <div class="bubbles">
                                                                         <span></span>
@@ -594,101 +602,304 @@
 
     
 <script>
-   const levelsContainer = document.getElementById("levels");
-               const indicators = document.getElementById("indicators");
-               const water = document.getElementById("water");
-               const audio = document.getElementById("waterSound");
-   
-               // data
-               const levels = [
-                   { cases: 50, height: 0.18, msg: "Great Production 🔥" },
-                   { cases: 100, height: 0.34, msg: "Awesome Speed 🚀" },
-                   { cases: 150, height: 0.5, msg: "Keep Going 💪" },
-                   { cases: 200, height: 0.66, msg: "Target Achieved 🎯" },
-               ];
-   
-               // UI generate
-               levels.forEach((lvl, i) => {
-                   const line = document.createElement("div");
-                   line.className = "lvl";
-                   line.style.bottom = lvl.height * 100 + "%";
-                   line.id = "lvl" + i;
-                   levelsContainer.appendChild(line);
-   
-                   const ind = document.createElement("div");
-                   ind.className = "indicator";
-                   ind.style.bottom = lvl.height * 100 + "%";
-                   ind.id = "ind" + i;
-   
-                   ind.innerHTML = `
-   <div class="line"></div>
-   <div class="dot"></div>
-   ${lvl.cases} Cases
-   `;
-   
-                   indicators.appendChild(ind);
-   
-                   const pop = document.createElement("div");
-                   pop.className = "popup";
-                   pop.style.bottom = lvl.height * 100 + "%";
-                   pop.id = "pop" + i;
-                   pop.innerText = lvl.msg;
-   
-                   document.querySelector(".bottle").appendChild(pop);
-               });
-   
-               let currentIndex = 0;
-               let currentHeight = 0;
-   
-            //    function animateTo(targetHeight, index) {
-            //        const speed = 0.001;
-   
-            //        audio.currentTime = 0;
-            //        audio.play();
-   
-            //        function step() {
-            //            currentHeight += speed;
-            //            water.style.height = currentHeight * 100 + "%";
-   
-            //            if (currentHeight >= targetHeight) {
-            //                currentHeight = targetHeight;
-   
-            //                document.getElementById("lvl" + index).classList.add("active");
-   
-            //                const ind = document.getElementById("ind" + index);
-            //                ind.classList.add("active");
-            //                ind.querySelector(".dot").classList.add("blink");
-   
-            //                const pop = document.getElementById("pop" + index);
-            //                pop.classList.add("active");
-   
-            //                audio.pause();
-   
-            //                return;
-            //            }
-   
-            //            requestAnimationFrame(step);
-            //        }
-   
-            //        step();
-            //    }
-   
-               // demo
-            //    setInterval(() => {
-            //        if (currentIndex < levels.length) {
-            //            animateTo(levels[currentIndex].height, currentIndex);
-            //            currentIndex++;
-            //        }
-            //    }, 3000);
-   
-               // ðŸ”“ unlock audio
-               document.body.addEventListener(
-                   "click",
-                   () => {
-                       audio.play();
-                   },
-                   { once: true }
-               );
+document.querySelectorAll(".size-tabs").forEach(group => {
+ 
+    const buttons = group.querySelectorAll(".tab-btn");
+ 
+    buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+ 
+            // 1. Active button
+            buttons.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+ 
+            // 2. Same column pakdo
+            const col = group.closest(".col-md-6");
+ 
+            // 3. Hide all
+            const contents = col.querySelectorAll(".tab-content");
+            contents.forEach(c => c.classList.remove("active"));
+ 
+            // 4. Show target
+            const target = btn.dataset.target;
+            const activeDiv = col.querySelector("#" + target);
+ 
+            if (activeDiv) {
+                activeDiv.classList.add("active");
+ 
+                // ðŸ”¥ YAHI ADD KARNA THA (INSIDE)
+                const bottle = activeDiv.querySelector(".bottlemain");
+                if(bottle){
+                    startBottle(bottle);
+                }
+            }
+ 
+        });
+    });
+ 
+});
+</script>
+
+
+            <script>
+
+// ===============================
+//  MAIN FUNCTION
+// ===============================
+function startBottle(container){
+
+    const levelsContainer = container.querySelector(".levels");
+    const indicators = container.querySelector(".indicators");
+    const water = container.querySelector(".water");
+    const audio = container.querySelector("audio");
+    const bottle = container.querySelector(".bottle");
+
+    if(!levelsContainer || !water || !bottle) return;
+
+    // ===============================
+    //  UNIQUE PREFIX PER BOTTLE
+    // ===============================
+    let prefix = "";
+
+    if(container.classList.contains("bottlemain1ltr")) prefix = "b1";
+    else if(container.classList.contains("bottlemain2ltr")) prefix = "b2";
+    else if(container.classList.contains("bottlemain500ml")) prefix = "b500";
+    else if(container.classList.contains("bottlemain200ml")) prefix = "b200";
+    else if(container.classList.contains("bottlemain200mlpink")) prefix = "bpink";
+
+    // ===============================
+    //  LEVELS DATA
+    // ===============================
+    let levels = [];
+
+    if(prefix === "b2"){
+        levels = [
+            { cases: 100, height: 0.15, msg: "Great Production 🔥" },
+            { cases: 200, height: 0.35, msg: "Awesome Speed 🚀" },
+            { cases: 300, height: 0.6, msg: "Keep Going 💪" },
+            { cases: 400, height: 0.85, msg: "Target Achieved 🎯" },
+        ];
+    }
+    else if(prefix === "b1"){
+        levels = [
+            { cases: 50, height: 0.2, msg: "Great Production 🔥" },
+            { cases: 100, height: 0.4, msg: "Awesome Speed 🚀" },
+            { cases: 150, height: 0.65, msg: "Keep Going 💪" },
+            { cases: 200, height: 0.85, msg: "Target Achieved 🎯" },
+        ];
+    }
+    else if(prefix === "b500"){
+        levels = [
+            { cases: 30, height: 0.25, msg: "Great Production 🔥" },
+            { cases: 60, height: 0.45, msg: "Awesome Speed 🚀" },
+            { cases: 90, height: 0.7, msg: "Keep Going 💪" },
+            { cases: 120, height: 0.9, msg: "Target Achieved 🎯" },
+        ];
+    }
+    else if(prefix === "b200"){
+        levels = [
+            { cases: 20, height: 0.3, msg: "Great Production 🔥" },
+            { cases: 40, height: 0.5, msg: "Awesome Speed 🚀" },
+            { cases: 60, height: 0.75, msg: "Keep Going 💪" },
+            { cases: 80, height: 0.95, msg: "Target Achieved 🎯" },
+        ];
+    }
+    else if(prefix === "bpink"){
+        levels = [
+            { cases: 20, height: 0.28, msg: "Great Production 🔥" },
+            { cases: 40, height: 0.48, msg: "Awesome Speed 🚀" },
+            { cases: 60, height: 0.72, msg: "Keep Going 💪" },
+            { cases: 80, height: 0.92, msg: "Target Achieved 🎯" },
+        ];
+    }
+
+    // ===============================
+    //  RESET
+    // ===============================
+    levelsContainer.innerHTML = "";
+    indicators.innerHTML = "";
+    container.querySelectorAll(".popup").forEach(p => p.remove());
+    water.style.height = "0%";
+
+    // ===============================
+    //  CREATE ELEMENTS
+    // ===============================
+    levels.forEach((lvl, i) => {
+
+        // LEVEL LINE
+        let line = document.createElement("div");
+        line.className = `lvl lvl-${prefix}-${i}`;
+        line.id = `lvl-${prefix}-${i}`;
+        line.style.bottom = (lvl.height * 100) + "%";
+        levelsContainer.appendChild(line);
+
+        // INDICATOR
+        let ind = document.createElement("div");
+        ind.className = `indicator ind-${prefix}-${i}`;
+        ind.id = `ind-${prefix}-${i}`;
+        ind.style.bottom = (lvl.height * 100) + "%";
+        ind.innerHTML = `
+            <div class="line"></div>
+            <div class="dot"></div>
+            ${lvl.cases}
+        `;
+        indicators.appendChild(ind);
+
+        // POPUP
+        let pop = document.createElement("div");
+        pop.className = `popup pop-${prefix}-${i}`;
+        pop.id = `pop-${prefix}-${i}`;
+        pop.style.bottom = (lvl.height * 100) + "%";
+        pop.innerText = lvl.msg;
+
+        bottle.appendChild(pop);
+    });
+
+    // ===============================
+    //  ANIMATION
+    // ===============================
+    let currentIndex = 0;
+    let currentHeight = 0;
+
+    function animateTo(targetHeight, index){
+
+        const speed = 0.001;
+
+        if(audio){
+            audio.currentTime = 0;
+            audio.play().catch(()=>{});
+        }
+
+        function step(){
+
+            currentHeight += speed;
+            water.style.height = (currentHeight * 100) + "%";
+
+            if(currentHeight >= targetHeight){
+
+                currentHeight = targetHeight;
+
+                levelsContainer.children[index]?.classList.add("active");
+
+                let ind = indicators.children[index];
+                if(ind){
+                    ind.classList.add("active");
+                    ind.querySelector(".dot")?.classList.add("blink");
+                }
+
+                container.querySelectorAll(".popup")[index]?.classList.add("active");
+
+                if(audio) audio.pause();
+
+                return;
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        step();
+    }
+
+    function run(){
+        if(currentIndex < levels.length){
+            animateTo(levels[currentIndex].height, currentIndex);
+            currentIndex++;
+            setTimeout(run, 2500);
+        }
+    }
+
+    run();
+}
+
+
+// ===============================
+//  TAB SWITCH SYSTEM (FIXED)
+// ===============================
+document.querySelectorAll(".size-tabs").forEach(group => {
+
+    const buttons = group.querySelectorAll(".tab-btn");
+
+    buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+
+            buttons.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            const col = group.closest(".col-md-6");
+
+            col.querySelectorAll(".tab-content").forEach(c => {
+                c.classList.remove("active");
+            });
+
+            const target = btn.dataset.target;
+            const activeDiv = col.querySelector("#" + target);
+
+            if(activeDiv){
+                activeDiv.classList.add("active");
+
+                const bottle = activeDiv.querySelector(".bottlemain");
+
+                if(bottle){
+                    setTimeout(() => startBottle(bottle), 100);
+                }
+            }
+        });
+    });
+
+});
+
+
+// ===============================
+// FIRST LOAD
+// ===============================
+window.onload = () => {
+    document.querySelectorAll(".tab-content.active").forEach(tab => {
+        const bottle = tab.querySelector(".bottlemain");
+        if(bottle){
+            startBottle(bottle);
+        }
+    });
+};
+
+</script>
+
+<script>
+document.querySelectorAll(".size-tabs").forEach(group => {
+
+    const buttons = group.querySelectorAll(".tab-btn");
+
+    buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+
+            // 1. Active button
+            buttons.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            // 2. Same column pakdo
+            const col = group.closest(".col-md-6");
+
+            // 3. Hide all
+            const contents = col.querySelectorAll(".tab-content");
+            contents.forEach(c => c.classList.remove("active"));
+
+            // 4. Show target
+            const target = btn.dataset.target;
+            const activeDiv = col.querySelector("#" + target);
+
+            if (activeDiv) {
+                activeDiv.classList.add("active");
+
+                // ðŸ”¥ YAHI ADD KARNA THA (INSIDE)
+                const bottle = activeDiv.querySelector(".bottlemain");
+                if(bottle){
+                    startBottle(bottle);
+                }
+            }
+
+        });
+    });
+
+});
 </script>
 
 <!-- Bottle JS Starts --->
@@ -703,8 +914,6 @@
                     response.data.productionLineStatus.forEach(function(item) {
                         
                         if (item.productionData != null) {
-                            console.log("A");
-                            console.log(item);
 
                             let startTime = new Date(item.productionData.production_start_time.replace(/-/g, "/"));
                             let timerSeconds = item.productionData.production_timer_seconds;
@@ -718,25 +927,39 @@
                             $("#production_line_last_active_" + item.counter.id).html(`${diffMinutes} min's ago`);
                             $("#production_line_alert_" + item.counter.id).show();
                             
+                            $("#fg_status_" + item.counter.id + "_" + item.productionData.fgId).show();
+                            $("#selected_fg_option_" + item.counter.id + "_" + item.productionData.fgId).addClass("active");
+                            $("#" + item.productionData.main_id).addClass("active");
+                            
+                            const activeBottle = document.querySelector("#" + item.productionData.main_id + ".bottlemain");
+                            if(activeBottle){
+                                startBottle(activeBottle);
+                            }
+
+                            $("#fg_water_capacity_" + item.counter.id + "_" + item.productionData.fgId).css("height", "20%");
+
+                            startBottle(".bottlemain");
+
                             if (currentTime > endTime) {
                                 $("#production_line_hault_alert_" + item.counter.id).show();
                                 $("#production_line_alert_" + item.counter.id)
                                     .addClass("deactive")
                                     .removeClass("active");
+                                $("#production_line_status_for_inactive_" + item.counter.id).html(
+                                    `Production Line Time Has Been Exceeded It's Limit`
+                                );
                             } else {
                                 $("#production_line_hault_alert_" + item.counter.id).hide();
                                 $("#production_line_alert_" + item.counter.id)
                                     .addClass("active")
                                     .removeClass("deactive");
                                 $("#production_line_status_for_inactive_" + item.counter.id).html(
-                                    `Production Line Time Has Been Exceeded It's Limit`
+                                    `Production Is Active For This Line`
                                 );
                             }
 
                         } else {
-                            console.log("B");
-                            
-                            console.log(item);
+
                             $("#production_line_hault_alert_" + item.counter.id).hide();
                             $("#production_line_status_" + item.counter.id).hide();
                             $("#production_line_last_active_" + item.counter.id).hide();

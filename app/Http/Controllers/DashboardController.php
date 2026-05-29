@@ -509,15 +509,20 @@ class DashboardController extends Controller {
                 $productionLineStatus[$pCounter]["counter"] = $pLine;
                 $productionLineStatus[$pCounter]["productionData"] = ProductionTimerMaster::
                     select(
-                        "id",
-                        "counter_id",
-                        "fgId",
-                        "production_start_time",
-                        "production_line_id",
-                        "production_timer_seconds"
+                        "production_timer_master.id",
+                        "production_timer_master.counter_id",
+                        "production_timer_master.fgId",
+                        "production_timer_master.production_start_time",
+                        "production_timer_master.production_line_id",
+                        "production_timer_master.production_timer_seconds",
+                        "fg_cat_bottle_html.main_id",
+                        "fg_cat_bottle_html.main_class",
+                        "fg_cat_bottle_html.sub_class",
+                        "fg_cat_bottle_html.inner_class"
                     )
-                    ->where("production_status", 1)
-                    ->where("production_line_id", $pLine["id"])
+                    ->leftJoin("fg_cat_bottle_html", "fg_cat_bottle_html.fg_cat_id", "=", "production_timer_master.fgId")
+                    ->where("production_timer_master.production_status", 1)
+                    ->where("production_timer_master.production_line_id", $pLine["id"])
                     ->first();
 
                 $fgCatData = FgCatMaster::select("id", "fg_cat_name")
