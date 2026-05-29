@@ -503,11 +503,11 @@ class DashboardController extends Controller {
 
         $totalStock = [];
         if ($productionLine) {
+            $pCounter = 0;
             foreach ($productionLine as $pLine) {
 
-                $pCounter = 0;
-                $productionLineStatus[$pCounter]["productionLineId"] = $pLine;
-                $productionLineStatus[$pCounter]["productionData"] = ProductionTimeMaster::
+                $productionLineStatus[$pCounter]["counter"] = $pLine;
+                $productionLineStatus[$pCounter]["productionData"] = ProductionTimerMaster::
                     select(
                         "id",
                         "counter_id",
@@ -518,12 +518,14 @@ class DashboardController extends Controller {
                     )
                     ->where("production_status", 1)
                     ->where("production_line_id", $pLine["id"])
-                    ->get()->toArray();
+                    ->first();
 
                 $fgCatData = FgCatMaster::select("id", "fg_cat_name")
                     ->where("production_line_id", $pLine["id"])
                     ->get()->toArray();
-                
+                 
+                $pCounter++;    
+                    
                 $counter = 0;    
                 foreach ($fgCatData as $fgValues) {
                     $totalStock[$pLine["id"]][$counter]["fgData"] = $fgValues;

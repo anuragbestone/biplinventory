@@ -701,42 +701,53 @@
             success: function(response) {
                 if (response.data.productionLineStatus) {
                     response.data.productionLineStatus.forEach(function(item) {
-
-                        let startTime = new Date(item.production_start_time.replace(/-/g, "/"));
-                        let timerSeconds = item.production_timer_seconds;
-                        let endTime = new Date(startTime.getTime() + (timerSeconds * 1000));
-                        let currentTime = new Date();
-                        let diffMilliseconds = currentTime - startTime;
-                        let diffMinutes = Math.floor(diffMilliseconds / (1000 * 60));
-
-                        $("#production_line_status_" + item.counter_id).show();
-                        $("#production_line_last_active_" + item.counter_id).show();
-                        $("#production_line_last_active_" + item.counter_id).html(`${diffMinutes} min's ago`);
-                        $("#production_line_alert_" + item.counter_id).show();
                         
-                        if (currentTime > endTime) {
-                            $("#production_line_hault_alert_" + item.counter_id).show();
-                            $("#production_line_alert_" + item.counter_id)
-                                .addClass("deactive")
-                                .removeClass("active");
+                        if (item.productionData != null) {
+                            console.log("A");
+                            console.log(item);
+
+                            let startTime = new Date(item.productionData.production_start_time.replace(/-/g, "/"));
+                            let timerSeconds = item.productionData.production_timer_seconds;
+                            let endTime = new Date(startTime.getTime() + (timerSeconds * 1000));
+                            let currentTime = new Date();
+                            let diffMilliseconds = currentTime - startTime;
+                            let diffMinutes = Math.floor(diffMilliseconds / (1000 * 60));
+
+                            $("#production_line_status_" + item.counter.id).show();
+                            $("#production_line_last_active_" + item.counter.id).show();
+                            $("#production_line_last_active_" + item.counter.id).html(`${diffMinutes} min's ago`);
+                            $("#production_line_alert_" + item.counter.id).show();
+                            
+                            if (currentTime > endTime) {
+                                $("#production_line_hault_alert_" + item.counter.id).show();
+                                $("#production_line_alert_" + item.counter.id)
+                                    .addClass("deactive")
+                                    .removeClass("active");
+                            } else {
+                                $("#production_line_hault_alert_" + item.counter.id).hide();
+                                $("#production_line_alert_" + item.counter.id)
+                                    .addClass("active")
+                                    .removeClass("deactive");
+                                $("#production_line_status_for_inactive_" + item.counter.id).html(
+                                    `Production Line Time Has Been Exceeded It's Limit`
+                                );
+                            }
+
                         } else {
-                            $("#production_line_alert_" + item.counter_id)
-                                .addClass("active")
-                                .removeClass("deactive");
-                            $("#production_line_status_for_inactive_" + item.counter_id).html(
-                                `Production Line Time Has Been Exceeded It's Limit`
-                            );
+                            console.log("B");
+                            
+                            console.log(item);
+                            $("#production_line_hault_alert_" + item.counter.id).hide();
+                            $("#production_line_status_" + item.counter.id).hide();
+                            $("#production_line_last_active_" + item.counter.id).hide();
+                            $("#production_line_last_active_" + item.counter.id).html(`0 min's ago`);
+                            $("#production_line_alert_" + item.counter.id).hide();
+                            $("#production_line_status_for_inactive_" + item.counter.id).html(
+                                    `Production Is Not Active For This Line`
+                                );
                         }
 
-                        
-
                     });
-                } else {
-                    $("#production_line_status_" + item.counter_id).hide();
-                    $("#production_line_last_active_" + item.counter_id).hide();
-                    $("#production_line_alert_" + item.counter_id).hide();
-                    $("#production_line_hault_alert_" + item.counter_id).hide();
-                    $()
                 }
             },
             error: function(error) {
