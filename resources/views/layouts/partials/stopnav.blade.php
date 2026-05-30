@@ -23,13 +23,13 @@
                     <div class="menu-pill shadow-sm">
                         
                         <div class="menu-item">
-                            <i class="bi bi-building"></i> Sales By SKU
+                           <li><a class="dropdown-item" href="#sales-report"><i class="bi bi-building"></i> Sales By SKU</a></li> 
                         </div>
                         <div class="menu-item active">
                             <i class="bi bi-house"></i>
                         </div>
                         <div class="menu-item">
-                            <i class="bi bi-cart-check"></i> Generate Orders
+                             <li><a class="dropdown-item" href="#generate-order-report"><i class="bi bi-cart-check"></i> Generate Orders</a></li>
                         </div>
 
                         

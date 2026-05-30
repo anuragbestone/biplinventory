@@ -16,34 +16,40 @@
                 <div class="card">
                     <div class="icon blue">🎯</div>
                     <h4>This Month Target</h4>
-                    <h2>28,000</h2>
+                    <h2>{{ $targetData[0]["target_quantity"] }}</h2>
                     <span>Cases</span>
                 </div>
 
                 <div class="card">
                     <div class="icon green">✅</div>
                     <h4>Total Achieved</h4>
-                    <h2>1,400</h2>
+                    <h2>{{ $targetData[0]["achieved_target_quantity"] }}</h2>
                     <span>Cases</span>
                 </div>
 
                 <div class="card">
                     <div class="icon orange">📈</div>
                     <h4>Remaining</h4>
-                    <h2>26,600</h2>
+                    <h2>{{ $targetData[0]["target_quantity"] - $targetData[0]["achieved_target_quantity"] }}</h2>
                     <span>Cases</span>
                 </div>
 
                 <div class="card">
                     <div class="icon purple">🏆</div>
                     <h4>Achievement</h4>
-                    <h2>5%</h2>
+                    <h2>{{ round(($targetData[0]["achieved_target_quantity"]/$targetData[0]["target_quantity"])*100 , 2) }}%</h2>
                     <span>Of Target</span>
                 </div>
 
             </div>
 
         </div>
+
+
+        @php
+            $target = $targetData[0]['target_quantity'] ?? 0;
+            $achieved = $targetData[0]['achieved_target_quantity'] ?? 0;
+        @endphp
 
         <div class="progress-section" id="progress-report">
 
@@ -77,22 +83,22 @@
                         </div>
 
                         <div class="milestone-card">
-                            <h3>7000</h3>
+                            <h3>{{ number_format($target * 0.25) }}</h3>
                             <p>Cases</p>
                         </div>
 
                         <div class="milestone-card">
-                            <h3>14000</h3>
+                            <h3>{{ number_format($target * 0.50) }}</h3>
                             <p>Cases</p>
                         </div>
 
                         <div class="milestone-card">
-                            <h3>21000</h3>
+                            <h3>{{ number_format($target * 0.75) }}</h3>
                             <p>Cases</p>
                         </div>
-
+                        
                         <div class="milestone-card">
-                            <h3>28000</h3>
+                            <h3>{{ number_format($target) }}</h3>
                             <p>Cases</p>
                         </div>
 
@@ -166,25 +172,29 @@
 
             </table>
 
-            <div class="footer-note">
-                Keep pushing your limits! You're on your way to achieving your monthly target 💙
-            </div>
+            
 
+        </div>
+
+
+        <div class="sales-generate-order-main" id="generate-order-report">
+          <div class="card bg-white">
+            dvffd
+          </div>
         </div>
 
     </div>
 
 </div>
 
-
-
-
-
 <script>
-const target = 28000;
-const achieved = 28000;
 
-const percentage = (achieved / target) * 100;
+const target = {{ $target }};
+const achieved = {{ $achieved }};
+
+const percentage = target > 0
+    ? (achieved / target) * 100
+    : 0;
 
 const circle = document.getElementById('circleProgress');
 const progressText = document.getElementById('progressPercent');
@@ -195,15 +205,21 @@ const floatingNumber = document.getElementById('floatingNumber');
 
 const milestoneCards = document.querySelectorAll('.milestone-card');
 
-const milestoneValues = [0,7000,14000,21000,28000];
+const milestoneValues = [
+    0,
+    target * 0.25,
+    target * 0.50,
+    target * 0.75,
+    target
+];
 
-milestoneCards.forEach((card,index)=>{
+milestoneCards.forEach((card, index) => {
 
-  if(index !== 0){
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(40px)';
-    card.style.transition = '0.5s ease';
-  }
+    if(index !== 0){
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(40px)';
+        card.style.transition = '0.5s ease';
+    }
 
 });
 
@@ -211,58 +227,59 @@ let current = 0;
 
 const counter = setInterval(() => {
 
-  current += 0.1;
+    current += 0.1;
 
-  if(current >= percentage){
+    if(current >= percentage){
+        current = percentage;
+        clearInterval(counter);
+    }
 
-    current = percentage;
+    const safeCurrent = Number(current.toFixed(1));
 
-    clearInterval(counter);
+    circle.style.background =
+        `conic-gradient(#2f67ff ${safeCurrent * 3.6}deg,#edf2ff 0deg)`;
 
-  }
+    progressText.innerHTML = `${safeCurrent}%`;
 
-  const safeCurrent = Number(current.toFixed(1));
+    let currentAchieved;
 
-  circle.style.background =
-  `conic-gradient(#2f67ff ${safeCurrent * 3.6}deg,#edf2ff 0deg)`;
+    if(current >= percentage){
 
-  progressText.innerHTML = `${safeCurrent}%`;
+        // Final value should exactly match database value
+        currentAchieved = achieved;
 
-  const currentAchieved = Math.min(
-    achieved,
-    Math.floor((safeCurrent / percentage) * achieved)
-  );
+    } else {
 
-  achievedText.innerHTML =
-  `${currentAchieved.toLocaleString()} Achieved`;
-
-  floatingNumber.innerHTML =
-  currentAchieved.toLocaleString();
-
-  lineFill.style.width = `${safeCurrent}%`;
-
-  floatingCard.style.left = `${safeCurrent}%`;
-
-
-
-  // milestone reveal animation
-
-  milestoneValues.forEach((value,index)=>{
-
-    if(currentAchieved >= value){
-
-      milestoneCards[index].style.opacity = '1';
-
-      milestoneCards[index].style.transform =
-      'translateY(0px)';
+        currentAchieved = Math.round(
+            (current / percentage) * achieved
+        );
 
     }
 
-  });
+    achievedText.innerHTML =
+        `${currentAchieved.toLocaleString()} Achieved`;
 
+    floatingNumber.innerHTML =
+        currentAchieved.toLocaleString();
 
+    lineFill.style.width = `${safeCurrent}%`;
+
+    floatingCard.style.left = `${safeCurrent}%`;
+
+    milestoneValues.forEach((value, index) => {
+
+        if(currentAchieved >= value){
+
+            milestoneCards[index].style.opacity = '1';
+            milestoneCards[index].style.transform =
+                'translateY(0px)';
+
+        }
+
+    });
 
 }, 25);
+
 </script>
 
 @endsection

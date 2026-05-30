@@ -417,4 +417,9 @@
     
     .floating-achievement p {
     color: #fff !important;
-}
+
+    }
+
+ .menu-item{
+      list-style: none;
+    }

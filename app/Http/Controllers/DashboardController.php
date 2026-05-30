@@ -18,6 +18,8 @@ use App\Models\ProductionLineMaster;
 use App\Models\NotificationMaster;
 use App\Models\FgCatBottleHtml;
 
+use App\Models\SalesTargetMaster;
+
 use App\Models\ProductionTimerMaster;
 
 use Carbon\Carbon;
@@ -501,8 +503,14 @@ class DashboardController extends Controller {
 
             } else {
 
-                return view("dashboard.salesDash");
+                $data["targetData"] = SalesTargetMaster::select("target_quantity", "achieved_target_quantity")
+                    ->whereMonth("target_date", Carbon::now()->month)
+                    ->whereYear("target_date", Carbon::now()->year)
+                    ->get()->toArray();
 
+                //echo "<pre>";print_r($data);die();
+
+                return view("dashboard.salesDash", $data);
             }
 
         } 
