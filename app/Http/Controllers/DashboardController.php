@@ -69,10 +69,8 @@ class DashboardController extends Controller {
     }
 
     public function showDashboard(Request $request) {
-        
         if ($request->session()->get("role_id") != 3 && $request->session()->get("role_id") != 4) {
 
-            
             // ------ Bottle Data Starts
             $productionLineData = ProductionLineMaster::select("id", "line_name")
                 ->where("is_active", 1)
@@ -98,7 +96,6 @@ class DashboardController extends Controller {
                         ->leftJoin("fg_master", "fg_master.id", "=", "fg_cat_master.fg_id")
                         ->where("fg_cat_master.production_line_id", $pLineData["id"])
                         ->get()->toArray();
-
                     $counter++;
                 }
             }
