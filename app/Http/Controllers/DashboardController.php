@@ -66,9 +66,10 @@ class DashboardController extends Controller {
     }
 
     public function showDashboard(Request $request) {
-        if ($request->session()->get("role_id") != 3) {
+        
+        if ($request->session()->get("role_id") != 3 && $request->session()->get("role_id") != 4) {
 
-
+            
             // ------ Bottle Data Starts
             $productionLineData = ProductionLineMaster::select("id", "line_name")
                 ->where("is_active", 1)
@@ -348,152 +349,165 @@ class DashboardController extends Controller {
 
             //echo "<pre>";print_r($data);die();
             return view("dashboard.adminDash", $data);
-        }
+        
+        } else {
 
-        $data = [];
+            if ($request->session()->get("role_id") == 3) {
 
-        /*
-        |--------------------------------------------------------------------------
-        | RM/PM DATA
-        |--------------------------------------------------------------------------
-        */
+                $data = [];
 
-        // RM/PM Main
-        $rmPmData = RmPmMaster::where("is_active", 1)
-            ->select("id", "rm_pm_name")
-            ->get();
+                /*
+                |--------------------------------------------------------------------------
+                | RM/PM DATA
+                |--------------------------------------------------------------------------
+                */
 
-        // Categories
-        $rmPmCategories = RmPMCatMaster::select(
-                "id",
-                "rm_pm_id",
-                "rm_pm_cat_name",
-                "cat_unit"
-            )
-            ->get()
-            ->groupBy("rm_pm_id");
+                // RM/PM Main
+                $rmPmData = RmPmMaster::where("is_active", 1)
+                    ->select("id", "rm_pm_name")
+                    ->get();
 
-        // Warehouse Stock
-        $warehouseStock = RmPmStockWarehouseMaster::pluck(
-            "stock_quantity",
-            "rm_pm_cat_id"
-        );
+                // Categories
+                $rmPmCategories = RmPMCatMaster::select(
+                        "id",
+                        "rm_pm_id",
+                        "rm_pm_cat_name",
+                        "cat_unit"
+                    )
+                    ->get()
+                    ->groupBy("rm_pm_id");
 
-        // Consumed Stock
-        $consumedStock = RmPmStockMaster::pluck(
-            "stock_quantity",
-            "rm_pm_cat_id"
-        );
+                // Warehouse Stock
+                $warehouseStock = RmPmStockWarehouseMaster::pluck(
+                    "stock_quantity",
+                    "rm_pm_cat_id"
+                );
 
-        $data["rmpmData"] = [];
-        $data["rmpmConsumedData"] = [];
+                // Consumed Stock
+                $consumedStock = RmPmStockMaster::pluck(
+                    "stock_quantity",
+                    "rm_pm_cat_id"
+                );
 
-        foreach ($rmPmData as $rmPm) {
-            $mainStock = [
-                "id" => $rmPm->id,
-                "rm_pm_name" => $rmPm->rm_pm_name,
-                "rcData" => []
-            ];
+                $data["rmpmData"] = [];
+                $data["rmpmConsumedData"] = [];
 
-            $consumed = [
-                "id" => $rmPm->id,
-                "rm_pm_name" => $rmPm->rm_pm_name,
-                "rcData" => []
-            ];
+                foreach ($rmPmData as $rmPm) {
+                    $mainStock = [
+                        "id" => $rmPm->id,
+                        "rm_pm_name" => $rmPm->rm_pm_name,
+                        "rcData" => []
+                    ];
 
-            $categories = $rmPmCategories[$rmPm->id] ?? [];
-            foreach ($categories as $cat) {
+                    $consumed = [
+                        "id" => $rmPm->id,
+                        "rm_pm_name" => $rmPm->rm_pm_name,
+                        "rcData" => []
+                    ];
 
-                // Main Warehouse Stock
-                $mainStock["rcData"][] = [
-                    "rm_pm_cat_name" => $cat->rm_pm_cat_name,
-                    "cat_unit"       => $cat->cat_unit,
-                    "stock_quantity" => $warehouseStock[$cat->id] ?? 0
-                ];
+                    $categories = $rmPmCategories[$rmPm->id] ?? [];
+                    foreach ($categories as $cat) {
 
-                // Consumed Remaining Stock
-                $consumed["rcData"][] = [
-                    "rm_pm_cat_name" => $cat->rm_pm_cat_name,
-                    "cat_unit"       => $cat->cat_unit,
-                    "stock_quantity" => $consumedStock[$cat->id] ?? 0
-                ];
-            }
+                        // Main Warehouse Stock
+                        $mainStock["rcData"][] = [
+                            "rm_pm_cat_name" => $cat->rm_pm_cat_name,
+                            "cat_unit"       => $cat->cat_unit,
+                            "stock_quantity" => $warehouseStock[$cat->id] ?? 0
+                        ];
 
-            $data["rmpmData"][] = $mainStock;
-            $data["rmpmConsumedData"][] = $consumed;
-        }
+                        // Consumed Remaining Stock
+                        $consumed["rcData"][] = [
+                            "rm_pm_cat_name" => $cat->rm_pm_cat_name,
+                            "cat_unit"       => $cat->cat_unit,
+                            "stock_quantity" => $consumedStock[$cat->id] ?? 0
+                        ];
+                    }
 
-        /*
-        |--------------------------------------------------------------------------
-        | FG DATA
-        |--------------------------------------------------------------------------
-        */
-
-        $fgData = FgMaster::where("is_active", 1)
-            ->select("id", "fg_name")
-            ->get();
-
-        $fgCategories = FgCatMaster::select(
-                "id",
-                "fg_id",
-                "fg_cat_name"
-            )
-            ->get()
-            ->groupBy("fg_id");
-
-        $fgStocks = FgStockMaster::pluck(
-            "stock_quantity",
-            "fg_cat_id"
-        );
-
-        $data["fgData"] = [];
-        foreach ($fgData as $fg) {
-            $fgItem = [
-                "id" => $fg->id,
-                "fg_name" => $fg->fg_name,
-                "fgcData" => []
-            ];
-
-            $categories = $fgCategories[$fg->id] ?? [];
-            foreach ($categories as $cat) {
-                $fgItem["fgcData"][] = [
-                    "fg_cat_name"   => $cat->fg_cat_name,
-                    "stock_quantity" => $fgStocks[$cat->id] ?? 0
-                ];
-            }
-
-            $data["fgData"][] = $fgItem;
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | SHIFT DATA
-        |--------------------------------------------------------------------------
-        */
-
-        $shiftData = ShiftMaster::select(
-                "shift_from",
-                "shift_to",
-                "shift_over_status"
-            )
-            ->where("userID", $request->session()->get("userID"))
-            ->latest()
-            ->first();
-
-        $data["shiftData"] = $shiftData;
-        if ($shiftData) {
-            if ($shiftData->shift_over_status == 0) {
-                if (!$request->session()->has('shift_from')) {
-                    $request->session()->put('shift_from', $shiftData->shift_from);
-                    $request->session()->put('shift_to', $shiftData->shift_to);
+                    $data["rmpmData"][] = $mainStock;
+                    $data["rmpmConsumedData"][] = $consumed;
                 }
 
-            } else {
-                $request->session()->forget(['shift_from', 'shift_to']);
-            }
-        }
+                /*
+                |--------------------------------------------------------------------------
+                | FG DATA
+                |--------------------------------------------------------------------------
+                */
 
-        return view("dashboard.warehouseDash", $data);
+                $fgData = FgMaster::where("is_active", 1)
+                    ->select("id", "fg_name")
+                    ->get();
+
+                $fgCategories = FgCatMaster::select(
+                        "id",
+                        "fg_id",
+                        "fg_cat_name"
+                    )
+                    ->get()
+                    ->groupBy("fg_id");
+
+                $fgStocks = FgStockMaster::pluck(
+                    "stock_quantity",
+                    "fg_cat_id"
+                );
+
+                $data["fgData"] = [];
+                foreach ($fgData as $fg) {
+                    $fgItem = [
+                        "id" => $fg->id,
+                        "fg_name" => $fg->fg_name,
+                        "fgcData" => []
+                    ];
+
+                    $categories = $fgCategories[$fg->id] ?? [];
+                    foreach ($categories as $cat) {
+                        $fgItem["fgcData"][] = [
+                            "fg_cat_name"   => $cat->fg_cat_name,
+                            "stock_quantity" => $fgStocks[$cat->id] ?? 0
+                        ];
+                    }
+
+                    $data["fgData"][] = $fgItem;
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | SHIFT DATA
+                |--------------------------------------------------------------------------
+                */
+
+                $shiftData = ShiftMaster::select(
+                        "shift_from",
+                        "shift_to",
+                        "shift_over_status"
+                    )
+                    ->where("userID", $request->session()->get("userID"))
+                    ->latest()
+                    ->first();
+
+                $data["shiftData"] = $shiftData;
+                if ($shiftData) {
+                    if ($shiftData->shift_over_status == 0) {
+                        if (!$request->session()->has('shift_from')) {
+                            $request->session()->put('shift_from', $shiftData->shift_from);
+                            $request->session()->put('shift_to', $shiftData->shift_to);
+                        }
+
+                    } else {
+                        $request->session()->forget(['shift_from', 'shift_to']);
+                    }
+                }
+
+                return view("dashboard.warehouseDash", $data);
+
+            } else {
+
+                return view("dashboard.salesDash");
+
+            }
+
+        } 
+
+        
     }
 
     public function getProductionStatus() {

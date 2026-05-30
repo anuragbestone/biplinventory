@@ -751,7 +751,6 @@ function startBottle(container){
         pop.id = `pop-${prefix}-${i}`;
         pop.style.bottom = (lvl.height * 100) + "%";
         pop.innerText = lvl.msg;
-
         bottle.appendChild(pop);
     });
 
@@ -762,7 +761,6 @@ function startBottle(container){
     let currentHeight = 0;
 
     function animateTo(targetHeight, index){
-
         const speed = 0.001;
 
         if(audio){
@@ -771,16 +769,12 @@ function startBottle(container){
         }
 
         function step(){
-
             currentHeight += speed;
             water.style.height = (currentHeight * 100) + "%";
 
             if(currentHeight >= targetHeight){
-
                 currentHeight = targetHeight;
-
                 levelsContainer.children[index]?.classList.add("active");
-
                 let ind = indicators.children[index];
                 if(ind){
                     ind.classList.add("active");
@@ -788,9 +782,7 @@ function startBottle(container){
                 }
 
                 container.querySelectorAll(".popup")[index]?.classList.add("active");
-
                 if(audio) audio.pause();
-
                 return;
             }
 
@@ -816,17 +808,12 @@ function startBottle(container){
 //  TAB SWITCH SYSTEM (FIXED)
 // ===============================
 document.querySelectorAll(".size-tabs").forEach(group => {
-
     const buttons = group.querySelectorAll(".tab-btn");
-
     buttons.forEach(btn => {
         btn.addEventListener("click", () => {
-
             buttons.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
-
             const col = group.closest(".col-md-6");
-
             col.querySelectorAll(".tab-content").forEach(c => {
                 c.classList.remove("active");
             });
@@ -836,9 +823,7 @@ document.querySelectorAll(".size-tabs").forEach(group => {
 
             if(activeDiv){
                 activeDiv.classList.add("active");
-
                 const bottle = activeDiv.querySelector(".bottlemain");
-
                 if(bottle){
                     setTimeout(() => startBottle(bottle), 100);
                 }
@@ -1024,6 +1009,6 @@ document.querySelectorAll(".size-tabs").forEach(group => {
             },
         });
     });
-    
+
 </script>
 @endsection
