@@ -47,8 +47,6 @@ class ProductionReportController extends Controller
             $counter++;
             
         }
-        
-        
     
         $data["selectedFilter"] = $filter;
         $data["productionGraphData"] = [];

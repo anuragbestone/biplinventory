@@ -235,8 +235,7 @@ class DashboardController extends Controller {
                 $category = $row["fg_cat_name"];
                 $finalDispatchData[$day][$category] = $row["total_qty"];
             }
-            
-            
+
             // MAX VALUE FOR HEIGHT CALCULATION
             $maxDispatchQty = FgDispatchMaster::whereBetween(
                     DB::raw("DATE(created_at)"),
@@ -244,14 +243,12 @@ class DashboardController extends Controller {
                 )
                 ->sum("fg_quantity");
             
-            
             $data["dispatchGraphData"] = $finalDispatchData;
             $data["fgCategories"] = $fgCategories;
             $data["maxDispatchQty"] = $maxDispatchQty;
             $data["selectedFilter"] = $filter;
             
             // ---------------- DISPATCH GRAPH DATA ENDS ----------------
-            
             
             // ---------------- PRODUCTION GRAPH DATA STARTS -------------
 
@@ -334,8 +331,6 @@ class DashboardController extends Controller {
                     ]
                 )
                 ->sum("stock_quantity");
-
-                
             
             $data["productionGraphData"] = $finalProductionData;
             $data["maxProductionQty"] = $maxProductionQty;
@@ -349,7 +344,6 @@ class DashboardController extends Controller {
         } else {
 
             if ($request->session()->get("role_id") == 3) {
-
                 $data = [];
 
                 /*
