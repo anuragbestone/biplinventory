@@ -70,7 +70,6 @@ class WarehouseController extends Controller {
         $request->session()->put('shift_from', $shiftFrom);
         $request->session()->put('shift_to', $shiftTo);
 
-
         // WhatsApp Service -- Starts
 
         $message =

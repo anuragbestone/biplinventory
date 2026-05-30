@@ -23,7 +23,6 @@ class SalesTargetController extends Controller
         if ($request->filter) {
 
         } else {
-
             $data["salesData"] = SalestargetMaster::select(
                 "sales_target_master.id",
                 "sales_target_master.target_date",

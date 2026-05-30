@@ -105,9 +105,6 @@ class DashboardController extends Controller {
 
             // ------ Bottle Data Ends
             
-            
-            
-            
             $data["fgData"] = FgStockMaster::select(
                     "fg_cat_master.fg_cat_name",
                     "fg_master.fg_name",
@@ -179,7 +176,6 @@ class DashboardController extends Controller {
             }
 
             $data["rmPmStockWiseData"] = $rmPmStockWiseData;
-            
             
             // ---------------- DISPATCH GRAPH DATA STARTS ----------------
 
