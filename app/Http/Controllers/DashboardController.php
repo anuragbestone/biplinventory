@@ -19,8 +19,9 @@ use App\Models\NotificationMaster;
 use App\Models\FgCatBottleHtml;
 
 use App\Models\SalesTargetMaster;
-
 use App\Models\ProductionTimerMaster;
+use App\Models\OrderDetails;
+use App\Models\OrderMaster;
 
 use Carbon\Carbon;
 
@@ -503,10 +504,47 @@ class DashboardController extends Controller {
 
             } else {
 
+                $data["orderData"] = OrderMaster::select(
+                        "id",
+                        "order_id",
+                        "order_date",
+                        "order_dispatch_date",
+                        "order_dispatch_date_achieved",
+                        "order_production_status",
+                        "order_dispatch_status"
+                    )
+                    ->where("is_active", 1)
+                    ->where("order_by_id", $request->session()->get("userID"))
+                    ->latest("created_at")
+                    ->get()
+                    ->toArray();
+
                 $data["targetData"] = SalesTargetMaster::select("target_quantity", "achieved_target_quantity")
                     ->whereMonth("target_date", Carbon::now()->month)
                     ->whereYear("target_date", Carbon::now()->year)
+                    ->where("user_id", $request->session()->get("userID"))
                     ->get()->toArray();
+
+                $data["fgCatData"] = FgCatMaster::select("id", "fg_cat_name")
+                    ->where("is_active", 1)
+                    ->get()->toArray();
+
+                if ($data["fgCatData"]) {
+                    $counter = 0;
+                    foreach ($data["fgCatData"] as $fgValues) {
+                        $data["progressReport"][$counter]["fgData"] = $fgValues;
+                        $data["progressReport"][$counter]["totalSold"] = OrderDetails::
+                            leftJoin("order_master", "order_master.order_id", "=", "order_details.order_id")
+                            ->where("order_details.fg_cat_id", $fgValues["id"])
+                            ->where("order_master.order_by_id", $request->session()->get("userID"))
+                            ->where("order_master.order_dispatch_status", 1)
+                            ->whereMonth("order_master.order_date", Carbon::now()->month)
+                            ->whereYear("order_master.order_date", Carbon::now()->year)
+                            ->sum("order_details.fg_quantity");
+
+                        $counter++;
+                    }
+                }
 
                 //echo "<pre>";print_r($data);die();
 

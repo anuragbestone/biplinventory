@@ -16,19 +16,21 @@ class OrderNDispatchController extends Controller
 {
 
     public function orderNDispatch() {
-
+        $rollID = $request->session()->get("role_id");
+        
         $data["orderData"] = OrderMaster::select(
                 "id",
-                "order_id", 
-                "order_date", 
-                "order_dispatch_date", 
-                "order_dispatch_date_achieved", 
+                "order_id",
+                "order_date",
+                "order_dispatch_date",
+                "order_dispatch_date_achieved",
                 "order_production_status",
                 "order_dispatch_status"
             )
             ->where("is_active", 1)
             ->latest("created_at")
-            ->get()->toArray();
+            ->get()
+            ->toArray();
 
 
         $data["fgCatData"] = FgCatMaster::select("id", "fg_cat_name")

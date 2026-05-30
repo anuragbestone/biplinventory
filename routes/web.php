@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\SalesController;
 
 use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Admin\ModulesController;
@@ -143,6 +144,8 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::get("/fgPmFormula", [FgPgFormulaController::class, "showfgPmFormula"]);
     Route::post("/fgPmFormulaUpload", [FgPgFormulaController::class, "fgPmFormulaUpload"]);
     Route::get("/getRmPmCatDataByID", [FgPgFormulaController::class, "getRmPmCatDataByID"]);
+
+    Route::get("/sales/profile", [SalesController::class, "showProfile"]);
 
     // -- Remaining Routes Ends
 

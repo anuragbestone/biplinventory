@@ -1,7 +1,7 @@
 <div class="header-wrapper d-flex justify-content-between align-items-center">
                 <!-- LOGO -->
                 <div class="logo">
-                    <img src="{{ asset("assets") }}/images/logo.png.webp" />
+                    <a href="{{ url("dashboard") }}"><img src="{{ asset("assets") }}/images/logo.png.webp" /></a>
                 </div>
 
                 <!-- TOGGLE BUTTON (Mobile Only) -->
@@ -26,7 +26,7 @@
                            <li><a class="dropdown-item" href="#sales-report"><i class="bi bi-building"></i> Sales By SKU</a></li> 
                         </div>
                         <div class="menu-item active">
-                            <i class="bi bi-house"></i>
+                            <a href="{{ url('dashboard') }}"><i class="bi bi-house"></i></a>
                         </div>
                         <div class="menu-item">
                              <li><a class="dropdown-item" href="#generate-order-report"><i class="bi bi-cart-check"></i> Generate Orders</a></li>
@@ -58,7 +58,7 @@
 
                             <ul class="dropdown-menu dropdown-menu-end mt-2">
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center gap-2" href="#">
+                                    <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url("sales/profile") }}">
                                         <i class="bi bi-person-circle"></i> Profile
                                     </a>
                                 </li>
