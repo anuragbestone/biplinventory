@@ -830,7 +830,6 @@ document.querySelectorAll(".size-tabs").forEach(group => {
             }
         });
     });
-
 });
 
 

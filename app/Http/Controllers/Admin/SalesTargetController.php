@@ -33,7 +33,7 @@ class SalesTargetController extends Controller
                 "user_master.full_name"
             )
             ->leftJoin("user_master", "user_master.id", "=", "sales_target_master.user_id")
-            ->latest("sales_target_master.created_at")
+            ->orderBy("sales_target_master.target_date", "ASC")
             ->get()->toArray();
         
         }
