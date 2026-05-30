@@ -10,7 +10,6 @@ class RmPmStockWarehouseTransactionMaster extends Model
     use HasFactory;
 
     protected $table = "rm_pm_stock_warehouse_transaction_master";
-
     protected $fillable = [
         "rm_pm_cat_id",
         "stock_quantity",

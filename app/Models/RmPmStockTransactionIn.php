@@ -10,7 +10,6 @@ class RmPmStockTransactionIn extends Model
     use HasFactory;
 
     protected $table = "rm_pm_stock_transaction_in";
-
     protected $fillable = [
         "rm_pm_cat_id",
         "stock_quantity",

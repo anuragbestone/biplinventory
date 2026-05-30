@@ -10,7 +10,6 @@ class ThresholdRmPmMaster extends Model
     use HasFactory;
 
     protected $table = "threshold_rm_pm_master";
-
     protected $fillable = [
         "rm_pm_cat_id",
         "max_quantity",

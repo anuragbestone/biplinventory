@@ -10,7 +10,6 @@ class RmPmStockMaster extends Model
     use HasFactory;
 
     protected $table = "rm_pm_stock_master";
-
     protected $fillable = [
         "rm_pm_cat_id",
         "stock_quantity",

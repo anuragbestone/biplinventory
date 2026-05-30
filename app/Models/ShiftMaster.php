@@ -10,7 +10,6 @@ class ShiftMaster extends Model
     use HasFactory;
 
     protected $table = "shift_master";
-
     protected $fillable = [
         "userID",
         "shift_from",
