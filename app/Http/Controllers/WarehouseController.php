@@ -112,6 +112,7 @@ class WarehouseController extends Controller {
     }
 
     public function profile(Request $request) {
+
         $data["profileData"] = UserMaster::select("full_name", "email", "contact_number", "whatsapp_contact")
             ->where("id", $request->session()->get('userID'))
             ->first();
@@ -120,6 +121,7 @@ class WarehouseController extends Controller {
     }
 
     public function getFgCatDataById(Request $request) {
+
         $fgCatData = FgCatMaster::select("id", "fg_cat_name")
             ->where("fg_id", $request->fgId)
             ->get()->toArray();
@@ -131,6 +133,7 @@ class WarehouseController extends Controller {
     }
 
     public function rmpmentryStock() {
+        
         $rmpmData = RmPmMaster::select("id", "rm_pm_name")
             ->where("is_active", 1)
             ->get();
