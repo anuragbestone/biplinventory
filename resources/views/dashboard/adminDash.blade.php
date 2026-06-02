@@ -719,7 +719,7 @@ function startBottle(container){
     levelsContainer.innerHTML = "";
     indicators.innerHTML = "";
     container.querySelectorAll(".popup").forEach(p => p.remove());
-    water.style.height = "0%";
+    // water.style.height = "0%";
 
     // ===============================
     //  CREATE ELEMENTS
@@ -770,7 +770,9 @@ function startBottle(container){
 
         function step(){
             currentHeight += speed;
-            water.style.height = (currentHeight * 100) + "%";
+            if(!window.productionWaterMode){
+                water.style.height = (currentHeight * 100) + "%";
+            }
 
             if(currentHeight >= targetHeight){
                 currentHeight = targetHeight;
@@ -793,11 +795,17 @@ function startBottle(container){
     }
 
     function run(){
+        console.log(levels);
+        
         if(currentIndex < levels.length){
             animateTo(levels[currentIndex].height, currentIndex);
             currentIndex++;
             setTimeout(run, 2500);
         }
+    }
+
+    if(window.productionWaterMode){
+        return;
     }
 
     run();
@@ -954,6 +962,7 @@ document.querySelectorAll(".size-tabs").forEach(group => {
 
                             const activeBottle = document.querySelector("#" + item.productionData.main_id + " .bottlemain");
                             if(activeBottle){
+                                window.productionWaterMode = true;
                                 startBottle(activeBottle);
                             }
 

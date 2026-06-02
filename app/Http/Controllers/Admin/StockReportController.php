@@ -86,7 +86,8 @@ class StockReportController extends Controller
                 "rm_pm_cat_master.rm_pm_cat_name",
                 "rm_pm_cat_master.cat_unit",
                 "rm_pm_master.rm_pm_name",
-                "rm_pm_stock_warehouse_transaction_master.stock_quantity"
+                "rm_pm_stock_warehouse_transaction_master.stock_quantity",
+                "rm_pm_stock_warehouse_transaction_master.token_id"
             )
             ->rightjoin("rm_pm_cat_master", "rm_pm_stock_warehouse_transaction_master.rm_pm_cat_id", "=", "rm_pm_cat_master.id")
             ->leftjoin("rm_pm_master", "rm_pm_cat_master.rm_pm_id", "=", "rm_pm_master.id")
@@ -98,6 +99,9 @@ class StockReportController extends Controller
 
         $data["rmPmStockWiseData"] = $rmPmStockWiseData;
         $data["dailyStockWarehouseData"] = $dailyStockWarehouseData;
+
+
+        // echo "<pre>";print_r($data);die();
         return view("admin.stockreportWarehouse", $data);
     }
 

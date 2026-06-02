@@ -5,7 +5,7 @@
 <div class="main-card content shadow-sm">
 
     <div class="rmpm-user-main-entry">
-        <h2 class="text-center section-title m-0 flex-grow-1 pb-5">RM/PM Entry</h2>
+        <h2 class="text-center section-title m-0 flex-grow-1 pb-5">RM/PM Procurred Entry</h2>
         
            
 
@@ -26,7 +26,7 @@
                 @csrf
                 <input type="hidden" name="filter" value="1">
                 <div class="maincard-line">
-                    <div class="row mb-3 center-row">
+                    <div class="row mb-3 center-row mx-auto">
                         <select name="production_line_id" class="form-select custom-field" {{ $selected_production_line_id == 0 ? "" : "disabled" }}>
                             @if ($productionLine)
                                 @foreach ($productionLine as $pLine)

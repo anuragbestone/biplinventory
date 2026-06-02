@@ -91,17 +91,40 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php $subCounter = 1  @endphp
+                                            @php
+                                                $subCounter = 1;
+                                                $uToken = "";
+                                            @endphp
+
                                             @foreach ($dData["data"] as $detailsD)
-                                            <tr>
-                                                <td>{{ $subCounter++ }}</td>
-                                                <td>{{ $detailsD["rm_pm_name"] }}</td>
-                                                <td>{{ $detailsD["rm_pm_cat_name"] }}</td>
-                                                <td>
-                                                    {{ $detailsD["stock_quantity"] }}
-                                                    <span class="rmpm-badge">{{ $detailsD["cat_unit"] }}</span>
-                                                </td>
-                                            </tr>
+
+                                                @if ($uToken != $detailsD["token_id"])
+
+                                                    @php
+                                                        $subCounter = 1;
+                                                        $uToken = $detailsD["token_id"];
+                                                    @endphp
+
+                                                    <tr class="procurement-row">
+                                                        <td colspan="4" class="text-center">
+                                                            New Stock Added
+                                                        </td>
+                                                    </tr>
+
+                                                @endif
+
+                                                <tr>
+                                                    <td>{{ $subCounter++ }}</td>
+                                                    <td>{{ $detailsD["rm_pm_name"] }}</td>
+                                                    <td>{{ $detailsD["rm_pm_cat_name"] }}</td>
+                                                    <td>
+                                                        {{ $detailsD["stock_quantity"] }}
+                                                        <span class="rmpm-badge">
+                                                            {{ $detailsD["cat_unit"] }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+
                                             @endforeach
                                         </tbody>
                                     </table>

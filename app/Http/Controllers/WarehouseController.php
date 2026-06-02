@@ -168,6 +168,7 @@ class WarehouseController extends Controller {
             return redirect()->back()->with("error", "Please enter at least one quantity.");
         } else {
             $rData = $request->except(['_token']);
+            $token_id = Carbon::now()->format("YmdHis");
             foreach ($rData as $key => $value) {
                 if ($value && $value > 0) {
                     // ---- Upload Current Stock
@@ -192,6 +193,7 @@ class WarehouseController extends Controller {
                     if (!empty($value[0])) {
                         RmPmStockWarehouseTransactionMaster::create([
                             "rm_pm_cat_id" => $key,
+                            "token_id" => $token_id,
                             "stock_quantity" => empty($value[0]) ? 0 : $value[0],
                             "added_by" => $request->session()->get('userID')
                         ]);

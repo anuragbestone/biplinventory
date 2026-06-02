@@ -9,7 +9,7 @@
                 <h5 class="procure-title">Add Rejection Entry</h5>
 
                 <!-- Date Row -->
-                <div class="row mb-3 center-row">
+                <div class="row mb-3 center-row mx-auto">
                     <div class="col-md-6">
                         <label class="procure-label">Shift from</label>
                         <input type="datetime-local" name="shift_from" value="{{ session("shift_from") }}" class="procure-input" readonly />
@@ -24,7 +24,7 @@
                     @csrf
                     <input type="hidden" name="filter" value="1">
                     <div class="maincard-line">
-                        <div class="row mb-3 center-row">
+                        <div class="row mb-3 center-row mx-auto">
                             <select name="production_line_id" class="form-select custom-field" {{ $selected_production_line_id == 0 ? "" : "disabled" }}>
                             @if ($productionLine)
                                 @foreach ($productionLine as $pLine)

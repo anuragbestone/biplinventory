@@ -64,9 +64,16 @@
                                         </thead>
                                         <tbody>
                                             @php $subCounter = 1  @endphp
+                                            @php $innerCounter = 1 @endphp
                                             @foreach ($dData["data"] as $detailsD)
+                                            @if ($innerCounter == 1)
+                                                <tr class="procurement-row">
+                                                    <td colspan="4" class="text-center">Procurement Added</td>
+                                                </tr>
+                                            @endif
+
                                             <tr>
-                                                <td>{{ $subCounter++ }}</td>
+                                                <td>{{ $innerCounter }}</td>
                                                 <td>{{ $detailsD["rm_pm_name"] }}</td>
                                                 <td>{{ $detailsD["rm_pm_cat_name"] }}</td>
                                                 <td>
@@ -74,6 +81,10 @@
                                                     <span class="rmpm-badge">{{ $detailsD["cat_unit"] }}</span>
                                                 </td>
                                             </tr>
+                                                @php $innerCounter += 1 @endphp
+                                                @if ($innerCounter > 4)
+                                                @php $innerCounter = 1 @endphp
+                                                @endif
                                             @endforeach
                                         </tbody>
                                     </table>

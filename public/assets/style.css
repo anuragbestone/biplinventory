@@ -5318,3 +5318,9 @@ nav.flex.items-center.justify-between svg{
 .badge-inactive  {
     background-color: none !important;
 }
+
+.procurement-row td {
+    border: none !important;
+    text-align: center;
+    font-weight: 500;
+}
