@@ -931,21 +931,20 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                                 $("#production_line_alert_" + item.counter.id)
                                     .addClass("deactive")
                                     .removeClass("active");
-                                $("#production_line_status_for_inactive_" + item.counter.id).html(
-                                    `Production Line Time Has Been Exceeded It's Limit`
-                                );
-                                $("#production_line_status_for_inactive_" + item.counter.id).addClass("badge");
+                                $("#production_line_status_for_inactive_" + item.counter.id)
+                                    .html("Production Line Time Has Been Exceeded It's Limit")
+                                    .removeClass("badge badge-inactive badge-green-active")
+                                    .addClass("badge");
                             } else {
                                 $("#production_line_hault_alert_" + item.counter.id).hide();
                                 $("#production_line_alert_" + item.counter.id)
                                     .addClass("active")
                                     .removeClass("deactive");
-                                $("#production_line_status_for_inactive_" + item.counter.id).html(
-                                    `Production Is Active For This Line`
-                                );
+
                                 $("#production_line_status_for_inactive_" + item.counter.id)
-                                    .addClass("badge-green-active")
-                                    .removeClass("badge");
+                                    .html("Production Is Active For This Line")
+                                    .removeClass("badge badge-inactive badge-green-active")
+                                    .addClass("badge-green-active");
                             }
 
                         } else {
@@ -955,13 +954,10 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                             $("#production_line_last_active_" + item.counter.id).hide();
                             $("#production_line_last_active_" + item.counter.id).html(`0 min's ago`);
                             $("#production_line_alert_" + item.counter.id).hide();
-                            $("#production_line_status_for_inactive_" + item.counter.id).html(
-                                    `Production Is Not Active For This Line`
-                                );
                             $("#production_line_status_for_inactive_" + item.counter.id)
-                                    .removeClass("badge-green-active")
-                                    .removeClass("badge")
-                                    .addClass("badge-inactive");
+                                .html("Production Is Not Active For This Line")
+                                .removeClass("badge badge-inactive badge-green-active")
+                                .addClass("badge-inactive");
                         }
 
                     });
