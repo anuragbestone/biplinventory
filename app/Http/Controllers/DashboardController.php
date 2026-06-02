@@ -90,7 +90,8 @@ class DashboardController extends Controller {
                             "fg_cat_bottle_html.main_class",
                             "fg_cat_bottle_html.sub_class",
                             "fg_cat_bottle_html.inner_class",
-                            "fg_cat_bottle_html.bottle_image"
+                            "fg_cat_bottle_html.bottle_image",
+                            "fg_cat_bottle_html.max_capacity"
                         )
                         ->leftJoin("fg_cat_bottle_html", "fg_cat_bottle_html.fg_cat_id", "=", "fg_cat_master.id")
                         ->leftJoin("fg_master", "fg_master.id", "=", "fg_cat_master.fg_id")
@@ -565,7 +566,8 @@ class DashboardController extends Controller {
                         "fg_cat_bottle_html.main_id",
                         "fg_cat_bottle_html.main_class",
                         "fg_cat_bottle_html.sub_class",
-                        "fg_cat_bottle_html.inner_class"
+                        "fg_cat_bottle_html.inner_class",
+                        "fg_cat_bottle_html.max_capacity"
                     )
                     ->leftJoin("fg_cat_bottle_html", "fg_cat_bottle_html.fg_cat_id", "=", "production_timer_master.fgId")
                     ->where("production_timer_master.production_status", 1)

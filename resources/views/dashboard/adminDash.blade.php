@@ -188,9 +188,9 @@
                                                         <div class="{{ $bottleData["sub_class"] }}">
                                                             <div class="{{ $bottleData["inner_class"] }}">
                                                                 <div class="levels" id="levels"></div>
-                                                                <div 
-                                                                    class="water fg_water_capacity_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $bottleData["id"] }}" 
-                                                                    id="water">
+                                                                <div
+                                                                    id="fg_water_capacity_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $bottleData["id"] }}"
+                                                                    class="water fg_water_capacity_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $bottleData["id"] }}">
                                                                     <div class="surface"></div>
                                                                     <div class="bubbles">
                                                                         <span></span>
@@ -889,6 +889,24 @@ document.querySelectorAll(".size-tabs").forEach(group => {
 <!-- Bottle JS Starts --->
 <script>
 
+    function getBottleMaxCapacity(fgId) {
+
+        switch(parseInt(fgId)) {
+            case 4: // 2 Ltr
+                return 400;
+            case 3: // 1 Ltr
+                return 200;
+            case 2: // 500 ml
+                return 120;
+            case 1: // 200 ml
+                return 80;
+            case 5: // 200 ml (P)
+                return 80;
+            default:
+                return 100;
+        }
+    }
+
     function getProductionStatus() {
         $.ajax({
             url: "{{ url('/getProductionStatus') }}",
@@ -907,6 +925,12 @@ document.querySelectorAll(".size-tabs").forEach(group => {
 
                         $("#production-fg-" + item.counter.id).html(productionHtml);
                         
+                        let productionQty = 0;
+                        response.data.totalStock[item.counter.id].forEach(function(stockItem){
+                            if(stockItem.fgData.id == item.productionData.fgId){
+                                productionQty = stockItem.productionQuantity;
+                            }
+                        });
 
                         if (item.productionData != null) {
 
@@ -933,7 +957,12 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                                 startBottle(activeBottle);
                             }
 
-                            $("#fg_water_capacity_" + item.counter.id + "_" + item.productionData.fgId).css("height", "20%");
+
+                            let maxCapacity = getBottleMaxCapacity(item.productionData.fgId);
+                            let waterPercentage = (productionQty / maxCapacity) * 100;
+                            waterPercentage = Math.min(waterPercentage, 100);
+                            $("#fg_water_capacity_" + item.counter.id + "_" + item.productionData.fgId)
+                                .css("height", waterPercentage + "%");
 
                             //startBottle(".bottlemain");
 
