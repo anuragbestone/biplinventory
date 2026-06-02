@@ -5324,3 +5324,61 @@ nav.flex.items-center.justify-between svg{
     text-align: center;
     font-weight: 500;
 }
+
+
+
+
+.user-orders th:nth-child(1),
+.user-orders td:nth-child(1) {
+    width: 32px;
+}
+
+
+.user-orders th:nth-child(2),
+.user-orders td:nth-child(2) {
+    width: 120px;
+}
+
+.user-orders th:nth-child(3),
+.user-orders td:nth-child(3) {
+    width: 160px;
+}
+
+.user-orders th:nth-child(4),
+.user-orders td:nth-child(4) {
+    width: 220px;
+}
+
+
+.user-orders th:nth-child(5),
+.user-orders td:nth-child(5) {
+    width: 110px;
+}
+
+
+.user-orders th:nth-child(6),
+.user-orders td:nth-child(6) {
+    width: 250px;
+}
+
+
+.user-orders th:nth-child(7),
+.user-orders td:nth-child(7) {
+    width: 130px;
+}
+
+
+.user-orders th:nth-child(8),
+.user-orders td:nth-child(8) {
+    width: 120px;
+}
+
+
+.user-orders th:nth-child(9),
+.user-orders td:nth-child(9) {
+    width: 40px;
+}
+
+.dataTables_scrollBody{
+   position: relative; overflow: hidden !important; width: 100%;
+}

@@ -5,7 +5,7 @@
 <div class="main-card content shadow-sm">
 
     <div class="user-order bg-white">
-        <div class="table-responsive">
+        <div class="table-responsive table-pad">
             <table class="table table-bordered user-orders" id="orderTable">
                 <thead>
                     <tr>
