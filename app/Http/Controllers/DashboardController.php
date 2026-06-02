@@ -338,7 +338,7 @@ class DashboardController extends Controller {
             
             // ---------------- PRODUCTION GRAPH DATA ENDS -------------
 
-            //echo "<pre>";print_r($data);die();
+            // echo "<pre>";print_r($data);die();
             return view("dashboard.adminDash", $data);
         
         } else {

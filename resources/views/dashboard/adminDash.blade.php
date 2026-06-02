@@ -154,10 +154,10 @@
                             </div>
 
                             <div class="p-3 mt-5" style="border-radius: 20px; background: #eef3fb59; border: #fff solid 1px">
-                                <div class="size-tabs group-left">
+                                <div class="size-tabs group-left" id="production-fg-{{ $productionLineValues["productionLineDetails"]["id"] }}">
                                     @if ($productionLineValues["fgData"])
                                         @foreach ($productionLineValues["fgData"] as $pFGData)
-                                            <div class="size-item" id="fg_status_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $pFGData["id"] }}" style="display: none;">
+                                            <div class="size-item" id="fg_status_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $pFGData["id"] }}">
                                                 <!-- Active function below -->
                                                 <button 
                                                     class="tab-btn" id="selected_fg_option_{{ $productionLineValues["productionLineDetails"]["id"] }}_{{ $pFGData["id"] }}" 
@@ -894,9 +894,20 @@ document.querySelectorAll(".size-tabs").forEach(group => {
             url: "{{ url('/getProductionStatus') }}",
             type: "GET",
             success: function(response) {
+
                 if (response.data.productionLineStatus) {
                     response.data.productionLineStatus.forEach(function(item) {
+                        let productionHtml = "";
+                        response.data.totalStock[item.counter.id].forEach(function(elements){
+                            productionHtml += `<div class="size-item" id="fg_status_${item.counter.id}_${elements.fgData.id}">`+
+                                `<button class="tab-btn" id="selected_fg_option_${item.counter.id}_${elements.fgData.id}">`+
+                                `${elements.fgData.fg_cat_name}</button></div>`+
+                                `<span class="case-text">${elements.productionQuantity} Cases</span>`;
+                        });
+
+                        $("#production-fg-" + item.counter.id).html(productionHtml);
                         
+
                         if (item.productionData != null) {
 
                             let startTime = new Date(item.productionData.production_start_time.replace(/-/g, "/"));
