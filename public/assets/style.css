@@ -5302,3 +5302,19 @@ nav.flex.items-center.justify-between svg{
 .title-div {
     text-align: center;
 }
+
+
+.badge {
+    background-color: #f00 !important;
+}
+
+.badge-green-active {
+    background-color: #07cd61 !important;
+    color:#fff !important;
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+.badge-inactive  {
+    background-color: none !important;
+}

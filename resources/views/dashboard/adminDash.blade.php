@@ -176,7 +176,7 @@
                                         <!-- Active function below -->
                                         <div 
                                             id="{{ $bottleData["main_id"] }}"
-                                            class="tab-content">
+                                            class="tab-content remove-bottle-{{ $productionLineValues["productionLineDetails"]["id"] }}">
                                             <div class="{{ $bottleData["main_class"] }}">
                                                 <!-- BUTTONS -->
                                                 <div class="bottle">
@@ -913,16 +913,18 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                             
                             $("#fg_status_" + item.counter.id + "_" + item.productionData.fgId).show();
                             $("#selected_fg_option_" + item.counter.id + "_" + item.productionData.fgId).addClass("active");
+                            $(".remove-bottle-" + item.counter.id).hide();
+                            $("#" + item.productionData.main_id).show();
                             $("#" + item.productionData.main_id).addClass("active");
 
-                            const activeBottle = document.querySelector("#" + item.productionData.main_id + ".bottlemain");
+                            const activeBottle = document.querySelector("#" + item.productionData.main_id + " .bottlemain");
                             if(activeBottle){
                                 startBottle(activeBottle);
                             }
 
                             $("#fg_water_capacity_" + item.counter.id + "_" + item.productionData.fgId).css("height", "20%");
 
-                            startBottle(".bottlemain");
+                            //startBottle(".bottlemain");
 
                             if (currentTime > endTime) {
                                 $("#production_line_hault_alert_" + item.counter.id).show();
@@ -932,6 +934,7 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                                 $("#production_line_status_for_inactive_" + item.counter.id).html(
                                     `Production Line Time Has Been Exceeded It's Limit`
                                 );
+                                $("#production_line_status_for_inactive_" + item.counter.id).addClass("badge");
                             } else {
                                 $("#production_line_hault_alert_" + item.counter.id).hide();
                                 $("#production_line_alert_" + item.counter.id)
@@ -940,10 +943,13 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                                 $("#production_line_status_for_inactive_" + item.counter.id).html(
                                     `Production Is Active For This Line`
                                 );
+                                $("#production_line_status_for_inactive_" + item.counter.id)
+                                    .addClass("badge-green-active")
+                                    .removeClass("badge");
                             }
 
                         } else {
-
+                            $(".remove-bottle-" + item.counter.id).hide();
                             $("#production_line_hault_alert_" + item.counter.id).hide();
                             $("#production_line_status_" + item.counter.id).hide();
                             $("#production_line_last_active_" + item.counter.id).hide();
@@ -952,6 +958,10 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                             $("#production_line_status_for_inactive_" + item.counter.id).html(
                                     `Production Is Not Active For This Line`
                                 );
+                            $("#production_line_status_for_inactive_" + item.counter.id)
+                                    .removeClass("badge-green-active")
+                                    .removeClass("badge")
+                                    .addClass("badge-inactive");
                         }
 
                     });
