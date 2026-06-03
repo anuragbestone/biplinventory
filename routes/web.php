@@ -55,34 +55,26 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::middleware("CheckShift")->group(function() {
 
         Route::get("/warehouse/profile", [WarehouseController::class, "profile"])->name("warehouse/profile");
-
         Route::get("/warehouse/rmpmentrystock", [WarehouseController::class, "rmpmentryStock"]);
         Route::post("/warehouse/rmpmentryStockDo", [WarehouseController::class, "rmpmentryStockDo"]);
-
         Route::get("/warehouse/rmpmentry", [WarehouseController::class, "rmpmentry"])->name("warehouse/rmpmentry");
         Route::post("/warehouse/rmpmentryDo", [WarehouseController::class, "rmpmentryDo"]);
         Route::get("/warehouse/getFgCatDataById", [WarehouseController::class, "getFgCatDataById"]);
         Route::get("/warehouse/getPreformOfFG", [WarehouseController::class, "getPreformOfFG"]);
         Route::get("/warehouse/setRmPmBasedOnPreform", [WarehouseController::class, "setRmPmBasedOnPreform"]);
-        
         Route::get("/warehouse/rmpmstock", [WarehouseController::class, "rmpmstock"])->name("warehouse/rmpmstock");
-
         Route::get("/warehouse/fgstock", [WarehouseController::class, "fgstock"])->name("warehouse/fgstock");
-
         Route::get("/warehouse/production", [WarehouseController::class, "production"])->name("warehouse/production");
         Route::post("/warehouse/uploadProduction", [WarehouseController::class, "uploadProduction"]);
         Route::get("/warehouse/productionDelayAlert", [WarehouseController::class, "productionDelayAlert"]);
         Route::post("/warehouse/productionIssueUpload", [WarehouseController::class, "productionIssueUpload"]);
-
         Route::get("/warehouse/updateProductionTime", [WarehouseController::class, "updateProductionTime"]);
         Route::get("/warehouse/getProductionTimerUpdate", [WarehouseController::class, "getProductionTimerUpdate"]);
         // Route::get("/warehouse/stopProductionTimer", [WarehouseController::class, "stopProductionTimer"]);
 
         Route::get("/warehouse/rejection", [WarehouseController::class, "rejection"]);
         Route::post("/warehouse/uploadRejection", [WarehouseController::class, "uploadRejection"]);
-
         Route::get("/warehouse/addOrderDev", [WarehouseController::class, "addOrderDev"]);
-
         Route::get("/warehouse/order", [WarehouseController::class, "order"])->name("warehouse/order");
         Route::get("/warehouse/getOrderDetailsDataByOrderCode", [WarehouseController::class, "getOrderDetailsDataByOrderCode"]);
         Route::post("/warehouse/dispatchOrder", [WarehouseController::class, "dispatchOrder"]);
@@ -92,63 +84,41 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
 
     // -- Remaining Routes Start
     Route::get("/notification", [DashboardController::class, "notificationHandler"]);
-
     Route::get("/getProductionStatus", [DashboardController::class, "getProductionStatus"])->name("getProductionStatus");
-
     Route::get("/getUpdatesOfTheWarehouse", [DashboardController::class, "getUpdatesOfTheWarehouse"]);
     Route::get("/getNotificationUpdates", [DashboardController::class, "getNotificationUpdates"]);
-
     Route::get("/threshold", [ThresholdController::class, "showPage"]);
     Route::post("/updateThresholdRmPm", [ThresholdController::class, "updateThresholdRmPm"]);
     Route::post("/updateThresholdProduction", [ThresholdController::class, "updateThresholdProduction"]);
-
     Route::get("/rejectionUpdate", [RejectionUpdateController::class, "rejectionUpdate"])->name("rejectionUpdate");
     Route::post("/rejectionUpdateDo", [RejectionUpdateController::class, "rejectionUpdateDo"]);
     Route::get("/getSingleRejectionData", [RejectionUpdateController::class, "getSingleRejectionData"]);
-
     Route::get("/orderNDispatch", [OrderNDispatchController::class, "orderNDispatch"])->name("orderNDispatch");
     Route::post("/generateOrder", [OrderNDispatchController::class, "generateOrder"]);
     Route::get("/getOrderDetailsData", [OrderNDispatchController::class, "getOrderDetailsData"]);
-
     Route::get("/salesTarget", [SalesTargetController::class, "getSalesTargetData"])->name("salesTarget");
     Route::post("/generateTarget", [SalesTargetController::class, "generateTarget"]);
-
     Route::get("/rmPmProcurementUpdate", [RmPmProcurementUpdateController::class, "rmPmProcurementUpdate"]);
-
     Route::get("/stockReport", [StockReportController::class, "stockReport"])->name("stockReport");
     Route::get("/stockReport/rmPmWarehouseStock", [StockReportController::class, "rmPmWarehouseStock"])->name("stockReport/rmPmWarehouseStock");
-
     Route::get("/shiftReport", [ShiftReportController::class, "shiftReport"])->name("shiftReport");
-
     Route::get("/admin/stockreportexcel",[StockReportController::class, "stockReportExcel"]);
-    
-
-    
     Route::get("/productionReport", [ProductionReportController::class, "productionReport"]);
-    
-    
     Route::get("/userRole", [UserRolesController::class, "userRole"]);
     Route::get("/getUserDetailsOfRoleId", [UserRolesController::class, "getUserDetailsOfRoleId"]);
-
     Route::get("/modules", [ModulesController::class, "modules"]);
-    
     Route::get("/permissions", [PermissionsController::class, "permissions"]);
     Route::get("/email", [EmailController::class, "email"]);
     Route::get("/whatsAppMesaging", [WhatsAppMessagingController::class, "whatsAppMessaging"]);
-
     Route::get("/productionIssue", [ProductionIssuesController::class, "productionIssue"]);
     Route::post("/productionIssueDo", [ProductionIssuesController::class, "productionIssueDo"]);
-
     Route::get("/admin/profile", [ProfileController::class, "getProfileData"]);
-    
     Route::get("/fgPmFormula", [FgPgFormulaController::class, "showfgPmFormula"]);
     Route::post("/fgPmFormulaUpload", [FgPgFormulaController::class, "fgPmFormulaUpload"]);
     Route::get("/getRmPmCatDataByID", [FgPgFormulaController::class, "getRmPmCatDataByID"]);
-
     Route::get("/sales/profile", [SalesController::class, "showProfile"]);
 
     // -- Remaining Routes Ends
-
     Route::get("/logout", [AuthController::class, "doLogout"]);
 });
 

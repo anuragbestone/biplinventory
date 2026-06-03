@@ -106,7 +106,7 @@
                 </div>
                 <ul class="dropdown-menu dropdown-menu-end mt-2">
                     <li>
-                        <a class="dropdown-item d-flex align-items-center gap-2" disabled>
+                        <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url("admin/profile") }}">
                             <i class="bi bi-person-circle"></i> Profile
                         </a>
                     </li>

@@ -19,8 +19,8 @@
                 <div class="pm-user">
                     <img src="https://i.pravatar.cc/80" />
                     <div class="user-name-head">
-                        <h6>{{ $profileData->full_name }}</h6>
-                        <span>{{ $profileData->email }}</span>
+                        <h6>{{ $profileData["full_name"] }}</h6>
+                        <span>{{ $profileData["email"] }}</span>
                     </div>
                 </div>
 
@@ -40,19 +40,19 @@
             <div class="pm-grid">
                 <div class="pm-field">
                     <label>Full Name</label>
-                    <div class="pm-value">{{ $profileData->full_name }}</div>
+                    <div class="pm-value">{{ $profileData["full_name"] }}</div>
                 </div>
                 <div class="pm-field">
                     <label>Email</label>
-                    <div class="pm-value">{{ $profileData->email }}</div>
+                    <div class="pm-value">{{ $profileData["email"] }}</div>
                 </div>
                 <div class="pm-field">
                     <label>Contact</label>
-                    <div class="pm-value">{{ $profileData->contact_number }}</div>
+                    <div class="pm-value">{{ $profileData["contact_number"] }}</div>
                 </div>
                 <div class="pm-field">
                     <label>Whatsapp No</label>
-                    <div class="pm-value">{{ $profileData->whatsapp_contact }}</div>
+                    <div class="pm-value">{{ $profileData["whatsapp_contact"] }}</div>
                 </div>
             </div>
         </div>
@@ -112,17 +112,17 @@
 </div>
 <script>
     document.querySelectorAll(".pm-toggle").forEach((icon) => {
-                    icon.addEventListener("click", function () {
-                        let input = this.previousElementSibling;
-                        if (input.type === "password") {
-                            input.type = "text";
-                            this.classList.replace("fa-eye", "fa-eye-slash");
-                        } else {
-                            input.type = "password";
-                            this.classList.replace("fa-eye-slash", "fa-eye");
-                        }
-                    });
-                });
+            icon.addEventListener("click", function () {
+            let input = this.previousElementSibling;
+            if (input.type === "password") {
+                input.type = "text";
+                this.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                this.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        });
+    });
 </script>
 
 @endsection
