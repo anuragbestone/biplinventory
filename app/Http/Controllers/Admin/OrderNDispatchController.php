@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 class OrderNDispatchController extends Controller
 {
 
-    public function orderNDispatch() {
+    public function orderNDispatch(Request $request) {
         $rollID = $request->session()->get("role_id");
         
         $data["orderData"] = OrderMaster::select(

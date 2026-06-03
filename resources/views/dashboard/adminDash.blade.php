@@ -148,7 +148,7 @@
 
                             <div class="linetext">
                                 <h3 class="mt-2 fw-light-custom">{{ $productionLineValues["productionLineDetails"]["line_name"] }}</h3>
-                                <p class="small text-muted" id="production_line_cases_{{ $productionLineValues["productionLineDetails"]["id"] }}"><b>Total 0 Cases</b></p>
+                                {{-- <p class="small text-muted" id="production_line_cases_{{ $productionLineValues["productionLineDetails"]["id"] }}"><b>Total 0 Cases</b></p> --}}
                                 <span id="production_line_status_for_inactive_{{ $productionLineValues["productionLineDetails"]["id"] }}">Production Is Not Active For This Line</span><br>
                                 <span id="production_line_fg_{{ $productionLineValues["productionLineDetails"]["id"] }}" style="display: none;">Production Is Active For : 1 Ltr</span>
                             </div>
@@ -768,34 +768,35 @@ function startBottle(container){
             audio.play().catch(()=>{});
         }
 
-        function step(){
-            currentHeight += speed;
-            if(!window.productionWaterMode){
-                water.style.height = (currentHeight * 100) + "%";
-            }
+        // function step(){
+        //     currentHeight += speed;
+        //     if(!window.productionWaterMode){
+        //         water.style.height = (currentHeight * 100) + "%";
+                
+        //     }
 
-            if(currentHeight >= targetHeight){
-                currentHeight = targetHeight;
-                levelsContainer.children[index]?.classList.add("active");
-                let ind = indicators.children[index];
-                if(ind){
-                    ind.classList.add("active");
-                    ind.querySelector(".dot")?.classList.add("blink");
-                }
+        //     if(currentHeight >= targetHeight){
+        //         currentHeight = targetHeight;
+        //         levelsContainer.children[index]?.classList.add("active");
+        //         let ind = indicators.children[index];
+        //         if(ind){
+        //             ind.classList.add("active");
+        //             ind.querySelector(".dot")?.classList.add("blink");
+        //         }
 
-                container.querySelectorAll(".popup")[index]?.classList.add("active");
-                if(audio) audio.pause();
-                return;
-            }
+        //         container.querySelectorAll(".popup")[index]?.classList.add("active");
+        //         if(audio) audio.pause();
+        //         return;
+        //     }
 
-            requestAnimationFrame(step);
-        }
+        //     requestAnimationFrame(step);
+        // }
 
-        step();
+        // step();
     }
 
     function run(){
-        console.log(levels);
+        // console.log(levels);
         
         if(currentIndex < levels.length){
             animateTo(levels[currentIndex].height, currentIndex);
@@ -934,13 +935,14 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                         $("#production-fg-" + item.counter.id).html(productionHtml);
                         
                         let productionQty = 0;
-                        response.data.totalStock[item.counter.id].forEach(function(stockItem){
-                            if(stockItem.fgData.id == item.productionData.fgId){
-                                productionQty = stockItem.productionQuantity;
-                            }
-                        });
 
                         if (item.productionData != null) {
+
+                            response.data.totalStock[item.counter.id].forEach(function(stockItem){
+                                if(stockItem.fgData.id == item.productionData.fgId){
+                                    productionQty = stockItem.productionQuantity;
+                                }
+                            });
 
                             let startTime = new Date(item.productionData.production_start_time.replace(/-/g, "/"));
                             let timerSeconds = item.productionData.production_timer_seconds;
@@ -972,6 +974,8 @@ document.querySelectorAll(".size-tabs").forEach(group => {
                             waterPercentage = Math.min(waterPercentage, 100);
                             $("#fg_water_capacity_" + item.counter.id + "_" + item.productionData.fgId)
                                 .css("height", waterPercentage + "%");
+                            
+                            
 
                             //startBottle(".bottlemain");
 
@@ -1022,7 +1026,7 @@ document.querySelectorAll(".size-tabs").forEach(group => {
         getProductionStatus();
         setInterval(function () {
             getProductionStatus();
-        }, 10000);
+        }, 20000);
     });
 
 </script>

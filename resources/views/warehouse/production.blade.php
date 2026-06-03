@@ -203,7 +203,8 @@
                             // ---- Start Remaining Timer
                             setTimersOnLoad(
                                 pData.counter_id,
-                                remainingSeconds
+                                productionStartTime,
+                                timerSeconds
                             );
 
                             // ---- Update UI
@@ -269,16 +270,19 @@
     onReloadPageGetData();
 
     // ---- On Page Reload Set the timer to their original value
-    function setTimersOnLoad(counterID, totalSeconds = 300) {
+    function setTimersOnLoad(counterID, productionStartTime, timerSeconds = 300) {
         clearInterval(timerIntervals[counterID]);
-        let timerDisplay = $("#timer_" + counterID);
-        let remainingSeconds = totalSeconds;
-
-        updateTimerDisplay(counterID, remainingSeconds);
-        
-        //-- Active Function Which Is Running --------
         timerIntervals[counterID] = setInterval(function () {
-            remainingSeconds--;
+            let currentTime = new Date();
+            let elapsedSeconds = Math.floor(
+                (currentTime - productionStartTime) / 1000
+            );
+
+            let remainingSeconds = timerSeconds - elapsedSeconds;
+            if (remainingSeconds < 0) {
+                remainingSeconds = 0;
+            }
+
             updateTimerDisplay(counterID, remainingSeconds);
             if (remainingSeconds <= 0) {
                 clearInterval(timerIntervals[counterID]);
@@ -286,10 +290,11 @@
                 $("#submitBtn_" + counterID).prop("disabled", true);
                 $("#stopBtn_" + counterID).prop("disabled", true);
                 $("#fg_select_" + counterID).prop("disabled", true);
-                $("#fg_select_" + counterID).val("");
-                alert("Production timer completed!");
+
+                // Refresh from server
                 onReloadPageGetData();
             }
+
         }, 1000);
     }
 
@@ -373,7 +378,13 @@
 
                     // ---- Start Real Time Countdown
                     let timerSeconds = response.data.production_timer_seconds ?? 300;
-                    setTimersOnLoad(counterID, timerSeconds);
+                    let productionStartTime = new Date();
+
+                    setTimersOnLoad(
+                        counterID,
+                        productionStartTime,
+                        timerSeconds
+                    );
                 }
             },
             error: function(error)
@@ -382,6 +393,12 @@
             }
         });
     }
+
+    document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) {
+            onReloadPageGetData();
+        }
+    });
 
 </script>
 

@@ -57,10 +57,10 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <button class="btn btn-info btn-sm" onclick="getSalesDetails({{ $salesDetail['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
+                                        <button class="btn btn-info btn-sm" disabled onclick="getSalesDetails({{ $salesDetail['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
                                             <i class="fa fa-info"></i>
                                         </button>
-                                        <button class="btn btn-danger btn-sm">
+                                        <button class="btn btn-danger btn-sm" disabled>
                                             <i class="fa fa-pencil"></i>
                                         </button>
                                     </td>
