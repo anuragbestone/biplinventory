@@ -10,6 +10,7 @@ class RoleMaster extends Model
     use HasFactory;
 
     protected $table = "role_master";
+    
     protected $fillable = [
         "role_name"
     ];

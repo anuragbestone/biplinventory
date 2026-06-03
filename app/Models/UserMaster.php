@@ -10,6 +10,7 @@ class UserMaster extends Model
     use HasFactory;
 
     protected $table = "user_master";
+    
     protected $fillable = [
         "full_name",
         "email",

@@ -10,6 +10,7 @@ class ThresholdProductionMaster extends Model
     use HasFactory;
 
     protected $table = "threshold_production_master";
+    
     protected $fillable = [
         "fg_cat_id",
         "max_quantity"

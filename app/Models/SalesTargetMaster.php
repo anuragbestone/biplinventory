@@ -10,6 +10,7 @@ class SalesTargetMaster extends Model
     use HasFactory;
 
     protected $table = "sales_target_master";
+    
     protected $fillable = [
         "target_date",
         "target_given_date",
