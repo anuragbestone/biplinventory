@@ -103,17 +103,17 @@
 </div>
 
 <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const element = document.getElementById("multiSelect");
-                    new Choices(element, {
-                        removeItemButton: true,
-                        searchEnabled: true,
-                        placeholder: true,
-                        placeholderValue: "Select User",
-                        itemSelectText: "",
-                        shouldSort: false,
-                    });
-                });
+    document.addEventListener("DOMContentLoaded", function () {
+        const element = document.getElementById("multiSelect");
+        new Choices(element, {
+            removeItemButton: true,
+            searchEnabled: true,
+            placeholder: true,
+            placeholderValue: "Select User",
+            itemSelectText: "",
+            shouldSort: false,
+        });
+    });
 
     function getUsersList(roleID) {
         $.ajax({

@@ -37,6 +37,7 @@
     <script>
         document.addEventListener("submit", function (e) {
             const form = e.target;
+
             // Only target forms having this class
             if (!form.classList.contains("generalformloader")) {
                 return;
@@ -49,12 +50,16 @@
 
             const loader = document.getElementById("pageLoader");
             if (loader) {
+
                 // Show loader
                 loader.style.display = "flex";
+
                 // Freeze screen scroll
                 document.body.style.overflow = "hidden";
+
                 // Prevent clicking entire screen
                 document.body.style.pointerEvents = "none";
+
                 // Allow loader interaction
                 loader.style.pointerEvents = "all";
             }
@@ -63,25 +68,32 @@
         document.addEventListener("keydown", function(e) {
             // CHECK ENTER KEY
             if(e.key === "Enter") {
+
                 // CURRENT ELEMENT
                 let element = document.activeElement;
+
                 // ALLOW TEXTAREA ENTER
                 if(element.tagName === "TEXTAREA")
                 {
                     return;
                 }
+
                 // PREVENT FORM SUBMIT
                 e.preventDefault();
+
                 // GET ALL FOCUSABLE ELEMENTS
                 let focusable = Array.from(
                     document.querySelectorAll(
                         'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])'
                     )
                 ).filter(el => el.offsetParent !== null);
+
                 // CURRENT INDEX
                 let index = focusable.indexOf(element);
+
                 // NEXT ELEMENT
                 let nextElement = focusable[index + 1];
+                
                 // MOVE FOCUS
                 if(nextElement)
                 {

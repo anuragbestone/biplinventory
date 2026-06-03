@@ -21,6 +21,7 @@
         <!-- SECTIONS -->
         <div class="mt-4">
             <div class="rmpm-dashboard">
+
                 <!-- RM/PM Stock CARD -->
                 <div class="rmpm-dash-card">
                     <div class="header-box">
@@ -31,6 +32,7 @@
                         </div>
                     </div>
                     <div class="rmpm-box">
+
                         <!-- HEADER ROW -->
                         <div class="rmpm-row rmpm-head">
                             <span>RM/PM</span>
@@ -55,6 +57,7 @@
                         @endif
                     </div>
                 </div>
+
                 <!-- RM/PM Procured (Remaining) CARD -->
                 <div class="rmpm-dash-card">
                     <div class="header-box">
@@ -65,6 +68,7 @@
                         </div>
                     </div>
                     <div class="rmpm-box">
+
                         <!-- HEADER ROW -->
                         <div class="rmpm-row rmpm-head">
                             <span>RM/PM</span>
@@ -100,6 +104,7 @@
                         </div>
                     </div>
                     <div class="rmpm-box">
+
                         <!-- HEADER -->
                         <div class="rmpm-row rmpm-head">
                             <span>FG</span>
@@ -131,6 +136,7 @@
 <div class="modal fade" id="shiftModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shift-modal">
+
             <!-- HEADER -->
             <div class="modal-header">
                 <h4 class="mb-0">Enter Your Shift</h4>
@@ -139,6 +145,7 @@
             <form action="{{ url("warehouse/updateShift") }}" class="generalformloader" method="post">
                 @csrf
                 <div class="modal-body">
+
                     <!-- SHIFT ROW -->
                     <div class="row">
                         <div class="col-md-6">
@@ -158,6 +165,7 @@
 
                     </div>
                 </div>
+
                 <!-- FOOTER -->
                 <div class="modal-footer rmpm-footer">
                     <button class="rmpm-approve" type="submit">Submit</button>
@@ -183,12 +191,15 @@
     document.addEventListener("DOMContentLoaded", function () {
         const shiftFrom = document.getElementById("shift_from");
         const shiftTo = document.getElementById("shift_to");
+        
         // DISABLE KEYBOARD ENTRY
         document.querySelectorAll(".dt-input").forEach(input => {
+
             // Prevent typing
             input.addEventListener("keydown", function(e){
                 e.preventDefault();
             });
+
             // Prevent paste
             input.addEventListener("paste", function(e){
                 e.preventDefault();
@@ -197,8 +208,10 @@
 
         // WHEN SHIFT FROM CHANGES
         shiftFrom.addEventListener("change", function () {
+
             // Set minimum value for shift_to
             shiftTo.min = this.value;
+
             // Reset shift_to if smaller than shift_from
             if (shiftTo.value && shiftTo.value <= this.value) {
                 shiftTo.value = "";

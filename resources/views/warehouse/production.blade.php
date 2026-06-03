@@ -1,6 +1,6 @@
 @extends("layouts.app")
-
 @section("mainContent")
+
 {{-- @php echo "<pre>"; print_r($productionLineData); @endphp --}}
 <div class="main-card content shadow-sm">
     <div class="production-line-user">
@@ -17,27 +17,28 @@
                         <h5 class="plu-title">
                           {{ $pData["line_name"] }}
                         </h5>
-                    <span>Submit Time Exceeded Reason</span>
+                        <span>Submit Time Exceeded Reason</span>
                     </div>
+
                     <form action="{{ url("warehouse/productionIssueUpload") }}" method="post" class="generalformloader">
                         @csrf
                         <input type="hidden" name="production_line_id" value="{{ $pData["id"] }}">
                         <div class="col-12">
-                        <label>Select Issue Type</label>
-                        <select name="issue_type_id" class="form-select custom-field" required>
-                            @if ($productionIssueData)
-                                @foreach ($productionIssueData as $issueData)
-                                    <option value="{{ $issueData["id"] }}">{{ $issueData["production_issue_types"] }}</option>
-                                @endforeach
-                            @endif
-                        </select>
+                            <label>Select Issue Type</label>
+                            <select name="issue_type_id" class="form-select custom-field" required>
+                                @if ($productionIssueData)
+                                    @foreach ($productionIssueData as $issueData)
+                                        <option value="{{ $issueData["id"] }}">{{ $issueData["production_issue_types"] }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
                         <div class="col-12">
                             <label>Remark</label>
                             <textarea name="summary" cols="30" class="form-control" rows="10"></textarea>
                         </div>                        
                         <div class="col-12 pt-4">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -93,6 +94,7 @@
                                 @endforeach
                             </select>
                         </div>
+
                         <!-- FORM -->
                         <form id="" method="post" action="{{ url("warehouse/uploadProduction") }}" class="generalformloader">
                             @csrf
@@ -400,7 +402,5 @@
     });
 
 </script>
-
-
 
 @endsection

@@ -231,16 +231,13 @@
 
 <script>
     function switchCard(id, el) {
-                    // sab cards hide
-                    document.querySelectorAll(".maincard-procure").forEach((div) => (div.style.display = "none"));
+                    
+        document.querySelectorAll(".maincard-procure").forEach((div) => (div.style.display = "none"));
+        document.getElementById(id).style.display = "block";
 
-                    // selected show
-                    document.getElementById(id).style.display = "block";
-
-                    // button active color
-                    document.querySelectorAll(".procure-toggle").forEach((btn) => btn.classList.remove("active"));
-                    el.classList.add("active");
-                }
+        document.querySelectorAll(".procure-toggle").forEach((btn) => btn.classList.remove("active"));
+        el.classList.add("active");
+    }
 </script>
 
 @endsection

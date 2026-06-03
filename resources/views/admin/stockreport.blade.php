@@ -51,8 +51,8 @@
                             <td colspan="6">
                                 <div class="rmpm-expand-box">
                                     <h6 class="rmpm-expand-title">
-                                                    {{ $dData["data"][0]["line_name"] }}
-                                                </h6>
+                                        {{ $dData["data"][0]["line_name"] }}
+                                    </h6>
                                     <table class="table rmpm-inner-table table-bordered">
                                         <thead>
                                             <tr>

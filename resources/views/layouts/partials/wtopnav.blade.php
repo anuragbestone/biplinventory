@@ -31,8 +31,8 @@
             <div class="icon-btn position-relative">
                 <i class="bi bi-bell"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px">
-                                3
-                            </span>
+                    3
+                </span>
             </div>
 
             <!-- Profile Dropdown -->

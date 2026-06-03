@@ -4,138 +4,134 @@
 
 <div class="main-card content shadow-sm">
     <div class="procure-wrapper">
-        
-            <div class="procure-box">
-                <h5 class="procure-title">Add Rejection Entry</h5>
+        <div class="procure-box">
+            <h5 class="procure-title">Add Rejection Entry</h5>
 
-                <!-- Date Row -->
-                <div class="row mb-3 center-row mx-auto">
-                    <div class="col-md-6">
-                        <label class="procure-label">Shift from</label>
-                        <input type="datetime-local" name="shift_from" value="{{ session("shift_from") }}" class="procure-input" readonly />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="procure-label">Shift to</label>
-                        <input type="datetime-local" name="shift_to" value="{{ session("shift_to") }}" class="procure-input" readonly />
-                    </div>
+            <!-- Date Row -->
+            <div class="row mb-3 center-row mx-auto">
+                <div class="col-md-6">
+                    <label class="procure-label">Shift from</label>
+                    <input type="datetime-local" name="shift_from" value="{{ session("shift_from") }}" class="procure-input" readonly />
                 </div>
+                <div class="col-md-6">
+                    <label class="procure-label">Shift to</label>
+                    <input type="datetime-local" name="shift_to" value="{{ session("shift_to") }}" class="procure-input" readonly />
+                </div>
+            </div>
 
-                <form class="generalformloader" action="{{ url("warehouse/rejection") }}" method="get">
-                    @csrf
-                    <input type="hidden" name="filter" value="1">
-                    <div class="maincard-line">
-                        <div class="row mb-3 center-row mx-auto">
-                            <select name="production_line_id" class="form-select custom-field" {{ $selected_production_line_id == 0 ? "" : "disabled" }}>
+            <form class="generalformloader" action="{{ url("warehouse/rejection") }}" method="get">
+                @csrf
+                <input type="hidden" name="filter" value="1">
+                <div class="maincard-line">
+                    <div class="row mb-3 center-row mx-auto">
+                        <select name="production_line_id" class="form-select custom-field" {{ $selected_production_line_id == 0 ? "" : "disabled" }}>
                             @if ($productionLine)
                                 @foreach ($productionLine as $pLine)
                                     <option value="{{ $pLine["id"] }}" {{ $selected_production_line_id == $pLine["id"] ? "selected" : "" }}>{{ $pLine["line_name"] }}</option>
                                 @endforeach
                             @endif
                         </select>
-                        </div>
                     </div>
+                </div>
 
-                    <div class="card pb-20">
-                        <div class="row filter-card">
-                            <div class="col-md-5">
+                <div class="card pb-20">
+                    <div class="row filter-card">
+                        <div class="col-md-5">
                             <select name="fg" class="form-select custom-field" id="getFgCat">
                                 <option value="0">Select Bottle</option>
-                                @foreach ($fgData as $fData)
-                                    <option value="{{ $fData["id"] }}" {{ isset($fg_id) && $fg_id == $fData["id"] ? "selected" : "" }}>{{ $fData["fg_name"] }}</option>
-                                @endforeach
+                                    @foreach ($fgData as $fData)
+                                        <option value="{{ $fData["id"] }}" {{ isset($fg_id) && $fg_id == $fData["id"] ? "selected" : "" }}>{{ $fData["fg_name"] }}</option>
+                                    @endforeach
                             </select>
-                            </div>
-                            <div class="col-md-5">
+                        </div>
+                        
+                        <div class="col-md-5">
                             <select name="fg_cat" class="form-select custom-field" id="getPreform" disabled>
                                 <option value="0">Select Sku</option>
                             </select>
-                            </div>
-                            
-                            <div class="col-md-2 align-items-right justify-content-between">
-                                <button class="btn btn-primary btn-sm" id="preformFilter" type="submit" disabled>
-                                    <i class="fa-solid fa-filter"></i> Filter
-                                </button>
-                            </div>
                         </div>
-                        
+                            
+                        <div class="col-md-2 align-items-right justify-content-between">
+                            <button class="btn btn-primary btn-sm" id="preformFilter" type="submit" disabled>
+                                <i class="fa-solid fa-filter"></i> Filter
+                            </button>
+                        </div>
                     </div>
-                </form>
-
-            </div>
+                        
+                </div>
+            </form>
+        </div>
         
         
         @if ($filter == 1)
-        <form id="rejectionForm" class="generalformloader" action="{{ url("warehouse/uploadRejection") }}" method="post">
-            @csrf
-            <div class="procure-box">
-                <input type="hidden" name="production_line_id" value="{{ $selected_production_line_id }}">
-                <input type="hidden" name="shift_from" value="{{ session("shift_from") }}">
-                <input type="hidden" name="shift_to" value="{{ session("shift_to") }}">
+            <form id="rejectionForm" class="generalformloader" action="{{ url("warehouse/uploadRejection") }}" method="post">
+                @csrf
+                <div class="procure-box">
+                    <input type="hidden" name="production_line_id" value="{{ $selected_production_line_id }}">
+                    <input type="hidden" name="shift_from" value="{{ session("shift_from") }}">
+                    <input type="hidden" name="shift_to" value="{{ session("shift_to") }}">
                 
-                <div class="maincard-procure" id="">
-                    @if ($rmpmData)
-                        @foreach ($rmpmData as $rValues)
-                    <div class="procure-card">
-                        <h6 class="blowinghead mb-3">{{ $rValues["rm_pm_name"] }}</h6>
-                        @if ($rValues["catData"])
-                            @foreach ($rValues["catData"] as $rcData)
-                        <div class="row g-3">
-                            <!-- Category -->
-                            <div class="col-md-1">
-                                <label class="form-label">Category</label>
-                                <input type="text" class="procure-input" value="{{ $rcData["rm_pm_cat_name"] }}" readonly />
-                            </div>
+                    <div class="maincard-procure" id="">
+                        @if ($rmpmData)
+                            @foreach ($rmpmData as $rValues)
+                                <div class="procure-card">
+                                    <h6 class="blowinghead mb-3">{{ $rValues["rm_pm_name"] }}</h6>
+                                    @if ($rValues["catData"])
+                                        @foreach ($rValues["catData"] as $rcData)
+                                            <div class="row g-3">
+                                                <!-- Category -->
+                                                <div class="col-md-1">
+                                                    <label class="form-label">Category</label>
+                                                    <input type="text" class="procure-input" value="{{ $rcData["rm_pm_cat_name"] }}" readonly />
+                                                </div>
 
+                                                <!-- Total Consumed -->
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Total Consumed</label>
+                                                    <input type="number" min="0" max="{{ $rcData["stock_quantity"] }}" placeholder="Max Quantity : {{ $rcData["stock_quantity"] }}" name="catId[{{ $rcData["id"] }}]" step="any" class="form-control custom-field consumed-input" />
+                                                </div>
 
+                                                <!-- Unit -->
+                                                <div class="col-md-1">
+                                                    <label class="form-label">Unit</label>
+                                                    <input type="text" class="form-control custom-field readonly-input" value="{{ $rcData["cat_unit"] }}" readonly />
+                                                </div>
 
-                            <!-- Total Consumed -->
-                            <div class="col-md-3">
-                                <label class="form-label">Total Consumed</label>
-                                <input type="number" min="0" max="{{ $rcData["stock_quantity"] }}" placeholder="Max Quantity : {{ $rcData["stock_quantity"] }}" name="catId[{{ $rcData["id"] }}]" step="any" class="form-control custom-field consumed-input" />
-                            </div>
+                                                <!-- Rejection -->
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Rejection</label>
+                                                    <input type="number" min="0" max="{{ $rcData["stock_quantity"] }}" placeholder="Max Quantity : {{ $rcData["stock_quantity"] }}" name="rejectionCat[{{ $rcData["id"] }}]" step="any" class="form-control custom-field rejection-input" />
+                                                </div>
 
-                            <!-- Unit -->
-                            <div class="col-md-1">
-                                <label class="form-label">Unit</label>
-                                <input type="text" class="form-control custom-field readonly-input" value="{{ $rcData["cat_unit"] }}" readonly />
-                            </div>
+                                                <!-- Unit -->
+                                                <div class="col-md-1">
+                                                    <label class="form-label">Unit</label>
+                                                    <input type="text" class="form-control custom-field readonly-input" value="{{ $rcData["cat_unit"] }}" readonly />
+                                                </div>
 
-                            <!-- Rejection -->
-                            <div class="col-md-3">
-                                <label class="form-label">Rejection</label>
-                                <input type="number" min="0" max="{{ $rcData["stock_quantity"] }}" placeholder="Max Quantity : {{ $rcData["stock_quantity"] }}" name="rejectionCat[{{ $rcData["id"] }}]" step="any" class="form-control custom-field rejection-input" />
-                            </div>
+                                                <!-- Rejection % -->
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Rejection %</label>
+                                                    <input type="text" name="rejection_percentage[{{ $rcData["id"] }}]" class="form-control custom-field rejection-percentage"  readonly/>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
 
-                            <!-- Unit -->
-                            <div class="col-md-1">
-                                <label class="form-label">Unit</label>
-                                <input type="text" class="form-control custom-field readonly-input" value="{{ $rcData["cat_unit"] }}" readonly />
-                            </div>
-
-                            <!-- Rejection % -->
-                            <div class="col-md-3">
-                                <label class="form-label">Rejection %</label>
-                                <input type="text" name="rejection_percentage[{{ $rcData["id"] }}]" class="form-control custom-field rejection-percentage"  readonly/>
-                            </div>
-                        </div>
+                                </div>
                             @endforeach
                         @endif
-
                     </div>
-                        @endforeach
-                    @endif
 
-                </div>
-
-                <!-- ---->
-                <div class="modal fade" id="rejectionModal">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content shift-modal">
-                            <!-- HEADER -->
-                            <div class="modal-header">
-                                <h4 class="mb-0">Rejection Exceeded</h4>
-                                <button class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
+                    <!-- ---->
+                    <div class="modal fade" id="rejectionModal">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content shift-modal">
+                                <!-- HEADER -->
+                                <div class="modal-header">
+                                    <h4 class="mb-0">Rejection Exceeded</h4>
+                                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
                                 <div class="modal-body">
                                     <!-- SHIFT ROW -->
                                     <div class="row">
@@ -157,13 +153,13 @@
                                 <div class="modal-footer rmpm-footer">
                                     <button class="rmpm-approve" type="button">Submit</button>
                                 </div>
+                            </div>
                         </div>
                     </div>
-                </div>
                 
-                <button type="submit" class="procure-btn">Calculate</button>
-            </div>
-        </form>
+                    <button type="submit" class="procure-btn">Calculate</button>
+                </div>
+            </form>
         @endif
     </div>
 </div>
@@ -184,24 +180,19 @@
         }
 
         // BUTTONS
-        const calculateBtn =
-            document.querySelector(".procure-btn");
+        const calculateBtn = document.querySelector(".procure-btn");
 
-        const modalSubmitBtn =
-            document.querySelector("#rejectionModal .rmpm-approve");
+        const modalSubmitBtn = document.querySelector("#rejectionModal .rmpm-approve");
 
         // MODAL
-        const rejectionModal =
-            new bootstrap.Modal(
+        const rejectionModal = new bootstrap.Modal(
                 document.getElementById('rejectionModal')
             );
 
         // INPUTS
-        const totalRejectionInput =
-            document.getElementById("all_rejection");
+        const totalRejectionInput = document.getElementById("all_rejection");
 
-        const remarkField =
-            document.querySelector("textarea[name='remark']");
+        const remarkField = document.querySelector("textarea[name='remark']");
 
         // FLAG
         let modalApproved = false;
@@ -210,7 +201,6 @@
         document.querySelectorAll('.procure-card').forEach(card => {
 
             let rows = card.querySelectorAll('.row');
-
             rows.forEach(row => {
 
                 let consumedInput =
@@ -425,49 +415,50 @@
 
     function getFgCatData(id, selectedFgCatId = 0) {
         $.ajax({
-                url: "{{ url('/warehouse/getFgCatDataById') }}",
-                type: "GET",
-                data: {
-                    fgId: id
-                },
+            url: "{{ url('/warehouse/getFgCatDataById') }}",
+            type: "GET",
+            data: {
+                fgId: id
+            },
 
-                success: function(response)
-                {   
-                    if (response.status == "success") {
-                        // Enable dropdown
-                        $("#getPreform").prop("disabled", false);
+            success: function(response)
+            {   
+                if (response.status == "success") {
+                        
+                    // Enable dropdown
+                    $("#getPreform").prop("disabled", false);
 
-                        // Clear old options
-                        $("#getPreform").html(
-                            '<option value="0">Select Sku</option>'
+                    // Clear old options
+                    $("#getPreform").html(
+                        '<option value="0">Select Sku</option>'
+                    );
+
+                    // Add new options
+                    $.each(response.fgCatData, function(index, value) {
+
+                        $("#getPreform").append(
+                            `<option value="${value.id}">
+                                ${value.fg_cat_name}
+                            </option>`
                         );
 
-                        // Add new options
-                        $.each(response.fgCatData, function(index, value) {
+                    });
 
-                            $("#getPreform").append(
-                                `<option value="${value.id}">
-                                    ${value.fg_cat_name}
-                                </option>`
-                            );
-
-                        });
-
-                        if (selectedFgCatId != 0) {
-                            $("#getPreform").val(selectedFgCatId);
-                        }
-
-                    } else {
-                        alert("No Data Available!!");
-                        $("#loaderOverlay").hide();
+                    if (selectedFgCatId != 0) {
+                        $("#getPreform").val(selectedFgCatId);
                     }
-                },
 
-                error: function(error)
-                {
-                    console.log(error);
+                } else {
+                    alert("No Data Available!!");
+                    $("#loaderOverlay").hide();
                 }
-            });
+            },
+
+            error: function(error)
+            {
+                console.log(error);
+            }
+        });
     }
 
 </script>

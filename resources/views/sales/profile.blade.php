@@ -1,11 +1,6 @@
 @extends("layouts.app")
 @section("mainContent")
 
-
-@extends("layouts.app")
-
-@section("mainContent")
-
 <div class="main-card content shadow-sm">
     <div class="profile-main">
         <!-- Header -->
@@ -93,7 +88,5 @@
 
 
 </div>
-
-@endsection
 
 @endsection

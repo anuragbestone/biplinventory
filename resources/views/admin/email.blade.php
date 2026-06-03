@@ -234,47 +234,48 @@
 
 <script>
     document.querySelectorAll(".toggle-pass").forEach((icon) => {
-                    icon.addEventListener("click", function () {
-                        let input = this.previousElementSibling;
+        icon.addEventListener("click", function () {
+            let input = this.previousElementSibling;
 
-                        if (input.type === "password") {
-                            input.type = "text";
-                            this.classList.replace("fa-eye", "fa-eye-slash");
-                        } else {
-                            input.type = "password";
-                            this.classList.replace("fa-eye-slash", "fa-eye");
-                        }
-                    });
-                });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-                    const element = document.getElementById("multiSelect");
-
-                    new Choices(element, {
-                        removeItemButton: true,
-                        searchEnabled: true,
-                        placeholder: true,
-                        placeholderValue: "Select User",
-                        itemSelectText: "",
-                        shouldSort: false,
-                    });
-                });
+            if (input.type === "password") {
+                input.type = "text";
+                this.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                this.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        });
+    });
 </script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-                    const element = document.getElementById("assignmultiSelect");
+        const element = document.getElementById("multiSelect");
 
-                    new Choices(element, {
-                        removeItemButton: true,
-                        searchEnabled: true,
-                        placeholder: true,
-                        placeholderValue: "Select User",
-                        itemSelectText: "",
-                        shouldSort: false,
-                    });
-                });
+        new Choices(element, {
+            removeItemButton: true,
+            searchEnabled: true,
+            placeholder: true,
+            placeholderValue: "Select User",
+            itemSelectText: "",
+            shouldSort: false,
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const element = document.getElementById("assignmultiSelect");
+
+        new Choices(element, {
+            removeItemButton: true,
+            searchEnabled: true,
+            placeholder: true,
+            placeholderValue: "Select User",
+            itemSelectText: "",
+            shouldSort: false,
+        });
+    });
 </script>
 
 @endsection
