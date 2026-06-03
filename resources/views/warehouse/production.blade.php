@@ -3,7 +3,6 @@
 @section("mainContent")
 {{-- @php echo "<pre>"; print_r($productionLineData); @endphp --}}
 <div class="main-card content shadow-sm">
-
     <div class="production-line-user">
         <div class="row justify-content-center">
             @if ($productionLineData)

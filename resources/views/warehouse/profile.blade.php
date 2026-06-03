@@ -30,8 +30,6 @@
                     <button class="pm-edit-btn" data-bs-toggle="modal" data-bs-target="#changeprofile">
                         Change Profile
                     </button>
-
-
                 </div>
             </div>
 

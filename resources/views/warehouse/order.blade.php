@@ -3,7 +3,6 @@
 @section("mainContent")
 
 <div class="main-card content shadow-sm">
-
     <div class="user-order bg-white">
         <div class="table-responsive table-pad">
             <table class="table table-bordered user-orders" id="orderTable">
@@ -20,7 +19,6 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     @if ($orderData)
                         @php $counter = 1 @endphp
@@ -44,19 +42,15 @@
                                             </div>
                                         </div>
                                         @endif
-
-
                                     </div>
                                 </td>
                                 <td><span class="badge bg-{{ $oValues["order"]["order_production_status"] == 0 ? 'warning' : 'success' }}">
                                     {{ $oValues["order"]["order_production_status"] == 0 ? 'Pending' : 'Processed' }}</span></td>
-
                                 <td>{{ $oValues["order"]["dispatch_address"] }}</td>
                                 <td>{{ $oValues["order"]["order_dispatch_date"] }}</td>
                                 <td><span class="badge bg-{{ $oValues["order"]["order_dispatch_status"] == 0 ? 'warning' : 'success' }}">
                                     {{ $oValues["order"]["order_dispatch_status"] == 0 ? 'Pending' : 'Processed' }}</span></td>
                                 <td>
-
                                     <button class="os-edit-btn has-tooltip" 
                                         onclick="dispatchOrder('{{ $oValues['order']['order_id'] }}')" 
                                         title="Dispatch" 
@@ -65,7 +59,6 @@
                                         >
                                         <i class="fa-solid fa-truck"></i>
                                     </button>
-
                                 </td>
                             </tr>
                         @endforeach
@@ -74,7 +67,6 @@
             </table>
         </div>
     </div>
-
 </div>
 
 <div class="modal fade" id="userdispatchModal">
@@ -104,7 +96,6 @@
                                 <input type="text" class="custom-field form-control" name="shift_from" value="{{ session("shift_from") }}" readonly />
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="order-field">
                                 <label>Shift To</label>
@@ -127,7 +118,6 @@
                         <div id="infoSkuContainer">
 
                         </div>
-
                     </div>
 
                     <div class="order-field">
@@ -142,7 +132,6 @@
                 <!-- FOOTER -->
                 <div class="modal-footer rmpm-footer">
                     <button class="btn btn-primary" type="submit">Submit</button>
-
                 </div>
             </div>
         </form>

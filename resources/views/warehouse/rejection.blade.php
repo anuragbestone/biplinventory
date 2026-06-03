@@ -35,7 +35,6 @@
                         </div>
                     </div>
 
-
                     <div class="card pb-20">
                         <div class="row filter-card">
                             <div class="col-md-5">

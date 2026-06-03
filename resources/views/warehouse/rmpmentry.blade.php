@@ -72,35 +72,25 @@
                 @endphp
 
                 <div class="row">
-
                     @if ($rmpmData)
-
                         @foreach ($rmpmData as $rData)
-
                             @if (!empty($rData["catData"]))
-
                                 @php
                                     $hasData = 1;
                                 @endphp
-
                                 <div class="col-md-4 mb-3">
                                     <div class="rmpm-user-card">
-
                                         <div class="rmpm-user-card-head">
                                             {{ $rData["rm_pm_name"] }}
                                         </div>
-
                                         <div class="rmpm-user-card-body">
-
                                             @foreach ($rData["catData"] as $rcData)
-
                                             <div class="rmpm-user-row">
 
                                                 <input
                                                     value="{{ $rcData['rm_pm_cat_name'] }}"
                                                     readonly
                                                 >
-
                                                 <input
                                                     type="number"
                                                     inputmode="decimal"
@@ -116,41 +106,29 @@
                                                         : 'readonly'
                                                     !!}
                                                 >
-
                                                 <input
                                                     value="{{ $rcData['cat_unit'] }}"
                                                     readonly
                                                 >
-
                                             </div>
-
                                             @endforeach
-
                                         </div>
                                     </div>
                                 </div>
-
                             @endif
-
                         @endforeach
-
                     @endif
-
                 </div>
 
                 @if ($hasData == 1)
-
                 <div class="text-center mt-3">
                     <button type="submit" class="rmpm-user-submit-btn">
                         Submit
                     </button>
                 </div>
-
                 @endif
 
-
             </form>
-
     </div>
 
 </div>

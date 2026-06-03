@@ -2,10 +2,8 @@
 @section("mainContent")
 
 <div class="main-card content shadow-sm">
-
     <div class="rmpm-user-main-entry">
         <h2 class="text-center section-title m-0 flex-grow-1 pb-5">RM/PM Entry Stock</h2>
-
             <form  class="generalformloader" method="post" action="{{ url("warehouse/rmpmentryStockDo") }}">
                 @csrf
                 <div class="row">
@@ -53,9 +51,7 @@
                 </div>
 
             </form>
-
     </div>
-
 </div>
 
 @endsection
