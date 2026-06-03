@@ -332,7 +332,7 @@
             success: function(response)
             {
                 if (response.status == "success") {
-                    console.log(response.data);
+                    // console.log(response.data);
 
                     // ---- Disable/Enable Buttons
                     $("#productionFgId_" + counterID).val("");
