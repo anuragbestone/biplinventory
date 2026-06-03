@@ -17,7 +17,6 @@ use App\Models\FgDispatchMaster;
 use App\Models\ProductionLineMaster;
 use App\Models\NotificationMaster;
 use App\Models\FgCatBottleHtml;
-
 use App\Models\SalesTargetMaster;
 use App\Models\ProductionTimerMaster;
 use App\Models\OrderDetails;
@@ -535,13 +534,10 @@ class DashboardController extends Controller {
                 }
 
                 //echo "<pre>";print_r($data);die();
-
                 return view("dashboard.salesDash", $data);
             }
-
         } 
-
-        
+ 
     }
 
     public function getProductionStatus() {
