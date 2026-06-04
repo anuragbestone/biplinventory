@@ -10,8 +10,7 @@ use App\Models\ThresholdProductionMaster;
 use App\Models\ThresholdRmPmMaster;
 use App\Models\FgCatMaster;
 
-class ThresholdController extends Controller
-{
+class ThresholdController extends Controller {
 
     public function showPage() {
 
