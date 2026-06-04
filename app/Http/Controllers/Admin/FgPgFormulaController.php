@@ -33,6 +33,7 @@ class FgPgFormulaController extends Controller {
             ->get()->toArray();
 
         if ($rmPmCatData) {
+            
             $rData = [];
             $counter = 0;
             foreach ($rmPmCatData as $rCData) {

@@ -51,7 +51,6 @@ class AuthController extends Controller
                 } else {
                     return back()->with("error", "email not found")->withInput();
                 }
-
             } else {
                 return back()->with("error", "email is wrong")->withInput();
             }

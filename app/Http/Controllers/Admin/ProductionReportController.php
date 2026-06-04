@@ -68,7 +68,6 @@ class ProductionReportController extends Controller
             ];
         }
         
-        // echo "<pre>";print_r($data);die();
         return view("admin.productionReport", $data);
     }
 }

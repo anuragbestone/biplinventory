@@ -381,7 +381,6 @@ class DashboardController extends Controller {
 
                 $data["rmpmData"] = [];
                 $data["rmpmConsumedData"] = [];
-
                 foreach ($rmPmData as $rmPm) {
                     $mainStock = [
                         "id" => $rmPm->id,

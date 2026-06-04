@@ -51,7 +51,6 @@ class WarehouseController extends Controller {
             ShiftMaster::where("id", $sData->id)
                 ->update(["shift_over_status" => 1]);
         }
-
         return back();
     }
 

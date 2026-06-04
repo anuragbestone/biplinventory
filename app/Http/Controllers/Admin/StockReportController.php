@@ -100,7 +100,6 @@ class StockReportController extends Controller
         $data["rmPmStockWiseData"] = $rmPmStockWiseData;
         $data["dailyStockWarehouseData"] = $dailyStockWarehouseData;
 
-
         // echo "<pre>";print_r($data);die();
         return view("admin.stockreportWarehouse", $data);
     }

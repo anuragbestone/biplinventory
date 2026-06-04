@@ -15,7 +15,6 @@ class ModulesController extends Controller
         $data["moduleData"] = ModuleMaster::select("id", "module_name", "module_route", "is_active")
             ->where("is_active", 1)
             ->get()->toArray(); 
-
         return view("admin.modules", $data);
     }
 

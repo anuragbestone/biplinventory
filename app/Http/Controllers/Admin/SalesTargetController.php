@@ -34,7 +34,6 @@ class SalesTargetController extends Controller
             ->leftJoin("user_master", "user_master.id", "=", "sales_target_master.user_id")
             ->orderBy("sales_target_master.target_date", "ASC")
             ->get()->toArray();
-        
         }
 
         return view("admin.salesTarget", $data);

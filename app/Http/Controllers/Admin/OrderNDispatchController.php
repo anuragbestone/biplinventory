@@ -70,7 +70,6 @@ class OrderNDispatchController extends Controller
                     ]);
                 }
             }
-
             return back()->with("success", "Order Generated Successfully");
 
         } else {
