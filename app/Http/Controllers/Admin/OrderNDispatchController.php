@@ -12,6 +12,8 @@ use App\Models\FgCatMaster;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
+use App\Models\NotificationMaster;
+
 class OrderNDispatchController extends Controller
 {
 
@@ -100,6 +102,30 @@ class OrderNDispatchController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function updatePaymentStatus(Request $request) {
+        if ($request->has("payment_status") && $request->input("payment_status") == 1) {
+
+            OrderMaster::where("id", $request->input("order_id"))->update([
+                "payment_status" => 1
+            ]);
+
+            $order_id = OrderMaster::select("order_id")->where("id", $request->input("order_id"))->first();
+
+            NotificationMaster::create([
+                "route_address" => "notification",
+                "main_address" => "orderNDispatch",
+                "notification_title" => "Payment Status Updated",
+                "notification_msg" => "Order Code: ".$order_id->order_id,
+                "is_clicked" => 0
+            ]);
+
+            return back()->with("success", "Payment Status Changed, Waiting For Approval");
+
+        } else {
+            return back()->with("error", "Payment Status Not Updated");
+        }
     }
 
 }

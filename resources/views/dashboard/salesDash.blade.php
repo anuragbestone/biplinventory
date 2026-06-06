@@ -190,6 +190,8 @@
                                 <th>Order Date</th>
                                 <th>Production Status</th>
                                 <th>Dispatch Status</th>
+                                <th>Payment Status</th>
+                                <th>Payment Approved Status</th>
                                 <th>Dispatch Date Given</th>
                                 <th>Achieved Dispatch Date</th>
                                 <th>Action</th>
@@ -207,6 +209,10 @@
                                             {{ $orderDetails["order_production_status"] == 1 ? "Completed" : "Pending" }}</span></td>
                                         <td><span class="badge {{ $orderDetails["order_dispatch_status"] == 1 ? "bg-success" : "bg-warning" }}">
                                             {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span></td>
+                                        <td><span class="badge {{ $orderDetails["payment_status"] == 1 ? "bg-success" : "bg-warning" }}">
+                                            {{ $orderDetails["payment_status"] == 1 ? "Completed" : "Pending" }}</span></td>
+                                        <td><span class="badge {{ $orderDetails["payment_approve_status"] == 1 ? "bg-success" : "bg-warning" }}">
+                                            {{ $orderDetails["payment_approve_status"] == 1 ? "Approved" : "Pending" }}</span></td>
                                         <td>{{ \Carbon\Carbon::parse($orderDetails["order_dispatch_date"])->format("d M Y") }}</td>
                                         <td>
                                             {{
@@ -215,10 +221,15 @@
                                             }}
                                         </td>
                                         <td>
+
                                             <button class="btn btn-info btn-sm" onclick="getOrderDetails({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
                                                 <i class="fa fa-info"></i>
                                             </button>
                                             
+                                            <button {{ $orderDetails["payment_status"] == 1 ? "disabled" : "" }} class="btn btn-info btn-sm" onclick="updatePaymentStatus({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentModal">
+                                                <i class="fa fa-info"></i>
+                                            </button>
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -233,58 +244,87 @@
 
 
     <div class="modal fade" id="infoModal">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5>Information</h5>
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Information</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- ORDER INFO -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Order ID</label>
+                            <input type="text" id="info_order_id" class="form-control" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold">Order Date</label>
+                            <input type="text" id="info_order_date" class="form-control" readonly>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <!-- ORDER INFO -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="fw-bold">Order ID</label>
-                                <input type="text" id="info_order_id" class="form-control" readonly>
-                            </div>
 
-                            <div class="col-md-6">
-                                <label class="fw-bold">Order Date</label>
-                                <input type="text" id="info_order_date" class="form-control" readonly>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="fw-bold">Dispatch Date</label>
-                            <input type="text" id="info_dispatch_date" class="form-control" readonly>
-                        </div>
-
-                        <!-- SKU CARD -->
-                        <div class="card bg-white p-3 mb-3 custom-sku-card">
-
-                            <!-- HEADER -->
-                            <div class="row text-center fw-bold mb-2 border-bottom pb-2">
-                                <div class="col-6">SKU</div>
-                                <div class="col-6">QTY</div>
-                            </div>
-
-                            <!-- DYNAMIC DATA -->
-                            <div id="infoSkuContainer">
-                            </div>
-
-                        </div>
-
-                        <!-- ADDRESS -->
-                        <label class="fw-bold">Address</label>
-                        <textarea
-                            class="form-control"
-                            rows="3"
-                            id="info_dispatch_address"
-                            readonly></textarea>
+                    <div class="mb-3">
+                        <label class="fw-bold">Dispatch Date</label>
+                        <input type="text" id="info_dispatch_date" class="form-control" readonly>
                     </div>
+
+                    <!-- SKU CARD -->
+                    <div class="card bg-white p-3 mb-3 custom-sku-card">
+
+                        <!-- HEADER -->
+                        <div class="row text-center fw-bold mb-2 border-bottom pb-2">
+                            <div class="col-6">SKU</div>
+                            <div class="col-6">QTY</div>
+                        </div>
+
+                        <!-- DYNAMIC DATA -->
+                        <div id="infoSkuContainer">
+                        </div>
+
+                    </div>
+
+                    <!-- ADDRESS -->
+                    <label class="fw-bold">Address</label>
+                    <textarea
+                        class="form-control"
+                        rows="3"
+                        id="info_dispatch_address"
+                        readonly>
+                    </textarea>
                 </div>
             </div>
         </div>
+    </div>
 
+
+    <div class="modal fade" id="paymentModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>PAYMENT STATUS</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+
+                    <form action="{{ url('/updatePaymentStatus') }}" method="post" class="generalformloader">
+                        @csrf
+                        <input type="hidden" name="order_id" id="payment_order_id">
+                        <div class="mb-3">
+                            <label class="fw-bold">Payment Status</label>
+                            <select name="payment_status" class="form-control" required>
+                                <option value="">Select Status</option>
+                                <option value="1">Completed</option>
+                                <option value="0">Pending</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
         <div class="modal fade" id="generateOrderModal">
@@ -460,6 +500,10 @@
 </script>
 
 <script>
+
+    function updatePaymentStatus(orderID) {
+        $("#payment_order_id").val(orderID);
+    }
 
     function getOrderDetails(orderID) {
 

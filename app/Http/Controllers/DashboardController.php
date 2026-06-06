@@ -497,7 +497,9 @@ class DashboardController extends Controller {
                         "order_dispatch_date",
                         "order_dispatch_date_achieved",
                         "order_production_status",
-                        "order_dispatch_status"
+                        "order_dispatch_status",
+                        "payment_status",
+                        "payment_approve_status"
                     )
                     ->where("is_active", 1)
                     ->where("order_by_id", $request->session()->get("userID"))
@@ -532,7 +534,7 @@ class DashboardController extends Controller {
                     }
                 }
 
-                //echo "<pre>";print_r($data);die();
+                // echo "<pre>";print_r($data);die();
                 return view("dashboard.salesDash", $data);
             }
         } 

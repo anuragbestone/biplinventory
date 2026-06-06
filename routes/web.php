@@ -93,9 +93,14 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::get("/rejectionUpdate", [RejectionUpdateController::class, "rejectionUpdate"])->name("rejectionUpdate");
     Route::post("/rejectionUpdateDo", [RejectionUpdateController::class, "rejectionUpdateDo"]);
     Route::get("/getSingleRejectionData", [RejectionUpdateController::class, "getSingleRejectionData"]);
+    
     Route::get("/orderNDispatch", [OrderNDispatchController::class, "orderNDispatch"])->name("orderNDispatch");
+
     Route::post("/generateOrder", [OrderNDispatchController::class, "generateOrder"]);
     Route::get("/getOrderDetailsData", [OrderNDispatchController::class, "getOrderDetailsData"]);
+    
+    Route::post("/updatePaymentStatus", [OrderNDispatchController::class, "updatePaymentStatus"]);
+    
     Route::get("/salesTarget", [SalesTargetController::class, "getSalesTargetData"])->name("salesTarget");
     Route::post("/generateTarget", [SalesTargetController::class, "generateTarget"]);
     Route::get("/rmPmProcurementUpdate", [RmPmProcurementUpdateController::class, "rmPmProcurementUpdate"]);
