@@ -20,6 +20,9 @@ class OrderMaster extends Model
         "order_dispatch_date_achieved",
         "order_production_status",
         "order_dispatch_status",
+        "payment_status",
+        "payment_approve_status",
+        "payment_approved_by_id"
     ];
 
     protected $casts = [
