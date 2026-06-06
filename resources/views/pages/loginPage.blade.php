@@ -14,7 +14,7 @@
     </head>
     <body>
         <div class="main-login">
-            <div class="container py-3">
+            <div class="loginpage">
                 <div class="login-main water-effect">
     
                     <div class="login-wrapper d-flex justify-content-center align-items-center">

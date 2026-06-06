@@ -108,10 +108,12 @@
     }
 
     .card span{
-      color:#6e7b9b;
+      color:#fff;
       font-size:15px;
     }
-
+.popupcard span{
+    color:#6e7b9b !important;
+}
     .wave{
       position:absolute;
       bottom:-10px;

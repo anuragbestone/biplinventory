@@ -1,6 +1,32 @@
 @extends("layouts.app")
 @section("mainContent")
 
+<style>
+    /* Boy vector */
+    .floating-achievement .boy img {
+        width: 50px;
+        height: auto;
+        transform: scaleX(-1); /* push direction */
+    }
+
+
+
+    /* Optional push animation */
+    .floating-achievement .boy img {
+        animation: push 1s infinite alternate ease-in-out;
+    }
+
+    @keyframes push {
+        0% { transform: scaleX(-1) translateX(0); }
+        100% { transform: scaleX(-1) translateX(5px); }
+    }
+    .boy {
+        position: absolute;
+        left: -49px;
+    }
+
+</style>
+
 <div class="main-card content shadow-sm">
     <div class="dashboard">
 
@@ -67,12 +93,20 @@
                 <div class="line-progress">
 
                     <div class="line-track">
+    
                         <div class="floating-achievement" id="floatingCard">
-                            <h3 id="floatingNumber">0</h3>
-                            <p>Achieved</p>
+                            <div class="boy">
+                                <img src="{{ asset("assets") }}/images/boy.png" alt="boy">
+                            </div>
+                    
+                            <div class="content">
+                                <h3 id="floatingNumber">0</h3>
+                                <p>Achieved</p>
+                            </div>
                         </div>
-
+                    
                         <div class="line-fill" id="lineFill"></div>
+                    
                     </div>
 
                     <div class="milestones">
@@ -165,28 +199,28 @@
                             @if ($orderData)
                                 @php $counter = 1 @endphp
                                 @foreach($orderData as $orderDetails)
-                                <tr>
-                                    <td>{{ $counter++ }}</td>
-                                    <td>{{ $orderDetails["order_id"] }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($orderDetails["order_date"])->format("d M Y") }}</td>
-                                    <td><span class="badge {{ $orderDetails["order_production_status"] == 1 ? "bg-success" : "bg-warning" }}">
-                                        {{ $orderDetails["order_production_status"] == 1 ? "Completed" : "Pending" }}</span></td>
-                                    <td><span class="badge {{ $orderDetails["order_dispatch_status"] == 1 ? "bg-success" : "bg-warning" }}">
-                                        {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span></td>
-                                    <td>{{ \Carbon\Carbon::parse($orderDetails["order_dispatch_date"])->format("d M Y") }}</td>
-                                    <td>
-                                        {{
-                                            $orderDetails["order_dispatch_date_achieved"]
-                                            ? \Carbon\Carbon::parse($orderDetails["order_dispatch_date_achieved"])->format("d M Y") : ""
-                                        }}
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm" onclick="getOrderDetails({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
-                                            <i class="fa fa-info"></i>
-                                        </button>
-                                        
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>{{ $counter++ }}</td>
+                                        <td>{{ $orderDetails["order_id"] }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($orderDetails["order_date"])->format("d M Y") }}</td>
+                                        <td><span class="badge {{ $orderDetails["order_production_status"] == 1 ? "bg-success" : "bg-warning" }}">
+                                            {{ $orderDetails["order_production_status"] == 1 ? "Completed" : "Pending" }}</span></td>
+                                        <td><span class="badge {{ $orderDetails["order_dispatch_status"] == 1 ? "bg-success" : "bg-warning" }}">
+                                            {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span></td>
+                                        <td>{{ \Carbon\Carbon::parse($orderDetails["order_dispatch_date"])->format("d M Y") }}</td>
+                                        <td>
+                                            {{
+                                                $orderDetails["order_dispatch_date_achieved"]
+                                                ? \Carbon\Carbon::parse($orderDetails["order_dispatch_date_achieved"])->format("d M Y") : ""
+                                            }}
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-info btn-sm" onclick="getOrderDetails({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
+                                                <i class="fa fa-info"></i>
+                                            </button>
+                                            
+                                        </td>
+                                    </tr>
                                 @endforeach
                             @endif
                         </tbody>
@@ -277,7 +311,7 @@
                                 @if ($fgCatData)
                                     @foreach ($fgCatData as $fData)
                                 <!-- ROW 1 -->
-                                <div class="d-flex justify-content-between border-bottom p-2">
+                                <div class="d-flex justify-content-between border-bottom p-2 popupcard">
                                     <span class="border-end pe-2 w-50">{{ $fData["fg_cat_name"] }}</span>
                                     <span class="ps-2 w-50 text-end"><input type="number" min="0" name="fgCat[{{ $fData["id"] }}]"> Cases</span>
                                 </div>
