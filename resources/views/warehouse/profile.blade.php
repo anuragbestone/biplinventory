@@ -66,18 +66,15 @@
                     <h6>Edit Profile</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <div class="modal-body">
                     <!-- Profile Image Edit -->
                     <div class="pm-edit-profile-img">
                         <img src="https://i.pravatar.cc/100" alt="profile" />
-
                         <label class="pm-img-edit">
                             <i class="fa-solid fa-pen"></i>
                             <input type="file" hidden />
                         </label>
                     </div>
-
                     <button class="pm-submit">Submit</button>
                 </div>
                 <div class="modal-footer"></div>

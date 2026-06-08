@@ -40,17 +40,14 @@
                     <label>Full Name</label>
                     <div class="pm-value">{{ $profileData->full_name }}</div>
                 </div>
-
                 <div class="pm-field">
                     <label>Email</label>
                     <div class="pm-value">{{ $profileData->email }}</div>
                 </div>
-
                 <div class="pm-field">
                     <label>Contact</label>
                     <div class="pm-value">{{ $profileData->contact_number }}</div>
                 </div>
-
                 <div class="pm-field">
                     <label>Whatsapp No</label>
                     <div class="pm-value">{{ $profileData->whatsapp_contact }}</div>

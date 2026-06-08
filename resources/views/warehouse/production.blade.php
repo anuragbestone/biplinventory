@@ -254,7 +254,6 @@
                                 pData.counter_id
                             );
                         }
-
                     });
                 }
             },

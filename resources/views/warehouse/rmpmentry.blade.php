@@ -209,13 +209,11 @@
 
                     // Add new options
                     $.each(response.fgCatData, function(index, value) {
-
                         $("#getPreform").append(
                             `<option value="${value.id}">
                                 ${value.fg_cat_name}
                             </option>`
                         );
-
                     });
 
                     if (selectedFgCatId != 0) {
@@ -249,14 +247,11 @@
 <script>
 
     $(document).ready(function () {
-
         getFgCatData(
             {{ $fg_id }},
             {{ $fg_cat_id }}
         );
-
         $("#preformFilter").prop("disabled", false);
-
     });
 
 </script>
@@ -264,7 +259,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-
         const shiftFrom = document.getElementById("shift_from");
         const shiftTo = document.getElementById("shift_to");
 
@@ -278,40 +272,28 @@
         });
 
         shiftFrom.addEventListener("change", function () {
-
             shiftTo.min = shiftFrom.value;
-
             if (shiftTo.value) {
-
                 const fromDate = new Date(shiftFrom.value);
                 const toDate = new Date(shiftTo.value);
-
                 if (toDate <= fromDate) {
-
                     alert("Shift To must be greater than Shift From");
-
                     shiftTo.value = "";
                 }
             }
         });
 
         shiftTo.addEventListener("change", function () {
-
             const fromDate = new Date(shiftFrom.value);
             const toDate = new Date(shiftTo.value);
-
             if (toDate <= fromDate) {
-
                 alert("Shift To must be greater than Shift From");
-
                 shiftTo.value = "";
             }
         });
 
         document.querySelectorAll(".qty-input").forEach(function(input){
-
             input.addEventListener("keydown", function(e){
-
                 // BLOCK: e, E, +, -
                 if (
                     e.key === "e" ||
@@ -325,7 +307,6 @@
             });
 
             input.addEventListener("input", function(){
-
                 // REMOVE INVALID CHARACTERS
                 this.value = this.value
                     .replace(/[^0-9.]/g, '')   // allow only numbers and dot

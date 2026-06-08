@@ -383,15 +383,12 @@
             </div>
         </div>
 
-
-
 </div>
 
 <script>
 
     const target = {{ $target }};
     const achieved = {{ $achieved }};
-
     const percentage = target > 0
         ? (achieved / target) * 100
         : 0;
@@ -402,9 +399,7 @@
     const lineFill = document.getElementById('lineFill');
     const floatingCard = document.getElementById('floatingCard');
     const floatingNumber = document.getElementById('floatingNumber');
-
     const milestoneCards = document.querySelectorAll('.milestone-card');
-
     const milestoneValues = [
         0,
         target * 0.25,
@@ -414,70 +409,49 @@
     ];
 
     milestoneCards.forEach((card, index) => {
-
         if(index !== 0){
             card.style.opacity = '0';
             card.style.transform = 'translateY(40px)';
             card.style.transition = '0.5s ease';
         }
-
     });
 
     let current = 0;
-
     const counter = setInterval(() => {
-
         current += 0.1;
-
         if(current >= percentage){
             current = percentage;
             clearInterval(counter);
         }
 
         const safeCurrent = Number(current.toFixed(1));
-
         circle.style.background =
             `conic-gradient(#2f67ff ${safeCurrent * 3.6}deg,#edf2ff 0deg)`;
-
         progressText.innerHTML = `${safeCurrent}%`;
-
         let currentAchieved;
-
         if(current >= percentage){
 
             // Final value should exactly match database value
             currentAchieved = achieved;
-
         } else {
-
             currentAchieved = Math.round(
                 (current / percentage) * achieved
             );
-
         }
 
         achievedText.innerHTML =
             `${currentAchieved.toLocaleString()} Achieved`;
-
         floatingNumber.innerHTML =
             currentAchieved.toLocaleString();
-
         lineFill.style.width = `${safeCurrent}%`;
-
         floatingCard.style.left = `${safeCurrent}%`;
-
         milestoneValues.forEach((value, index) => {
-
             if(currentAchieved >= value){
-
                 milestoneCards[index].style.opacity = '1';
                 milestoneCards[index].style.transform =
                     'translateY(0px)';
-
             }
-
         });
-
     }, 25);
 
 </script>

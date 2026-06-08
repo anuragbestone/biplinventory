@@ -181,7 +181,6 @@
 
         // BUTTONS
         const calculateBtn = document.querySelector(".procure-btn");
-
         const modalSubmitBtn = document.querySelector("#rejectionModal .rmpm-approve");
 
         // MODAL
@@ -191,7 +190,6 @@
 
         // INPUTS
         const totalRejectionInput = document.getElementById("all_rejection");
-
         const remarkField = document.querySelector("textarea[name='remark']");
 
         // FLAG
