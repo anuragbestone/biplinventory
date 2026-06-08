@@ -113,6 +113,7 @@ class OrderNDispatchController extends Controller
     }
 
     public function updatePaymentStatus(Request $request) {
+
         if ($request->has("payment_status") && $request->input("payment_status") == 1) {
             OrderMaster::where("id", $request->input("order_id"))->update([
                 "payment_status" => 1
@@ -155,7 +156,9 @@ class OrderNDispatchController extends Controller
             return back()->with("success", "Payment Status Changed, Waiting For Approval");
 
         } else {
+
             return back()->with("error", "Payment Status Not Updated");
+            
         }
     }
 
