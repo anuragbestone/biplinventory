@@ -1156,25 +1156,6 @@ class WarehouseController extends Controller {
                         "order_dispatch_date_achieved" => Carbon::now()->format("Y-m-d")
                     ]);
 
-                $salesUserData = OrderMaster::select("order_by_id", "order_date")
-                    ->where("order_id", $request->input("order_id"))
-                    ->first();
-
-                if ($salesUserData) {
-                    $currentAchievedData = SalesTargetMaster::select("achieved_target_quantity", "id")
-                        ->where("user_id", $salesUserData->order_by_id)
-                        ->whereMonth("target_date", Carbon::parse($salesUserData->order_date)->format("m"))
-                        ->whereYear("target_date", Carbon::parse($salesUserData->order_date)->format("Y"))
-                        ->first();
-                    
-                    if ($currentAchievedData) {
-                        SalesTargetMaster::where("id", $currentAchievedData->id)
-                            ->update([
-                                "achieved_target_quantity" => $currentAchievedData->achieved_target_quantity + $totalCases
-                            ]);
-                    }
-                }
-
                 NotificationMaster::create([
                     "route_address" => "notification",
                     "main_address" => "orderNDispatch",

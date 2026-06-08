@@ -367,8 +367,6 @@
         $("#payment_order_id").val(orderID);
     }
 
-    function 
-
 </script>
 
 @endsection

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\OrderMaster;
 use App\Models\OrderDetails;
 use App\Models\FgCatMaster;
+use App\Models\SalesTargetMaster;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -113,12 +114,35 @@ class OrderNDispatchController extends Controller
 
     public function updatePaymentStatus(Request $request) {
         if ($request->has("payment_status") && $request->input("payment_status") == 1) {
-
             OrderMaster::where("id", $request->input("order_id"))->update([
                 "payment_status" => 1
             ]);
 
             $order_id = OrderMaster::select("order_id")->where("id", $request->input("order_id"))->first();
+
+            // ------ Get Total Cases
+            $totalCases = OrderDetails::where("order_id", $order_id->order_id)->sum("fg_quantity");
+
+            // -------- Update The Target Sales Starts
+            $salesUserData = OrderMaster::select("order_by_id", "order_date")
+                ->where("order_id", $order_id->order_id)
+                ->first();
+
+            if ($salesUserData) {
+                $currentAchievedData = SalesTargetMaster::select("achieved_target_quantity", "id")
+                    ->where("user_id", $salesUserData->order_by_id)
+                    ->whereMonth("target_date", Carbon::parse($salesUserData->order_date)->format("m"))
+                    ->whereYear("target_date", Carbon::parse($salesUserData->order_date)->format("Y"))
+                    ->first();
+                    
+                if ($currentAchievedData) {
+                    SalesTargetMaster::where("id", $currentAchievedData->id)
+                        ->update([
+                            "achieved_target_quantity" => $currentAchievedData->achieved_target_quantity + $totalCases
+                        ]);
+                }
+            }
+            // -------- Update The Target Sales Ends
 
             NotificationMaster::create([
                 "route_address" => "notification",
