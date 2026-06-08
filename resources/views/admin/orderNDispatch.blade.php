@@ -62,10 +62,10 @@
                                         {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span>
                                     </td>
                                     <td><span class="badge {{ $orderDetails['payment_status'] == 1 ? 'bg-success' : 'bg-warning' }}">
-                                        {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span>
+                                        {{ $orderDetails["payment_status"] == 1 ? "Completed" : "Pending" }}</span>
                                     </td>
                                     <td><span class="badge {{ $orderDetails['payment_approve_status'] == 1 ? 'bg-success' : 'bg-warning' }}">
-                                        {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span>
+                                        {{ $orderDetails["payment_approve_status"] == 1 ? "Completed" : "Pending" }}</span>
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($orderDetails["order_dispatch_date"])->format("d M Y") }}</td>
                                     <td>
