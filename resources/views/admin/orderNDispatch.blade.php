@@ -32,9 +32,12 @@
                             <tr>
                                 <th>S.No</th>
                                 <th>Order ID</th>
+                                <th>Order By</th>
                                 <th>Order Date</th>
                                 <th>Production Status</th>
                                 <th>Dispatch Status</th>
+                                <th>Payment Status</th>
+                                <th>Payment Approve Status</th>
                                 <th>Dispatch Date Given</th>
                                 <th>Achieved Dispatch Date</th>
                                 <th>Action</th>
@@ -47,11 +50,19 @@
                                 <tr>
                                     <td>{{ $counter++ }}</td>
                                     <td>{{ $orderDetails["order_id"] }}</td>
+                                    <td>{{ $orderDetails["email"] }}</td>
                                     <td>{{ \Carbon\Carbon::parse($orderDetails["order_date"])->format("d M Y") }}</td>
                                     <td><span class="badge {{ $orderDetails["order_production_status"] == 1 ? "bg-success" : "bg-warning" }}">
                                         {{ $orderDetails["order_production_status"] == 1 ? "Completed" : "Pending" }}</span></td>
                                     <td><span class="badge {{ $orderDetails["order_dispatch_status"] == 1 ? "bg-success" : "bg-warning" }}">
-                                        {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span></td>
+                                        {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span>
+                                    </td>
+                                    <td><span class="badge {{ $orderDetails["payment_status"] == 1 ? "bg-success" : "bg-warning" }}">
+                                        {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span>
+                                    </td>
+                                    <td><span class="badge {{ $orderDetails["payment_approve_status"] == 1 ? "bg-success" : "bg-warning" }}">
+                                        {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span>
+                                    </td>
                                     <td>{{ \Carbon\Carbon::parse($orderDetails["order_dispatch_date"])->format("d M Y") }}</td>
                                     <td>
                                         {{
@@ -63,8 +74,11 @@
                                         <button class="btn btn-info btn-sm" onclick="getOrderDetails({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
                                             <i class="fa fa-info"></i>
                                         </button>
-                                        <button class="btn btn-danger btn-sm">
-                                            <i class="fa fa-trash"></i>
+                                        <button class="btn btn-danger btn-sm" {{ $orderDetails["payment_status"] == 1 ? "disabled" : "" }} onclick="updatePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentModal"> 
+                                            <i class="fa fa-info"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" {{ (($orderDetails["payment_status"] == 0 || $orderDetails["payment_approve_status"] == 1) ? "disabled" : "") }} onclick="approvePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentApproveModal"> 
+                                            <i class="fa fa-info"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -130,7 +144,59 @@
             </div>
         </div>
 
+        <div class="modal fade" id="paymentModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Update Payment Status</h5>
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url('/updatePaymentStatus') }}" method="post" class="generalformloader">
+                            @csrf
+                            <input type="hidden" name="order_id" id="payment_order_id">
+                            <div class="mb-3">
+                                <label class="fw-bold">Payment Status</label>
+                                <select name="payment_status" class="form-control" required>
+                                    <option value="">Select Status</option>
+                                    <option value="1">Completed</option>
+                                    <option value="0">Pending</option>
+                                </select>
+                            </div>
 
+                            <button class="btn btn-primary" type="submit">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="paymentApproveModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Approve Payment</h5>
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url('/approvePayment') }}" method="post" class="generalformloader">
+                            @csrf
+                            <input type="hidden" name="order_id" id="payment_order_id_for_approve">
+                            <div class="mb-3">
+                                <label class="fw-bold">Payment Status</label>
+                                <select name="payment_status" class="form-control" required>
+                                    <option value="">Select Status</option>
+                                    <option value="1">Approve</option>
+                                    <option value="0">Reject</option>
+                                </select>
+                            </div>
+
+                            <button class="btn btn-primary" type="submit">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="generateOrderModal">
             <div class="modal-dialog modal-dialog-centered">
@@ -150,7 +216,7 @@
                             <div class="card bg-white p-0 mb-3 custom-case-card">
                                 <!-- HEADER -->
                                 <div class="d-flex justify-content-between border-bottom fw-bold p-2">
-                                    <span>SKU</span>
+                                    <span>SKU</span>  
                                     <span>QTY</span>
                                 </div>
                                 @if ($fgCatData)
@@ -296,6 +362,12 @@
             year: 'numeric'
         });
     }
+
+    function updatePayment(orderID) {
+        $("#payment_order_id").val(orderID);
+    }
+
+    function 
 
 </script>
 

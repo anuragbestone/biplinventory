@@ -21,16 +21,20 @@ class OrderNDispatchController extends Controller
         $rollID = $request->session()->get("role_id");
         
         $data["orderData"] = OrderMaster::select(
-                "id",
-                "order_id",
-                "order_date",
-                "order_dispatch_date",
-                "order_dispatch_date_achieved",
-                "order_production_status",
-                "order_dispatch_status"
+                "order_master.id",
+                "order_master.order_id",
+                "order_master.order_date",
+                "order_master.order_dispatch_date",
+                "order_master.order_dispatch_date_achieved",
+                "order_master.order_production_status",
+                "order_master.order_dispatch_status",
+                "order_master.payment_status",
+                "order_master.payment_approve_status",
+                "user_master.email"
             )
-            ->where("is_active", 1)
-            ->latest("created_at")
+            ->leftjoin("user_master", "user_master.id", "=", "order_master.order_by_id")
+            ->where("order_master.is_active", 1)
+            ->latest("order_master.created_at")
             ->get()
             ->toArray();
 
@@ -57,6 +61,9 @@ class OrderNDispatchController extends Controller
             "order_by_id" => $request->session()->get('userID'),
             "dispatch_address" => $request->dispatch_address,
             "order_dispatch_date" => $request->dispatch_date,
+            "payment_status" => $request->production_status,
+            "payment_approve_status" => 0,
+            "payment_approve_by_id" => 0
         ]);
 
         if ($orderStatus) {
@@ -125,6 +132,29 @@ class OrderNDispatchController extends Controller
 
         } else {
             return back()->with("error", "Payment Status Not Updated");
+        }
+    }
+
+    public function approvePayment(Request $request) {
+        if ($request->has("payment_status") && $request->input("payment_status") == 1) {
+
+            OrderMaster::where("id", $request->input("order_id"))->update([
+                "payment_approve_status" => 1,
+                "payment_approved_by_id" => $request->session()->get("userID")
+            ]);
+
+            $order_id = OrderMaster::select("order_id")->where("id", $request->input("order_id"))->first();
+
+            NotificationMaster::create([
+                "route_address" => "notification",
+                "main_address" => "orderNDispatch",
+                "notification_title" => "Payment Approved",
+                "notification_msg" => "Order Code: ".$order_id->order_id,
+                "is_clicked" => 0
+            ]);
+
+        } else {
+            return back()->with("error", "Payment Status Noy Updated");
         }
     }
 

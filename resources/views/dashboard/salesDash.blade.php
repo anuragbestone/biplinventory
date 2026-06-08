@@ -292,6 +292,7 @@
                         id="info_dispatch_address"
                         readonly>
                     </textarea>
+
                 </div>
             </div>
         </div>
@@ -366,6 +367,14 @@
                             <!-- ADDRESS -->
                             <label>Dispatch Address</label>
                             <textarea class="form-control" name="dispatch_address" rows="3" required></textarea>
+
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Production Status</label>
+                                <select name="production_status" class="form-control" id="">
+                                    <option value="0" selected>Pending</option>
+                                    <option value="1">Completed</option>
+                                </select>
+                            </div>
 
                         </div>
                         <div class="modal-footer">
