@@ -124,14 +124,12 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- SUBMIT -->
                             <div class="text-center mt-5">
                                 <button type="submit" class="plu-submit-btn" id="submitBtn_{{ $counter }}" disabled>
                                     Submit
                                 </button>
                             </div>
-
                         </form>
 
                         <!-- ACTION BUTTONS -->
@@ -146,7 +144,6 @@
 
                     </div>
                 </div>
-
                 <!-- Production Line Card Ends -->
 
                 @php $counter++; @endphp
@@ -342,8 +339,6 @@
                     $("#stopBtn_" + counterID).prop("disabled", true);
                     $("#fg_select_" + counterID).prop("disabled", false);
                     $("#qty_input_" + counterID).prop("disabled", true);
-
-                    
                 }
             },
             error: function(error)

@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Models\RmPmStockTransactionIn;
-
 use Carbon\Carbon;
 use DB;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\RmPmStockTransactionIn;
 use App\Models\RmPmMaster;
 use App\Models\RmPmCatMaster;
 use App\Models\RmPmStockMaster;

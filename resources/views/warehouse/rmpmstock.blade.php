@@ -148,7 +148,6 @@
                                 <td>0</td>
                                 <td>0%</td>
                             </tr>
-
                             <!-- ROW 5 CAP -->
                             <tr class="rmpm-main">
                                 <td rowspan="4">5</td>

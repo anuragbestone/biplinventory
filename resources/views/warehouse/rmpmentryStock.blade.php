@@ -21,7 +21,6 @@
                                                 value="{{ $rcData['rm_pm_cat_name'] }}"
                                                 readonly
                                             >
-
                                             <input
                                                 type="number"
                                                 inputmode="decimal"
