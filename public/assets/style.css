@@ -4929,7 +4929,7 @@ nav.flex.items-center.justify-between svg{
 }
 .order-tableadmin th:nth-child(10),
 .order-tableadmin td:nth-child(10) {
-    width: 80px;
+    width: 8%;
 }
 
 .order-tableadmin th:nth-child(11),

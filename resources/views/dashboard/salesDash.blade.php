@@ -370,7 +370,7 @@
 
                             <div class="mb-3">
                                 <label for="" class="fw-bold">Production Status</label>
-                                <select name="production_status" class="form-control" id="">
+                                <select name="payment_status" class="form-control" id="">
                                     <option value="0" selected>Pending</option>
                                     <option value="1">Completed</option>
                                 </select>

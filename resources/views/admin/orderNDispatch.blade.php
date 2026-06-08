@@ -371,6 +371,10 @@
         $("#payment_order_id").val(orderID);
     }
 
+    function approvePayment(orderID) {
+        $("#payment_order_id_for_approve").val(orderID);
+    }
+
 </script>
 <script>
     $(document).ready(function () {

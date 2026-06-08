@@ -525,7 +525,7 @@ class DashboardController extends Controller {
                             leftJoin("order_master", "order_master.order_id", "=", "order_details.order_id")
                             ->where("order_details.fg_cat_id", $fgValues["id"])
                             ->where("order_master.order_by_id", $request->session()->get("userID"))
-                            ->where("order_master.order_dispatch_status", 1)
+                            ->where("order_master.payment_approve_status", 1)
                             ->whereMonth("order_master.order_date", Carbon::now()->month)
                             ->whereYear("order_master.order_date", Carbon::now()->year)
                             ->sum("order_details.fg_quantity");

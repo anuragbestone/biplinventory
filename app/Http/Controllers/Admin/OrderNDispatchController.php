@@ -62,7 +62,7 @@ class OrderNDispatchController extends Controller
             "order_by_id" => $request->session()->get('userID'),
             "dispatch_address" => $request->dispatch_address,
             "order_dispatch_date" => $request->dispatch_date,
-            "payment_status" => $request->production_status,
+            "payment_status" => $request->payment_status,
             "payment_approve_status" => 0,
             "payment_approve_by_id" => 0
         ]);
@@ -121,6 +121,33 @@ class OrderNDispatchController extends Controller
 
             $order_id = OrderMaster::select("order_id")->where("id", $request->input("order_id"))->first();
 
+            NotificationMaster::create([
+                "route_address" => "notification",
+                "main_address" => "orderNDispatch",
+                "notification_title" => "Payment Status Updated",
+                "notification_msg" => "Order Code: ".$order_id->order_id,
+                "is_clicked" => 0
+            ]);
+
+            return back()->with("success", "Payment Status Changed, Waiting For Approval");
+
+        } else {
+
+            return back()->with("error", "Payment Status Not Updated");
+
+        }
+    }
+
+    public function approvePayment(Request $request) {
+        if ($request->has("payment_status") && $request->input("payment_status") == 1) {
+
+            OrderMaster::where("id", $request->input("order_id"))->update([
+                "payment_approve_status" => 1,
+                "payment_approved_by_id" => $request->session()->get("userID")
+            ]);
+
+            $order_id = OrderMaster::select("order_id")->where("id", $request->input("order_id"))->first();
+
             // ------ Get Total Cases
             $totalCases = OrderDetails::where("order_id", $order_id->order_id)->sum("fg_quantity");
 
@@ -148,40 +175,15 @@ class OrderNDispatchController extends Controller
             NotificationMaster::create([
                 "route_address" => "notification",
                 "main_address" => "orderNDispatch",
-                "notification_title" => "Payment Status Updated",
-                "notification_msg" => "Order Code: ".$order_id->order_id,
-                "is_clicked" => 0
-            ]);
-
-            return back()->with("success", "Payment Status Changed, Waiting For Approval");
-
-        } else {
-
-            return back()->with("error", "Payment Status Not Updated");
-            
-        }
-    }
-
-    public function approvePayment(Request $request) {
-        if ($request->has("payment_status") && $request->input("payment_status") == 1) {
-
-            OrderMaster::where("id", $request->input("order_id"))->update([
-                "payment_approve_status" => 1,
-                "payment_approved_by_id" => $request->session()->get("userID")
-            ]);
-
-            $order_id = OrderMaster::select("order_id")->where("id", $request->input("order_id"))->first();
-
-            NotificationMaster::create([
-                "route_address" => "notification",
-                "main_address" => "orderNDispatch",
                 "notification_title" => "Payment Approved",
                 "notification_msg" => "Order Code: ".$order_id->order_id,
                 "is_clicked" => 0
             ]);
 
+            return back()->with("success", "Payment Approved Successfully");
+
         } else {
-            return back()->with("error", "Payment Status Noy Updated");
+            return back()->with("error", "Payment Status Not Updated");
         }
     }
 
