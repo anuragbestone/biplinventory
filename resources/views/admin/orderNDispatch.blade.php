@@ -49,7 +49,11 @@
                                 @foreach($orderData as $orderDetails)
                                 <tr>
                                     <td>{{ $counter++ }}</td>
-                                    <td>{{ $orderDetails["order_id"] }}</td>
+                                    <td title="{{ $orderDetails['order_id'] }}"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top">
+                                        {{ \Illuminate\Support\Str::limit($orderDetails['order_id'], 5, '...') }}
+                                    </td> 
                                     <td>{{ $orderDetails["email"] }}</td>
                                     <td>{{ \Carbon\Carbon::parse($orderDetails["order_date"])->format("d M Y") }}</td>
                                     <td><span class="badge {{ $orderDetails["order_production_status"] == 1 ? "bg-success" : "bg-warning" }}">
@@ -74,11 +78,11 @@
                                         <button class="btn btn-info btn-sm" onclick="getOrderDetails({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
                                             <i class="fa fa-info"></i>
                                         </button>
-                                        <button class="btn btn-danger btn-sm" {{ $orderDetails["payment_status"] == 1 ? "disabled" : "" }} onclick="updatePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentModal"> 
-                                            <i class="fa fa-info"></i>
+                                        <button class="btn btn-{{ $orderDetails["payment_status"] == 1 ? "success" : "danger" }} btn-sm" {{ $orderDetails["payment_status"] == 1 ? "disabled" : "" }} onclick="updatePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentModal"> 
+                                            <i class="fa fa-wallet"></i>
                                         </button>
-                                        <button class="btn btn-danger btn-sm" {{ (($orderDetails["payment_status"] == 0 || $orderDetails["payment_approve_status"] == 1) ? "disabled" : "") }} onclick="approvePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentApproveModal"> 
-                                            <i class="fa fa-info"></i>
+                                        <button class="btn btn-{{ (($orderDetails["payment_status"] == 0 || $orderDetails["payment_approve_status"] == 1) ? "danger" : "success") }} btn-sm" {{ (($orderDetails["payment_status"] == 0 || $orderDetails["payment_approve_status"] == 1) ? "disabled" : "") }} onclick="approvePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentApproveModal"> 
+                                            <i class="fa fa-check"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -368,5 +372,9 @@
     }
 
 </script>
-
+<script>
+    $(document).ready(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip();
+});
+</script>
 @endsection
