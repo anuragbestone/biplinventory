@@ -519,6 +519,7 @@ class DashboardController extends Controller {
 
                 if ($data["fgCatData"]) {
                     $counter = 0;
+                    
                     foreach ($data["fgCatData"] as $fgValues) {
                         $data["progressReport"][$counter]["fgData"] = $fgValues;
                         $data["progressReport"][$counter]["totalSold"] = OrderDetails::
@@ -542,6 +543,7 @@ class DashboardController extends Controller {
     }
 
     public function getProductionStatus() {
+
         $productionLine = ProductionLineMaster::select("id", "line_name")
             ->where("is_active", 1)
             ->get()->toArray();

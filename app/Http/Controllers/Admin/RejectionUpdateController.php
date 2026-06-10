@@ -59,6 +59,7 @@ class RejectionUpdateController extends Controller
             $rejectionData = [];
             $counter = 0;
             foreach ($transactionIdsArr as $trData) {
+                
                 $rejectionData[$counter] = RmPmStockTransactionOut::select(
                     "rm_pm_stock_transaction_out.rm_pm_cat_id", 
                     "rm_pm_stock_transaction_out.rejection_percentage",

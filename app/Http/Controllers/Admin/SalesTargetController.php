@@ -23,6 +23,7 @@ class SalesTargetController extends Controller
         if ($request->filter) {
 
         } else {
+
             $data["salesData"] = SalestargetMaster::select(
                 "sales_target_master.id",
                 "sales_target_master.target_date",
@@ -49,6 +50,7 @@ class SalesTargetController extends Controller
             ->exists();
 
         if ($monthStatus) {
+
             $currentQuantityData = SalesTargetMaster::select("id", "target_quantity")
                 ->where("user_id", $request->user_id)
                 ->whereMonth("target_date", date("m", strtotime($request->target_date)))
@@ -65,6 +67,7 @@ class SalesTargetController extends Controller
             return back()->with("success", "Target Updated");
 
         } else {
+            
             SalesTargetMaster::create([
                 "target_date" => $request->target_date,
                 "target_given_date" => Carbon::now(),

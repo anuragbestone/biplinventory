@@ -52,6 +52,7 @@ class StockReportController extends Controller
     }
 
     public function rmPmWarehouseStock() {
+        
         $rmPmData = RmPmMaster::select("id", "rm_pm_name", "rm_pm_image")
             ->where("is_active", 1)
             ->get()->toArray();
@@ -59,6 +60,7 @@ class StockReportController extends Controller
         if ($rmPmData) {
             $rmPmStockWiseData = [];
             $counter = 0;
+
             foreach ($rmPmData as $rData) {
                 $rmPmStockWiseData[$counter] = $rData;
                 $rmPmStockWiseData[$counter]["rcData"] = RmPmCatMaster::select(

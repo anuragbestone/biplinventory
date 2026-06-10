@@ -31,6 +31,7 @@ class EmailController extends Controller
         if ($emailData) {
             $counter = 0;
             foreach ($emailData as $emailValues) {
+
                 $data["emailTemplateData"][$counter]["template_name"] = $emailValues["template_name"];
                 $data["emailTemplateData"][$counter]["template_slug_name"] = $emailValues["template_slug_name"];
                 $data["emailTemplateData"][$counter]["email_body"] = $emailValues["email_body"];
@@ -41,6 +42,7 @@ class EmailController extends Controller
                 $data["emailTemplateData"][$counter]["email_from_address"] = UserMaster::select("email")->where("id", $emailValues["email_from_address"])->first()->email_from_address;
                 $data["emailTemplateData"][$counter]["email_cc_address_ids"] = $emailValues["email_cc_address"];
                 $data["emailTemplateData"][$counter]["email_cc_address"] = [];
+                
             }
         } else {
             $data["emailTemplateData"] = [];

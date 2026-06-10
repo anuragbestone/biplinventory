@@ -70,6 +70,7 @@ class OrderNDispatchController extends Controller
         if ($orderStatus) {
 
             $fgIds = FgCatMaster::select("id")->where("is_active", 1)->get()->toArray();
+            
             foreach ($fgIds as $fId) {
                 if (!empty($request->fgCat[$fId["id"]]) && ($request->fgCat[$fId["id"]] > 0)) {
                     OrderDetails::create([

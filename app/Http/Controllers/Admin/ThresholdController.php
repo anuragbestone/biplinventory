@@ -57,6 +57,7 @@ class ThresholdController extends Controller {
         if (!$hasValue) {
             return redirect()->back()->with("error", "Please enter at least one quantity.");
         } else {
+            
             $rData = $request->except(['_token']);
             foreach ($rData as $key => $value) {
                 $valueStatus = ThresholdRmPmMaster::select("id")
@@ -81,6 +82,7 @@ class ThresholdController extends Controller {
     }   
 
     public function updateThresholdProduction(Request $request) {
+
         $data = collect($request->except('_token'))->flatten();
         $hasValue = $data->contains(function ($value) {
             return !empty($value) && $value > 0;

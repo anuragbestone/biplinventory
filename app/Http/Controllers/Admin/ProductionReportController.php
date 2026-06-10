@@ -50,6 +50,7 @@ class ProductionReportController extends Controller
     
         $data["selectedFilter"] = $filter;
         $data["productionGraphData"] = [];
+        
         foreach ($dates as $index => $d) {
             $stockData = FgStockMaster::select(
                     "fg_cat_master.fg_cat_name",
