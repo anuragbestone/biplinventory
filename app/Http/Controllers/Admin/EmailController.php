@@ -7,5 +7,10 @@ use Illuminate\Http\Request;
 
 class EmailController extends Controller
 {
-    //
+
+    public function email() {
+
+        return view("admin.email");
+    }
+
 }

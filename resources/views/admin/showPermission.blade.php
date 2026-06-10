@@ -49,8 +49,13 @@
                                         @else
                                             <td></td>
                                         @endif
-                                        <td>{{ \Carbon\Carbon::parse($pData["rolesData"][0]["created_at"])->format("d M Y, H:i") }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($pData["rolesData"][0]["updated_at"])->format("d M Y, H:i") }}</td>
+                                        @if ($pData["rolesData"])
+                                            <td>{{ \Carbon\Carbon::parse($pData["rolesData"][0]["created_at"])->format("d M Y, H:i") }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($pData["rolesData"][0]["updated_at"])->format("d M Y, H:i") }}</td>
+                                        @else
+                                            <td>--</td>
+                                            <td>--</td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             @endif

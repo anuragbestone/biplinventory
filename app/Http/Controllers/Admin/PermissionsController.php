@@ -35,7 +35,7 @@ class PermissionsController extends Controller
             $data["permissionData"] = [];
         }
 
-        ///echo "<pre>";print_r($data);die();
+        // echo "<pre>";print_r($data);die();
 
         // return view("admin.permissions");
         return view("admin.showPermission", $data);
