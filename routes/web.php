@@ -115,7 +115,7 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::get("/modules", [ModulesController::class, "modules"]);
 
     Route::get("/permissions", [PermissionsController::class, "permissions"]);
-    Route::get("/getRelatedRoleByModuleID", [PermissionController::class, "getRelatedRoleByModuleID"]);
+    Route::get("/getRelatedRoleByModuleID", [PermissionsController::class, "getRelatedRoleByModuleID"]);
     
     Route::get("/email", [EmailController::class, "email"]);
     Route::get("/whatsAppMesaging", [WhatsAppMessagingController::class, "whatsAppMessaging"]);

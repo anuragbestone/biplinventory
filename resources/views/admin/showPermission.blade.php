@@ -121,16 +121,21 @@
             success: function(response)
             {
                 if (response.status == "success") {
-                    // console.log(response.data);
+                    
+                    // Extract role ids
+                    let roleIds = response.role_data.map(function(item) {
+                        return item.role_id.toString();
+                    });
 
-                    // ---- Disable/Enable Buttons
-                    $("#productionFgId_" + counterID).val("");
-                    $("#startBtn_" + counterID).prop("disabled", false);
-                    $("#submitBtn_" + counterID).prop("disabled", true);
-                    $("#stopBtn_" + counterID).prop("disabled", true);
-                    $("#fg_select_" + counterID).prop("disabled", false);
-                    $("#qty_input_" + counterID).prop("disabled", true);
-                }
+                    // Set selected values
+                    $("#multiSelect").val(roleIds);
+
+                    // If using Select2
+                    $("#multiSelect").trigger("change");
+                    } else {
+                        alert("No Data Found!!");
+                    }
+
             },
             error: function(error)
             {
