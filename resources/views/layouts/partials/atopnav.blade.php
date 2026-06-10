@@ -47,7 +47,7 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{{ url("userRole") }}">User Role</a></li>
                     <li><a class="dropdown-item" href="{{ url("modules") }}">Modules</a></li>
-                    {{-- <li><a class="dropdown-item" href="{{ url("permissions") }}">Permission</a></li> --}}
+                    <li><a class="dropdown-item" href="{{ url("permissions") }}">Permission</a></li>
                 </ul>
             </div>
 

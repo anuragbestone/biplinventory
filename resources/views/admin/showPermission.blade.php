@@ -6,7 +6,7 @@
         <div class="card bg-white">
             <div class="card-header">
                 <div class="d-flex align-items-center justify-content-between flex-wrap">
-                    <h4 class="text-left m-0 flex-grow-1">Users Modules</h4>
+                    <h4 class="text-left m-0 flex-grow-1">Permissions</h4>
 
                     <!-- Right Button -->
                     <div>
@@ -19,25 +19,35 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="modalTable">
+                    <table class="table table-bordered" id="permissionTable">
                         <thead>
                             <tr>
                                 <th>S.No</th>
-                                <th>Module Name</th>
                                 <th>Route Name</th>
-                                <th>Status</th>
+                                <th>Route</th>
+                                <th>Role</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($moduleData)
+                            @if ($permissionData)
                                 @php $counter = 1 @endphp
-                                @foreach ($moduleData as $mData)
+                                @foreach ($permissionData as $pData)
                                     <tr>
                                         <td>{{ $counter++ }}</td>
-                                        <td>{{ $mData["module_name"] }}</td>
-                                        <td>{{ $mData["module_route"] }}</td>
-                                        <td>{{ $mData["is_active"] == 1 ? "Active" : "Inactive" }}</td>
+                                        <td>{{ $pData["moduleData"]["module_name"] }}</td>
+                                        <td>{{ $pData["moduleData"]["module_route"] }}</td>
+                                        @if ($pData["rolesData"])
+                                            <td>
+                                                <ul>
+                                                    @foreach ($pData["rolesData"] as $rData)
+                                                        <li>{{ $rData["role_name"] }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+                                        @else
+                                            <td></td>
+                                        @endif
                                         <td>
                                             <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#assignModal">
                                                 <i class="bi bi-gear"></i>
@@ -53,12 +63,14 @@
         </div>
     </div>
 
+
+
     <!-- Modal -->
     <div class="modal fade" id="createmodule">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5>Create Module</h5>
+                    <h5>Add Permission</h5>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -86,7 +98,7 @@
 <script>
 
     $(document).ready(function () {
-        $('#modalTable').DataTable({
+        $('#permissionTable').DataTable({
             responsive: true,
             autoWidth: false,
             pageLength: 10,
