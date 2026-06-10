@@ -40,7 +40,7 @@ class EmailController extends Controller
                 $data["emailTemplateData"][$counter]["email_from_address_id"] = $emailValues["email_from_address"];
                 $data["emailTemplateData"][$counter]["email_from_address"] = UserMaster::select("email")->where("id", $emailValues["email_from_address"])->first()->email_from_address;
                 $data["emailTemplateData"][$counter]["email_cc_address_ids"] = $emailValues["email_cc_address"];
-                $data["emailTemplateData"][$counter]["email_cc_address"]
+                $data["emailTemplateData"][$counter]["email_cc_address"] = [];
             }
         } else {
             $data["emailTemplateData"] = [];
