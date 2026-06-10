@@ -15,6 +15,7 @@ class EmailMaster extends Model
         "template_name",
         "template_slug_name",
         "email_body",
+        "subject",
         "email_to_address",
         "email_from_address",
         "email_cc_address"
