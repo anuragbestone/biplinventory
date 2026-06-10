@@ -26,7 +26,8 @@
                                 <th>Route Name</th>
                                 <th>Route</th>
                                 <th>Role</th>
-                                <th>Action</th>
+                                <th>Created On</th>
+                                <th>Updated On</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,11 +49,8 @@
                                         @else
                                             <td></td>
                                         @endif
-                                        <td>
-                                            <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#assignModal">
-                                                <i class="bi bi-gear"></i>
-                                            </button>
-                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($pData["rolesData"][0]["created_at"])->format("d M Y, H:i") }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($pData["rolesData"][0]["updated_at"])->format("d M Y, H:i") }}</td>
                                     </tr>
                                 @endforeach
                             @endif

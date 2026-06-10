@@ -19,7 +19,7 @@ class PermissionsController extends Controller
             $counter = 0;
             foreach ($data["moduleData"] as $mData) {
                 $data["permissionData"][$counter]["moduleData"] = $mData;
-                $data["permissionData"][$counter]["rolesData"] = PermissionMaster::select("role_master.role_name")
+                $data["permissionData"][$counter]["rolesData"] = PermissionMaster::select("role_master.role_name", "permission_master.created_at", "permission_master.updated_at")
                     ->leftjoin("role_master", "role_master.id", "=", "permission_master.role_id")
                     ->where("permission_master.module_id", $mData["id"])
                     ->get()->toArray();
@@ -35,7 +35,7 @@ class PermissionsController extends Controller
             $data["permissionData"] = [];
         }
 
-        // echo "<pre>";print_r($data);die();
+        ///echo "<pre>";print_r($data);die();
 
         // return view("admin.permissions");
         return view("admin.showPermission", $data);
@@ -65,12 +65,21 @@ class PermissionsController extends Controller
     public function updateModulePermission(Request $request) {
         if ($request->has("role_id")) {
 
+            PermissionMaster::where("module_id", $request->input("module_id"))
+                ->delete();
+
             foreach ($request->input("role_id") as $role_values) {
-                
+                PermissionMaster::create([
+                    "role_id" => $role_values,
+                    "module_id" => $request->input("module_id"),
+                    "is_active" => 1
+                ]);
             }
 
+            return back()->with("success", "New Permissions Added To Roles");
+
         } else {
-            return back()->with("error", "No Route Given");
+            return back()->with("error", "No Role ID Found!!");
         }
     }
 
