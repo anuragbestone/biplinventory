@@ -113,7 +113,9 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::get("/userRole", [UserRolesController::class, "userRole"]);
     Route::get("/getUserDetailsOfRoleId", [UserRolesController::class, "getUserDetailsOfRoleId"]);
     Route::get("/modules", [ModulesController::class, "modules"]);
+
     Route::get("/permissions", [PermissionsController::class, "permissions"]);
+    
     Route::get("/email", [EmailController::class, "email"]);
     Route::get("/whatsAppMesaging", [WhatsAppMessagingController::class, "whatsAppMessaging"]);
     Route::get("/productionIssue", [ProductionIssuesController::class, "productionIssue"]);
@@ -122,6 +124,7 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     Route::get("/fgPmFormula", [FgPgFormulaController::class, "showfgPmFormula"]);
     Route::post("/fgPmFormulaUpload", [FgPgFormulaController::class, "fgPmFormulaUpload"]);
     Route::get("/getRmPmCatDataByID", [FgPgFormulaController::class, "getRmPmCatDataByID"]);
+
     Route::get("/sales/profile", [SalesController::class, "showProfile"]);
 
     // -- Remaining Routes Ends

@@ -10,7 +10,9 @@ class PermissionsController extends Controller
     
     public function permissions() {
 
-        return view("admin.permissions");
+        $data = [];
+        // return view("admin.permissions");
+        return view("admin.showPermission", $data);
     }
 
 }
