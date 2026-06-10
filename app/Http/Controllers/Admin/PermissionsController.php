@@ -7,16 +7,17 @@ use Illuminate\Http\Request;
 
 use App\Models\ModuleMaster;
 use App\Models\PermissionMaster;
+use App\Models\RoleMaster;
 
 class PermissionsController extends Controller
 {
     
     public function permissions() {
 
-        $moduleData = ModuleMaster::select("id", "module_name", "module_route")->where("is_active", 1)->get()->toArray();
-        if ($moduleData) {
+        $data["moduleData"] = ModuleMaster::select("id", "module_name", "module_route")->where("is_active", 1)->get()->toArray();
+        if ($data["moduleData"]) {
             $counter = 0;
-            foreach ($moduleData as $mData) {
+            foreach ($data["moduleData"] as $mData) {
                 $data["permissionData"][$counter]["moduleData"] = $mData;
                 $data["permissionData"][$counter]["rolesData"] = PermissionMaster::select("role_master.role_name")
                     ->leftjoin("role_master", "role_master.id", "=", "permission_master.role_id")
@@ -25,6 +26,11 @@ class PermissionsController extends Controller
 
                 $counter++;
             }
+
+            $data["roleData"] = RoleMaster::select("id", "role_name")
+                ->where("is_active", 1)
+                ->get()->toArray();
+
         } else {
             $data["permissionData"] = [];
         }

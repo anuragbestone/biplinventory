@@ -5411,3 +5411,9 @@ nav.flex.items-center.justify-between svg{
 .dataTables_scrollBody{
    position: relative; overflow: hidden !important; width: 100%;
 }
+
+.choices__list--multiple .choices__item{
+    background-color: #0d6efd !important;
+    color:#fff !important;
+    border:none !important;
+}

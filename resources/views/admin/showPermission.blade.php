@@ -77,12 +77,26 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <label class="form-label">Module Name</label>
-                            <input type="text" class="form-control custom-field" />
+                            <label class="form-label">Route</label>
+                            <select name="module_id" class="form-control" id="" required>
+                                <option value="">Select Route</option>
+                                @if ($moduleData)
+                                    @foreach ($moduleData as $routeValues)
+                                        <option value="{{ $routeValues['id'] }}">{{ $routeValues['module_name'].' '.$routeValues['module_route'] }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label">Route</label>
-                            <input type="text" class="form-control custom-field" />
+                            <label class="form-label">Role</label>
+                            <select name="role_id[]" class="form-control" id="multiSelect" multiple required>
+                                <option value="">Select Role</option>
+                                @if ($roleData)
+                                    @foreach ($roleData as $roleValues)
+                                        <option value="{{ $roleValues['id'] }}">{{ $roleValues['role_name'] }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -94,6 +108,22 @@
         </div>
     </div>
 </div>
+
+
+<script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const element = document.getElementById("multiSelect");
+ 
+                    new Choices(element, {
+                        removeItemButton: true,
+                        searchEnabled: true,
+                        placeholder: true,
+                        placeholderValue: "Select User",
+                        itemSelectText: "",
+                        shouldSort: false,
+                    });
+                });
+</script>
 
 <script>
 
