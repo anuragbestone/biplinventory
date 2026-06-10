@@ -16,7 +16,9 @@ class AuthOutCheck
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->session()->has("userID")) {
+
             return redirect()->route("dashboard");
+            
         } else {
             return $next($request);
         }

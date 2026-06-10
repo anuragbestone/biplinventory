@@ -16,7 +16,9 @@ class AuthInCheck
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->session()->has("userID")) {
+
             return $next($request);
+            
         } else {
             return redirect()->route("/")->with("user session not found!!!");
         }

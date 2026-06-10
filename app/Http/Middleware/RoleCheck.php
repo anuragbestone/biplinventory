@@ -41,7 +41,6 @@ class RoleCheck
                         ->first();
 
                     if ($moduleRoute) {
-
                         $permissionStatus = PermissionMaster::where("module_id", $moduleRoute->id)
                             ->where("role_id", $rollID)
                             ->exists();
