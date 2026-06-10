@@ -73,37 +73,39 @@
                     <h5>Add Permission</h5>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="form-label">Route</label>
-                            <select name="module_id" class="form-control" id="moduleSelect" required>
-                                <option value="">Select Route</option>
-                                @if ($moduleData)
-                                    @foreach ($moduleData as $routeValues)
-                                        <option value="{{ $routeValues['id'] }}">{{ $routeValues['module_name'].' '.$routeValues['module_route'] }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Role</label>
-                            <select name="role_id[]" class="form-control" id="multiSelect" multiple required>
-                                <option value="">Select Role</option>
-                                @if ($roleData)
-                                    @foreach ($roleData as $roleValues)
-                                        <option value="{{ $roleValues['id'] }}">{{ $roleValues['role_name'] }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
+                <form action="{{ url('updateModulePermission') }}" method="post" class="generalformloader">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="form-label">Route</label>
+                                <select name="module_id" class="form-control" id="moduleSelect" required>
+                                    <option value="">Select Route</option>
+                                    @if ($moduleData)
+                                        @foreach ($moduleData as $routeValues)
+                                            <option value="{{ $routeValues['id'] }}">{{ $routeValues['module_name'].' '.$routeValues['module_route'] }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Role</label>
+                                <select name="role_id[]" class="form-control" id="multiSelect" multiple required>
+                                    <option value="">Select Role</option>
+                                    @if ($roleData)
+                                        @foreach ($roleData as $roleValues)
+                                            <option value="{{ $roleValues['id'] }}">{{ $roleValues['role_name'] }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Request Send</button>
-                </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit">Update Permission</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -127,14 +129,12 @@
                         return item.role_id.toString();
                     });
 
-                    // Set selected values
-                    $("#multiSelect").val(roleIds);
+                    roleChoices.removeActiveItems();
+                    roleChoices.setChoiceByValue(roleIds);
 
-                    // If using Select2
-                    $("#multiSelect").trigger("change");
-                    } else {
-                        alert("No Data Found!!");
-                    }
+                } else {
+                    alert("No Data Found!!");
+                }
 
             },
             error: function(error)
@@ -147,10 +147,12 @@
 </script>
 
 <script>
+    let roleChoices;
+
     document.addEventListener("DOMContentLoaded", function () {
         const element = document.getElementById("multiSelect");
- 
-        new Choices(element, {
+
+        roleChoices = new Choices(element, {
             removeItemButton: true,
             searchEnabled: true,
             placeholder: true,

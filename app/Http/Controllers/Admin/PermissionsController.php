@@ -62,4 +62,16 @@ class PermissionsController extends Controller
         return response()->json($data);
     }
 
+    public function updateModulePermission(Request $request) {
+        if ($request->has("role_id")) {
+
+            foreach ($request->input("role_id") as $role_values) {
+                
+            }
+
+        } else {
+            return back()->with("error", "No Route Given");
+        }
+    }
+
 }
