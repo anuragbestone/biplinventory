@@ -487,9 +487,7 @@ class DashboardController extends Controller {
                 }
 
                 return view("dashboard.warehouseDash", $data);
-
             } else {
-
                 $data["orderData"] = OrderMaster::select(
                         "id",
                         "order_id",
@@ -519,7 +517,7 @@ class DashboardController extends Controller {
 
                 if ($data["fgCatData"]) {
                     $counter = 0;
-                    
+
                     foreach ($data["fgCatData"] as $fgValues) {
                         $data["progressReport"][$counter]["fgData"] = $fgValues;
                         $data["progressReport"][$counter]["totalSold"] = OrderDetails::
@@ -543,7 +541,6 @@ class DashboardController extends Controller {
     }
 
     public function getProductionStatus() {
-
         $productionLine = ProductionLineMaster::select("id", "line_name")
             ->where("is_active", 1)
             ->get()->toArray();
@@ -552,7 +549,6 @@ class DashboardController extends Controller {
         if ($productionLine) {
             $pCounter = 0;
             foreach ($productionLine as $pLine) {
-
                 $productionLineStatus[$pCounter]["counter"] = $pLine;
                 $productionLineStatus[$pCounter]["productionData"] = ProductionTimerMaster::
                     select(
@@ -588,7 +584,6 @@ class DashboardController extends Controller {
                         ->sum("fg_stock_transaction.stock_quantity");
                     $counter++;
                 } 
-
             }
         }
 
