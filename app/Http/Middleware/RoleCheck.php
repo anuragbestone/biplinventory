@@ -33,7 +33,7 @@ class RoleCheck
                 }
             } else {
                 if ($request->is("warehouse/*")) {
-                    return redirect()->route("dashboard");
+                    return redirect()->route("dashboard")->with("error", "You don't have permission to access the route!!");
                 } else {
 
                     $moduleRoute = ModuleMaster::select("id", "module_route")
