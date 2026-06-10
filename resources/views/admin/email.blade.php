@@ -180,53 +180,73 @@
         </div>
     </div>
 
+
     <div class="modal fade" id="createModal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <!-- HEADER -->
                 <div class="modal-header">
-                    <h5 class="w-100 text-center">Template Create</h5>
+                    <h5 class="w-100 text-center">Create Template</h5>
                     <button class="btn-close position-absolute end-0 me-2" data-bs-dismiss="modal"></button>
                 </div>
+                <form action="{{ url('generateEmailTemplate') }}" method="post" class="generalformloader">
+                    <!-- BODY -->
+                    <div class="modal-body">
+                        <!-- TEMPLATE NAME -->
+                        <div class="mb-2">
+                            <label>Template Name</label>
+                            <input type="text" name="template_name" class="form-control" placeholder="Enter template name" required />
+                        </div>
 
-                <!-- BODY -->
-                <div class="modal-body">
-                    <!-- TEMPLATE NAME -->
-                    <div class="mb-2">
-                        <label>Template Name</label>
-                        <input type="text" class="form-control" placeholder="Enter template name" />
+                        <div class="mb-2">
+                            <label>Subject</label>
+                            <input type="text" name="subject" class="form-control" placeholder="Enter template Subject" required />
+                        </div>
+                        <div class="mb-2">
+                            <label for="">Email To</label>
+                            <select name="email_to_address" class="form-control" id="" required>
+                                @if ($userData)
+                                    <option value="">Select User</option>
+                                    @foreach ($userData as $uData)
+                                        <option value="{{ $uData['id'] }}">{{ $uData['full_name'].' - '.$uData['email'] }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="">Email From</label>
+                            <select name="email_from_address" class="form-control" id="" required>
+                                @if ($userData)
+                                    <option value="">Select User</option>
+                                    @foreach ($userData as $uData)
+                                        <option value="{{ $uData['id'] }}">{{ $uData['full_name'].' - '.$uData['email'] }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label>Email CC</label>
+                            <select id="multiSelect" name="email_cc_address[]" multiple required>
+                                @if ($userData)
+                                    <option value="">Select User</option>
+                                    @foreach ($userData as $uData)
+                                        <option value="{{ $uData['id'] }}">{{ $uData['full_name'].' - '.$uData['email'] }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <!-- BODY TEXTAREA -->
+                        <div>
+                            <label>Message</label>
+                            <textarea class="form-control" rows="4" placeholder="Enter email content..."></textarea>
+                        </div>
                     </div>
 
-                    <!-- USER SELECT -->
-                    <div class="mb-2">
-                        <label>User</label>
-                        <select id="multiSelect" multiple>
-                            <option value="1">Books</option>
-                            <option value="2">Movies</option>
-                            <option value="3">Electronics</option>
-                            <option value="4">Home</option>
-                            <option value="5">Beauty</option>
-                        </select>
+                    <!-- FOOTER -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
                     </div>
-                    <div class="mb-2">
-                        <label>Subject</label>
-                        <input type="text" class="form-control" placeholder="Enter template Subject" />
-                    </div>
-                    <div class="mb-2">
-                        <label>CC</label>
-                        <input type="text" class="form-control" placeholder="Enter template CC" />
-                    </div>
-                    <!-- BODY TEXTAREA -->
-                    <div>
-                        <label>Message</label>
-                        <textarea class="form-control" rows="4" placeholder="Enter email content..."></textarea>
-                    </div>
-                </div>
-
-                <!-- FOOTER -->
-                <div class="modal-footer">
-                    <button class="btn btn-primary">Create</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
