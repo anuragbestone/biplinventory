@@ -58,7 +58,7 @@
                 <ul class="dropdown-menu">
                     {{-- <li><a class="dropdown-item" href="{{ url("threshold") }}">Threshold</a></li> --}}
                     <li><a class="dropdown-item" href="{{ url("productionIssue") }}">Production Issues</a></li>
-                    {{-- <li><a class="dropdown-item" href="{{ url("email") }}">Email</a></li> --}}
+                    <li><a class="dropdown-item" href="{{ url("email") }}">Email</a></li>
                     {{-- <li><a class="dropdown-item" href="{{ url("whatsAppMessaging") }}">Whatsapp Message</a></li>
                     <li><a class="dropdown-item" href="warning.html">Warnings</a></li>
                     <li><a class="dropdown-item" href="#">Threshold</a></li>

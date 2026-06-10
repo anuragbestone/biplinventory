@@ -78,7 +78,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label class="form-label">Route</label>
-                            <select name="module_id" class="form-control" id="" required>
+                            <select name="module_id" class="form-control" id="moduleSelect" required>
                                 <option value="">Select Route</option>
                                 @if ($moduleData)
                                     @foreach ($moduleData as $routeValues)
@@ -109,20 +109,51 @@
     </div>
 </div>
 
+<script>
+
+    $("#moduleSelect").change(function(){
+        $.ajax({
+            url: "{{ url('getRelatedRoleByModuleID') }}",
+            type: "GET",
+            data: {
+                module_id: $(this).val(),
+            },
+            success: function(response)
+            {
+                if (response.status == "success") {
+                    // console.log(response.data);
+
+                    // ---- Disable/Enable Buttons
+                    $("#productionFgId_" + counterID).val("");
+                    $("#startBtn_" + counterID).prop("disabled", false);
+                    $("#submitBtn_" + counterID).prop("disabled", true);
+                    $("#stopBtn_" + counterID).prop("disabled", true);
+                    $("#fg_select_" + counterID).prop("disabled", false);
+                    $("#qty_input_" + counterID).prop("disabled", true);
+                }
+            },
+            error: function(error)
+            {
+                console.log(error);
+            }
+        });
+    });
+
+</script>
 
 <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const element = document.getElementById("multiSelect");
+    document.addEventListener("DOMContentLoaded", function () {
+        const element = document.getElementById("multiSelect");
  
-                    new Choices(element, {
-                        removeItemButton: true,
-                        searchEnabled: true,
-                        placeholder: true,
-                        placeholderValue: "Select User",
-                        itemSelectText: "",
-                        shouldSort: false,
-                    });
-                });
+        new Choices(element, {
+            removeItemButton: true,
+            searchEnabled: true,
+            placeholder: true,
+            placeholderValue: "Select User",
+            itemSelectText: "",
+            shouldSort: false,
+        });
+    });
 </script>
 
 <script>

@@ -41,4 +41,25 @@ class PermissionsController extends Controller
         return view("admin.showPermission", $data);
     }
 
+    public function getRelatedRoleByModuleID(Request $request) {
+        $roleData = PermissionMaster::select("role_id")
+            ->where("module_id", $request->input("module_id"))
+            ->get()->toArray();
+
+        if ($roleData) {
+            $data = [
+                "status" => "success",
+                "role_data" => $roleData,
+                "message" => "Role Data Found"
+            ];
+        } else {    
+            $data = [
+                "status" => "error",
+                "message" => "Role ID Not Found"
+            ];
+        }
+
+        return response->json($data);
+    }
+
 }
