@@ -169,8 +169,7 @@
             },
             success: function(response) {
                 if (response.status == "success") {
-
-                    // setStartTimer(counterID);
+                    setStartTimer(counterID);
                 } else {
                     Swal.fire({
                         text: response.message,

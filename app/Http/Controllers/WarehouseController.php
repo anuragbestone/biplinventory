@@ -546,32 +546,41 @@ class WarehouseController extends Controller {
 
         if ($formulaData) {
             $totalQuantity = !($request->has("fg_quantity")) ? 1 : $request->input("fg_quantity");
-            $checkFlagForRmPm = [];
+            $rmPmQuantityArr = [];
             $finalCheckStatus = 1;
+            $message = "";
             foreach ($formulaData as $fData) {
                 $totalStock = RmPmStockMaster::select("stock_quantity")
                     ->where("rm_pm_cat_id", $fData["rm_pm_cat_id"])
                     ->first();
 
-                if ($totalStock->stock_quantity) {
-                    if ($totalStock->stock_quantity >= ($fData["rm_pm_cat_quantity"] * $totalQuantity * $totalUnitInCase->cases_quantity)) {
-                        $data = [
-                            "status" => "success",
-                            "message" => "Rm Pm Stock OK"
-                        ];
-                    } else {
-                        $data = [
-                            "status" => "error",
-                            "message" => "Rm Pm Stock Is Low For This SKU!!"
-                        ];
+                if ($totalStock) {
+                    if ($totalStock->stock_quantity < ($fData["rm_pm_cat_quantity"] * $totalQuantity * $totalUnitInCase->cases_quantity)) {
+                        $finalCheckStatus = 0;
+                        $rmPmName = RmPmCatMaster::select("rm_pm_cat_name")
+                            ->where("id", $fData["rm_pm_cat_id"])
+                            ->first();
+                        $message = $message.$rmPmName->rm_pm_cat_name." quantity is low";
                     }
                 } else {
-                    $data = [
-                        "status" => "error",
-                        "message" => "Rm Pm Stock Not Available For This SKU!!"
-                    ];
+                    $finalCheckStatus = 0;
+                    $message = "Rm Pm Stock Is Not Available For This SKU!!";
+                    break;
                 }
             }
+
+            if ($finalCheckStatus == 1) {
+                $data = [
+                    "status" => "success",
+                    "message" => "OK"
+                ];
+            } else {
+                $data = [
+                    "status" => "error",
+                    "message" => $message
+                ];
+            }
+
         } else {
             $data = [
                 "status" => "error",
@@ -623,56 +632,129 @@ class WarehouseController extends Controller {
     public function uploadProduction(Request $request, WhatsAppService $whatsapp) {
         if (!empty($request->production_quantity)) {
 
-            // ----- Update FG Stock
-            $currentFgStatus = FgStockMaster::select("stock_quantity")
-                ->where("fg_cat_id", $request->fgID)
+            // --------- Check If Rm Pm Stock Available Or Not -----------------------------
+
+            $formulaData = FgPmFormulaMaster::select("rm_pm_cat_id", "rm_pm_cat_quantity")
+                ->where("fg_cat_id", $request->input("fgID"))
+                ->get()->toArray();
+
+            $totalUnitInCase = FgCatMaster::select("cases_quantity")
+                ->where("id", $request->input("fgID"))
                 ->first();
 
-            if ($currentFgStatus) {
+            if ($formulaData) {
+                $totalQuantity = $request->production_quantity;
+                $rmPmQuantityArr = [];
+                $finalCheckStatus = 1;
+                $message = "";
+                $rmPmCounter = 0;
+                foreach ($formulaData as $fData) {
+                    $totalStock = RmPmStockMaster::select("stock_quantity")
+                        ->where("rm_pm_cat_id", $fData["rm_pm_cat_id"])
+                        ->first();
 
-                FgStockMaster::where("fg_cat_id", $request->fgID)
-                    ->update([
-                        "stock_quantity" => $currentFgStatus->stock_quantity + $request->production_quantity 
+                    if ($totalStock) {
+                        if ($totalStock->stock_quantity < ($fData["rm_pm_cat_quantity"] * $totalQuantity * $totalUnitInCase->cases_quantity)) {
+                            $finalCheckStatus = 0;
+                            $rmPmName = RmPmCatMaster::select("rm_pm_cat_name")
+                                ->where("id", $fData["rm_pm_cat_id"])
+                                ->first();
+                            $message = $message.$rmPmName->rm_pm_cat_name." quantity is low";
+                        } else {
+                            $rmPmQuantityArr[$rmPmCounter]["rm_pm_cat_id"] = $fData["rm_pm_cat_id"];
+                            $rmPmQuantityArr[$rmPmCounter++]["rm_pm_quantity"] = $fData["rm_pm_cat_quantity"] * $totalQuantity * $totalUnitInCase->cases_quantity;
+                        }
+                    } else {
+                        $finalCheckStatus = 0;
+                        $message = "Rm Pm Stock Is Not Available For This SKU!!";
+                        break;
+                    }
+                }
+
+                if ($finalCheckStatus == 1) {
+
+                    $currentFgStatus = FgStockMaster::select("stock_quantity")
+                        ->where("fg_cat_id", $request->fgID)
+                        ->first();
+
+                    if ($currentFgStatus) {
+                        FgStockMaster::where("fg_cat_id", $request->fgID)
+                            ->update([
+                                "stock_quantity" => $currentFgStatus->stock_quantity + $request->production_quantity 
+                            ]);
+                    } else {
+                        FgStockMaster::create([
+                            "fg_cat_id" => $request->fgID,
+                            "stock_quantity" => $request->production_quantity,
+                        ]);
+                    }
+
+                    // ----- Update Rm Pm Data
+
+                    foreach ($rmPmQuantityArr as $rmPmQ) {
+                        $rmPmCurrentValue = RmPMStockMaster::select("stock_quantity")
+                            ->where("rm_pm_cat_id", $rmPmQ["rm_pm_cat_id"])
+                            ->first();
+
+                        RmPmStockMaster::where("rm_pm_cat_id", $rmPmQ["rm_pm_cat_id"])
+                            ->update([
+                                "stock_quantity" => $rmPmCurrentValue->stock_quantity - $rmPmQ["rm_pm_quantity"]
+                            ]);
+
+                        RmPmStockTransactionOut::create([
+                            "rm_pm_cat_id" => $rmPmQ["rm_pm_cat_id"],
+                            "stock_quantity" => $rmPmQ["rm_pm_quantity"],
+                            "rejection_quantity" => 0,
+                            "rejection_percentage" => 0,
+                            "shift_from" => $request->session()->get("shift_from"),
+                            "shift_to" => $request->session()->get("shift_to"),
+                            "uploaded_by_user_id" => $request->session()->get("userID")
+                        ]);
+                    }
+
+                    // ----- Update FG Transaction
+
+                    FgStockTransaction::create([
+                        "fg_cat_id" => $request->fgID,
+                        "stock_quantity" => $request->production_quantity,
+                        "shift_from" => $request->session()->get("shift_from"),
+                        "shift_to" => $request->session()->get("shift_to"),
+                        "production_line_id" => $request->productionLineId,
+                        "uploaded_by_id" => $request->session()->get("userID"),
                     ]);
 
+                    // ------ Update Production Timer Master
+
+                    ProductionTimerMaster::where("production_line_id", $request->productionLineId)
+                        ->where("production_status", 1)
+                        ->update([
+                            "production_stop_time" => Carbon::now(),
+                            "production_status" => 0
+                        ]);
+
+                    // ------- Create New Production Timer Master
+
+                    ProductionTimerMaster::create([
+                        "shift_from" => $request->session()->get("shift_from"),
+                        "shift_to" => $request->session()->get("shift_to"),
+                        "counter_id" => $request->productionLineId,
+                        "fgId" => $request->fgID,
+                        "production_start_time" => Carbon::now(),
+                        "production_line_id" => $request->productionLineId,
+                        "production_timer_seconds" => 300,
+                        "production_status" => 1
+                    ]);
+
+                    return back()->with("success", "New Production Uploaded");
+
+                } else {
+                    return back()->with("error", $message);
+                }
+
             } else {
-                return back()->with("error", "Fg Stock Not Found!!");
+                $message = "Rm Pm Stock Not Available For This SKU!!";
+                return back()->with("error", $message);
             }
-
-            // ----- Update FG Transaction
-
-            FgStockTransaction::create([
-                "fg_cat_id" => $request->fgID,
-                "stock_quantity" => $request->production_quantity,
-                "shift_from" => $request->session()->get("shift_from"),
-                "shift_to" => $request->session()->get("shift_to"),
-                "production_line_id" => $request->productionLineId,
-                "uploaded_by_id" => $request->session()->get("userID"),
-            ]);
-
-            // ------ Update Production Timer Master
-
-            ProductionTimerMaster::where("production_line_id", $request->productionLineId)
-                ->where("production_status", 1)
-                ->update([
-                    "production_stop_time" => Carbon::now(),
-                    "production_status" => 0
-                ]);
-
-            // ------- Create New Production Timer Master
-
-            ProductionTimerMaster::create([
-                "shift_from" => $request->session()->get("shift_from"),
-                "shift_to" => $request->session()->get("shift_to"),
-                "counter_id" => $request->productionLineId,
-                "fgId" => $request->fgID,
-                "production_start_time" => Carbon::now(),
-                "production_line_id" => $request->productionLineId,
-                "production_timer_seconds" => 300,
-                "production_status" => 1
-            ]);
-
-            return back()->with("success", "New Production Uploaded");
 
         } else {
             return back()->with("error", "0 Quantity was found!!");
@@ -923,8 +1005,8 @@ class WarehouseController extends Controller {
                             "stock_quantity" => $values,
                             "rejection_quantity" => !empty($request->input("rejectionCat")[$cValues]) ? $request->input("rejectionCat")[$cValues] : 0,
                             "rejection_percentage" => $request->input("rejection_percentage")[$cValues],
-                            "shift_from" => $shiftFrom,
-                            "shift_to" => $shiftTo,
+                            "shift_from" => $request->session()->get("shift_from"),
+                            "shift_to" => $request->session()->get("shift_to"),
                             "uploaded_by_user_id" => $request->session()->get("userID")
                         ]);
 
