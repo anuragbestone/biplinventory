@@ -158,6 +158,33 @@
 
 <script>
 
+
+    // --------------------- Handle Rm Pm Stock Availability ----
+    function checkRmPmStockAvailable(fgID, counterID) {
+        $.ajax({
+            url: "{{ url('warehouse/getRmPmStockAvailableDataByFgID') }}",
+            type: "GET",
+            data: {
+                fgID: fgID
+            },
+            success: function(response) {
+                if (response.status == "success") {
+
+                    // setStartTimer(counterID);
+                } else {
+                    Swal.fire({
+                        text: response.message,
+                        icon: "error"
+                    }); 
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        })
+    }
+    // ----------------------------------------------------------
+
     let timerIntervals = {};
 
     // ----- Handle Timer and Other things on reload
@@ -313,7 +340,9 @@
         if (!fgSelected) {
             alert("Kindly select fg type first!!");
         } else {
-            setStartTimer(counterID);
+            // ----- Check For Rm Pm Availability Start ---------
+            checkRmPmStockAvailable($("#fg_select_" + counterID).val(), counterID);
+            // ----- Check For Rm Pm Availability Ends ----------
         }
     }
 

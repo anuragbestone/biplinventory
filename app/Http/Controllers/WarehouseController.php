@@ -535,8 +535,48 @@ class WarehouseController extends Controller {
         // WhatsApp Service -- Ends
     }
 
-    public function calculateRMPMForProduction($fg_id) {
+    public function getRmPmStockAvailableDataByFgID(Request $request) {
+        $formulaData = FgPmFormulaMaster::select("rm_pm_cat_id", "rm_pm_cat_quantity")
+            ->where("fg_cat_id", $request->input("fgID"))
+            ->get()->toArray();
 
+        if ($formulaData) {
+            $totalQuantity = !($request->has("fg_quantity")) ? 1 : $request->input("fg_quantity");
+            $checkFlagForRmPm = [];
+            $finalCheckStatus = 1;
+            foreach ($formulaData as $fData) {
+                $totalStock = RmPmStockMaster::select("stock_quantity")
+                    ->where("rm_pm_cat_id", $fData["rm_pm_cat_id"])
+                    ->first();
+
+                if ($totalStock->stock_quantity) {
+                    if ($totalStock->stock_quantity >= ($fData["rm_pm_cat_quantity"]*$totalQuantity)) {
+                        $data = [
+                            "status" => "success",
+                            "message" => "Rm Pm Stock OK"
+                        ];
+                    } else {
+                        $data = [
+                            "status" => "error",
+                            "message" => "Rm Pm Stock Is Low For This SKU!!"
+                        ];
+                    }
+                } else {
+                    $data = [
+                        "status" => "error",
+                        "message" => "Rm Pm Stock Not Available For This SKU!!"
+                    ];
+                }
+            }
+        } else {
+            $data = [
+                "status" => "error",
+                "message" => "Rm Pm Stock Not Available For This SKU!!"
+            ];
+        }
+
+        return response()->json($data);
+        
     }
 
     public function production() {
@@ -572,7 +612,7 @@ class WarehouseController extends Controller {
             return redirect()->route("dashboard")->with("error", "production line not found");
         }
 
-        echo "<pre>";print_r($data);die();
+        //echo "<pre>";print_r($data);die();
         return view("warehouse.production", $data);
     }
 
