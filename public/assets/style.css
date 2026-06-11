@@ -3864,7 +3864,7 @@ textarea.custom-field.form-control {
     background: #0d6efd;
     color: #fff;
     border: none;
-    padding: 8px 20px;
+    padding: 8px 200px;
     border-radius: 6px;
 }
 
@@ -3896,7 +3896,7 @@ textarea.custom-field.form-control {
 /* INPUT (agar already hai toh skip kar sakta hai) */
 .pm-input {
     width: 100%;
-    padding: 8px 40px 8px 10px; /* right space for eye */
+    padding: 8px 400px 8px 10px; /* right space for eye */
     border: 1px solid #d1d5db;
     border-radius: 6px;
 }
@@ -3980,7 +3980,7 @@ textarea.custom-field.form-control {
     backdrop-filter: blur(12px);
     border-radius: 16px;
     padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 100px 30px rgba(0,0,0,0.08);
     border: 1px solid rgba(255,255,255,0.4);
 }
 
@@ -4821,7 +4821,7 @@ nav.flex.items-center.justify-between svg{
 
 .adminrmpmtable th:nth-child(1),
 .adminrmpmtable td:nth-child(1) {
-    width: 50px;
+    width: 500px;
 }
 
 .adminrmpmtable th:nth-child(2),
@@ -5330,22 +5330,22 @@ nav.flex.items-center.justify-between svg{
 
 
 .badge {
-    background-color: #f00 !important;
+    background-color: #f00;
 }
 
 .badge-green-active {
-    background-color: #07cd61 !important;
-    color:#fff !important;
+    background-color: #07cd61;
+    color:#fff;
     padding: 2px 8px;
     border-radius: 5px;
 }
 
 .badge-inactive  {
-    background-color: none !important;
+    background-color: none;
 }
 
 .procurement-row td {
-    border: none !important;
+    border: none;
     text-align: center;
     font-weight: 500;
 }
