@@ -408,7 +408,7 @@ a.dropdown-item {
 .main-card {
     background:#E4EDFF;
     border-radius:30px;
-    padding:20px;
+    padding:200px;
     
 }
 
@@ -1675,8 +1675,8 @@ g.raphael-group-OWoiSXkv {
 /* Main Card */ 
 .main-card{
   
-    border-radius:30px;
-    padding:20px;
+    border-radius:30x;
+    padding:200px;
     box-shadow:0 5px 20px rgba(0,0,0,0.05);
 }
 
