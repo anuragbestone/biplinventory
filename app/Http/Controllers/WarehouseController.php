@@ -535,6 +535,9 @@ class WarehouseController extends Controller {
         // WhatsApp Service -- Ends
     }
 
+    public function calculateRMPMForProduction($fg_id) {
+
+    }
 
     public function production() {
         $data["productionIssueData"] = ProductionIssueMaster::select("id", "production_issue_types")
@@ -553,10 +556,10 @@ class WarehouseController extends Controller {
 
                 $data["productionLineData"][$counter] = $pData;
                 $data["productionLineData"][$counter]["fg"] = FgCatMaster::select(
-                            "fg_cat_master.id", 
-                            "fg_cat_master.fg_cat_name",
-                            "threshold_production_master.max_quantity"
-                        )
+                        "fg_cat_master.id", 
+                        "fg_cat_master.fg_cat_name",
+                        "threshold_production_master.max_quantity"
+                    )
                     ->leftjoin("threshold_production_master", "threshold_production_master.fg_cat_id", "=", "fg_cat_master.id")
                     ->where("fg_cat_master.production_line_id", $pData["id"])
                     ->where("fg_cat_master.is_active", 1)
@@ -564,11 +567,12 @@ class WarehouseController extends Controller {
 
                 $counter++;
             }
+
         } else {
             return redirect()->route("dashboard")->with("error", "production line not found");
         }
 
-        // echo "<pre>";print_r($data);die();
+        echo "<pre>";print_r($data);die();
         return view("warehouse.production", $data);
     }
 

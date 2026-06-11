@@ -515,6 +515,8 @@ class DashboardController extends Controller {
                     ->where("fg_cat_master.is_active", 1)
                     ->get()->toArray();
 
+                $data["totalStockQuantity"] = FgStockMaster::where("is_active", 1)->sum("stock_quantity");
+
                 if ($data["fgCatData"]) {
                     $counter = 0;
 

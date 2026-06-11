@@ -38,7 +38,7 @@
             </div>
 
             <div class="cards">
-
+                @if ($targetData)
                 <div class="card">
                     <div class="icon blue">🎯</div>
                     <h4>This Month Target</h4>
@@ -66,7 +66,35 @@
                     <h2>{{ round(($targetData[0]["achieved_target_quantity"]/$targetData[0]["target_quantity"])*100 , 2) }}%</h2>
                     <span>Of Target</span>
                 </div>
+                @else
+                <div class="card">
+                    <div class="icon blue">🎯</div>
+                    <h4>This Month Target</h4>
+                    <h2>0</h2>
+                    <span>Cases</span>
+                </div>
 
+                <div class="card">
+                    <div class="icon green">✅</div>
+                    <h4>Total Achieved</h4>
+                    <h2>0</h2>
+                    <span>Cases</span>
+                </div>
+
+                <div class="card">
+                    <div class="icon orange">📈</div>
+                    <h4>Remaining</h4>
+                    <h2>0</h2>
+                    <span>Cases</span>
+                </div>
+
+                <div class="card">
+                    <div class="icon purple">🏆</div>
+                    <h4>Achievement</h4>
+                    <h2>0%</h2>
+                    <span>Of Target</span>
+                </div>
+                @endif
             </div>
 
         </div>
@@ -173,7 +201,7 @@
                 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="m-0">Orders</h5>
-                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#generateOrderModal">
+                    <button class="btn btn-primary btn-sm" id="generateOrder">
                         Generate Order
                     </button>
                 </div>
@@ -372,7 +400,7 @@
                             <textarea class="form-control" name="dispatch_address" rows="3" required></textarea>
 
                             <div class="mb-3">
-                                <label for="" class="fw-bold">Production Status</label>
+                                <label for="" class="fw-bold">Payment Status</label>
                                 <select name="payment_status" class="form-control" id="">
                                     <option value="0" selected>Pending</option>
                                     <option value="1">Completed</option>
@@ -577,6 +605,18 @@
             year: 'numeric'
         });
     }
+
+    $("#generateOrder").click(function() {
+        let totalStock = {{ $totalStockQuantity }};
+        if (totalStock > 0) {
+            $("#generateOrderModal").modal("show");
+        } else {
+            Swal.fire({
+                text: "Kindly Add FG First!!",
+                icon: "error"
+            }); 
+        }
+    });
 
 </script>
 
