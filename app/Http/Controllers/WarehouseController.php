@@ -690,7 +690,6 @@ class WarehouseController extends Controller {
                     }
 
                     // ----- Update Rm Pm Data
-
                     foreach ($rmPmQuantityArr as $rmPmQ) {
                         $rmPmCurrentValue = RmPMStockMaster::select("stock_quantity")
                             ->where("rm_pm_cat_id", $rmPmQ["rm_pm_cat_id"])
