@@ -393,7 +393,6 @@ class DashboardController extends Controller {
                         "rm_pm_name" => $rmPm->rm_pm_name,
                         "rcData" => []
                     ];
-
                     $categories = $rmPmCategories[$rmPm->id] ?? [];
                     foreach ($categories as $cat) {
 

@@ -42,6 +42,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// ----- Changes
+
 Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
 
     Route::get("/dashboard", [DashboardController::class, "showDashboard"])->name("dashboard"); 
@@ -80,6 +82,7 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
         Route::post("/warehouse/dispatchOrder", [WarehouseController::class, "dispatchOrder"]);
     });
     // -- Warehouse Entry Ends
+
 
 
     // -- Remaining Routes Start
