@@ -5062,7 +5062,7 @@ nav.flex.items-center.justify-between svg{
 /* First and last readonly inputs */
 .rmpm-user-row input:first-child,
 .rmpm-user-row input:last-child{
-    width: 80px;
+    width: 800px;
     flex-shrink: 0;
 }
 
@@ -5084,8 +5084,8 @@ nav.flex.items-center.justify-between svg{
 }
 
 .icon-btn{
-    width:45px;
-    height:45px;
+    width:450px;
+    height:450px;
     border-radius:50%;
     display:flex;
     align-items:center;
