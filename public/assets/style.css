@@ -4794,7 +4794,7 @@ nav.flex.items-center.justify-between svg{
 }
 
 .wh-overall span{
-    color:#2563eb !important;
+    color:#2563eb;
 }
 
 .custom-sku-card {
@@ -4813,10 +4813,6 @@ nav.flex.items-center.justify-between svg{
  
 .custom-case-card span {
     display: block;
-}
-
-.label{
-    margin-bottom:5px;
 }
 
 .table-pad{
@@ -4943,12 +4939,12 @@ nav.flex.items-center.justify-between svg{
 }
 
 .tooltip-inner {
-    background-color: #000 !important;
-    color: #fff !important;
+    background-color: #000;
+    color: #fff;
 }
 
 .tooltip .tooltip-arrow::before {
-    border-top-color: #000 !important;
+    border-top-color: #000;
 }
 
 

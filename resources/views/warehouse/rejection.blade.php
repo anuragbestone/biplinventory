@@ -170,9 +170,8 @@
     document.addEventListener("DOMContentLoaded", function(){
 
         // FORM
-        const form =
-            document.getElementById("rejectionForm");
-
+        const form = document.getElementById("rejectionForm");
+        
         if(!form)
         {
             console.log("Form not found");
@@ -185,8 +184,8 @@
 
         // MODAL
         const rejectionModal = new bootstrap.Modal(
-                document.getElementById('rejectionModal')
-            );
+            document.getElementById('rejectionModal')
+        );
 
         // INPUTS
         const totalRejectionInput = document.getElementById("all_rejection");
