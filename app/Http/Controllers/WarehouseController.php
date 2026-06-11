@@ -659,7 +659,7 @@ class WarehouseController extends Controller {
                             $rmPmName = RmPmCatMaster::select("rm_pm_cat_name")
                                 ->where("id", $fData["rm_pm_cat_id"])
                                 ->first();
-                            $message = $message.$rmPmName->rm_pm_cat_name." quantity is low";
+                            $message = $message.$rmPmName->rm_pm_cat_name." quantity is low<br>";
                         } else {
                             $rmPmQuantityArr[$rmPmCounter]["rm_pm_cat_id"] = $fData["rm_pm_cat_id"];
                             $rmPmQuantityArr[$rmPmCounter++]["rm_pm_quantity"] = $fData["rm_pm_cat_quantity"] * $totalQuantity * $totalUnitInCase->cases_quantity;

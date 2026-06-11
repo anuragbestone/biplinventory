@@ -21,9 +21,9 @@
         @if (session('error'))
             <script>
                 Swal.fire({
-                    text: @json(session('error')),
+                    html: @json(session('error')),
                     icon: "error"
-                }); 
+                });
             </script>
         @endif
 
