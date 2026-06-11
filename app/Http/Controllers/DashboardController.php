@@ -510,8 +510,9 @@ class DashboardController extends Controller {
                     ->where("user_id", $request->session()->get("userID"))
                     ->get()->toArray();
 
-                $data["fgCatData"] = FgCatMaster::select("id", "fg_cat_name")
-                    ->where("is_active", 1)
+                $data["fgCatData"] = FgCatMaster::select("fg_cat_master.id", "fg_cat_master.fg_cat_name", "fg_stock_master.stock_quantity")
+                    ->leftjoin("fg_stock_master", "fg_stock_master.fg_cat_id", "=", "fg_cat_master.id")
+                    ->where("fg_cat_master.is_active", 1)
                     ->get()->toArray();
 
                 if ($data["fgCatData"]) {

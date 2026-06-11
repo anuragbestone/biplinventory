@@ -42,8 +42,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// ----- Changes
-
 Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
 
     Route::get("/dashboard", [DashboardController::class, "showDashboard"])->name("dashboard"); 

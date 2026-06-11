@@ -352,7 +352,12 @@
                                 <!-- ROW 1 -->
                                 <div class="d-flex justify-content-between border-bottom p-2 popupcard">
                                     <span class="border-end pe-2 w-50">{{ $fData["fg_cat_name"] }}</span>
-                                    <span class="ps-2 w-50 text-end"><input type="number" min="0" name="fgCat[{{ $fData["id"] }}]"> Cases</span>
+                                    <span class="ps-2 w-50 text-end">
+                                        <input type="number" min="0" 
+                                            max="{{ $fData['stock_quantity'] }}" 
+                                            name="fgCat[{{ $fData['id'] }}]"
+                                            {{ (($fData['stock_quantity'] == 0) || (!$fData['stock_quantity'])) ? 'disabled' : '' }}> Cases
+                                    </span>
                                 </div>
                                     @endforeach
                                 @endif
