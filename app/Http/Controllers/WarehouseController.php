@@ -540,6 +540,10 @@ class WarehouseController extends Controller {
             ->where("fg_cat_id", $request->input("fgID"))
             ->get()->toArray();
 
+        $totalUnitInCase = FgCatMaster::select("cases_quantity")
+            ->where("id", $request->input("fgID"))
+            ->first();
+
         if ($formulaData) {
             $totalQuantity = !($request->has("fg_quantity")) ? 1 : $request->input("fg_quantity");
             $checkFlagForRmPm = [];
@@ -550,7 +554,7 @@ class WarehouseController extends Controller {
                     ->first();
 
                 if ($totalStock->stock_quantity) {
-                    if ($totalStock->stock_quantity >= ($fData["rm_pm_cat_quantity"]*$totalQuantity)) {
+                    if ($totalStock->stock_quantity >= ($fData["rm_pm_cat_quantity"] * $totalQuantity * $totalUnitInCase->cases_quantity)) {
                         $data = [
                             "status" => "success",
                             "message" => "Rm Pm Stock OK"
