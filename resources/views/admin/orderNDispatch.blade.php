@@ -34,7 +34,6 @@
                                 <th>Order ID</th>
                                 <th>Order By</th>
                                 <th>Order Date</th>
-                                <th>Production Status</th>
                                 <th>Dispatch Status</th>
                                 <th>Payment Status</th>
                                 <th>Payment Approve Status</th>
@@ -56,7 +55,6 @@
                                     </td> 
                                     <td>{{ $orderDetails["email"] }}</td>
                                     <td>{{ \Carbon\Carbon::parse($orderDetails["order_date"])->format("d M Y") }}</td>
-                                    <td><span class="badge {{ $orderDetails['order_production_status'] == 1 ? 'bg-success' : 'bg-warning' }}">
                                         {{ $orderDetails["order_production_status"] == 1 ? "Completed" : "Pending" }}</span></td>
                                     <td><span class="badge {{ $orderDetails['order_dispatch_status'] == 1 ? 'bg-success' : 'bg-warning' }}">
                                         {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span>
@@ -75,13 +73,13 @@
                                         }}
                                     </td>
                                     <td>
-                                        <button class="btn btn-info btn-sm" onclick="getOrderDetails({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
+                                        <button title="Info" class="btn btn-info btn-sm" onclick="getOrderDetails({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
                                             <i class="fa fa-info"></i>
                                         </button>
-                                        <button class="btn btn-{{ $orderDetails['payment_status'] == 1 ? 'success' : 'danger' }} btn-sm" {{ $orderDetails['payment_status'] == 1 ? 'disabled' : '' }} onclick="updatePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentModal"> 
+                                        <button title="Update Payment" class="btn btn-{{ $orderDetails['payment_status'] == 1 ? 'success' : 'danger' }} btn-sm" {{ $orderDetails['payment_status'] == 1 ? 'disabled' : '' }} onclick="updatePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentModal"> 
                                             <i class="fa fa-wallet"></i>
                                         </button>
-                                        <button class="btn btn-{{ (($orderDetails['payment_status'] == 0 || $orderDetails['payment_approve_status'] == 1) ? 'danger' : 'success') }} btn-sm" {{ (($orderDetails['payment_status'] == 0 || $orderDetails['payment_approve_status'] == 1) ? 'disabled' : '') }} onclick="approvePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentApproveModal"> 
+                                        <button title="Approve Payment" class="btn btn-{{ (($orderDetails['payment_status'] == 0 || $orderDetails['payment_approve_status'] == 1) ? 'danger' : 'success') }} btn-sm" {{ (($orderDetails['payment_status'] == 0 || $orderDetails['payment_approve_status'] == 1) ? 'disabled' : '') }} onclick="approvePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentApproveModal"> 
                                             <i class="fa fa-check"></i>
                                         </button>
                                     </td>

@@ -214,7 +214,6 @@
                                 <th>S.No</th>
                                 <th>Order ID</th>
                                 <th>Order Date</th>
-                                <th>Production Status</th>
                                 <th>Dispatch Status</th>
                                 <th>Payment Status</th>
                                 <th>Payment Approved Status</th>
@@ -231,8 +230,7 @@
                                         <td>{{ $counter++ }}</td>
                                         <td>{{ $orderDetails["order_id"] }}</td>
                                         <td>{{ \Carbon\Carbon::parse($orderDetails["order_date"])->format("d M Y") }}</td>
-                                        <td><span class="badge {{ $orderDetails["order_production_status"] == 1 ? "bg-success" : "bg-warning" }}">
-                                            {{ $orderDetails["order_production_status"] == 1 ? "Completed" : "Pending" }}</span></td>
+                                        
                                         <td><span class="badge {{ $orderDetails["order_dispatch_status"] == 1 ? "bg-success" : "bg-warning" }}">
                                             {{ $orderDetails["order_dispatch_status"] == 1 ? "Completed" : "Pending" }}</span></td>
                                         <td><span class="badge {{ $orderDetails["payment_status"] == 1 ? "bg-success" : "bg-warning" }}">
