@@ -73,13 +73,13 @@
                                         }}
                                     </td>
                                     <td>
-                                        <button title="Info" class="btn btn-info btn-sm" onclick="getOrderDetails({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
+                                        <button class="btn btn-info btn-sm" onclick="getOrderDetails({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#infoModal">
                                             <i class="fa fa-info"></i>
                                         </button>
-                                        <button title="Update Payment" class="btn btn-{{ $orderDetails['payment_status'] == 1 ? 'success' : 'danger' }} btn-sm" {{ $orderDetails['payment_status'] == 1 ? 'disabled' : '' }} onclick="updatePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentModal"> 
+                                        <button class="btn btn-{{ $orderDetails['payment_status'] == 1 ? 'success' : 'danger' }} btn-sm" {{ $orderDetails['payment_status'] == 1 ? 'disabled' : '' }} onclick="updatePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentModal"> 
                                             <i class="fa fa-wallet"></i>
                                         </button>
-                                        <button title="Approve Payment" class="btn btn-{{ (($orderDetails['payment_status'] == 0 || $orderDetails['payment_approve_status'] == 1) ? 'danger' : 'success') }} btn-sm" {{ (($orderDetails['payment_status'] == 0 || $orderDetails['payment_approve_status'] == 1) ? 'disabled' : '') }} onclick="approvePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentApproveModal"> 
+                                        <button class="btn btn-{{ (($orderDetails['payment_status'] == 0 || $orderDetails['payment_approve_status'] == 1) ? 'danger' : 'success') }} btn-sm" {{ (($orderDetails['payment_status'] == 0 || $orderDetails['payment_approve_status'] == 1) ? 'disabled' : '') }} onclick="approvePayment({{ $orderDetails['id'] }})" data-bs-toggle="modal" data-bs-target="#paymentApproveModal"> 
                                             <i class="fa fa-check"></i>
                                         </button>
                                     </td>
