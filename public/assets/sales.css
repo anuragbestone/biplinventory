@@ -73,9 +73,9 @@
       overflow:hidden;
     }
 
-    .card:hover{
+    /* .card:hover{
       transform:translateY(-8px);
-    }
+    } */
 
     .icon{
       width:70px;
@@ -108,11 +108,11 @@
     }
 
     .card span{
-      color:#fff;
+      color:#202020;
       font-size:15px;
     }
 .popupcard span{
-    color:#6e7b9b !important;
+    color:#1a1e27 !important;
 }
     .wave{
       position:absolute;
@@ -425,3 +425,16 @@
  .menu-item{
       list-style: none;
     }
+
+
+    .custom-case-card input {
+    width: 200px;
+    background-color: transparent !important;
+    border: #ccc solid 1px;
+    border-radius: 5px;
+}
+
+.popupcard span {
+    color: #3e3e40 !important;
+    font-weight: 500;
+}

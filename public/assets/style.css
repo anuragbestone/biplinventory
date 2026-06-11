@@ -411,7 +411,21 @@ a.dropdown-item {
     
     
 }
+.main-card.warehouse-role {
+    padding: 45px;
+}
 
+
+label {
+ 
+    
+    font-weight: bold;
+    padding-bottom: 10px;
+ 
+}
+.main-card.sales-role {
+    padding: 45px;
+}
 /* Bottle Card */
 .bottle-card {
     background:white;
@@ -419,7 +433,12 @@ a.dropdown-item {
     padding:15px;
     height:100%;
 }
-
+input.units {
+    width: 50px !important;
+}
+input.category {
+    width: 110px !important;
+}
 /* Status Badge */
 .status-green {
     color:green;
@@ -5411,4 +5430,29 @@ nav.flex.items-center.justify-between svg{
     background-color: #0d6efd !important;
     color:#fff !important;
     border:none !important;
+}
+
+
+
+
+
+
+div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long] {
+    top: 2.7em !important;
+    right: .5em !important;
+    width: 3.5em !important;
+    transform: rotate(-45deg) !important;
+}
+
+div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=tip] {
+    top: 3.2em !important;
+    left: .7125em !important;
+    width: 2.3em !important;
+    transform: rotate(45deg) !important;
+}
+
+
+div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=left] {
+    left: 2.0625em !important;
+    transform: rotate(45deg) !important;
 }

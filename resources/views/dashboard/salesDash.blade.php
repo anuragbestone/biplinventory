@@ -27,7 +27,7 @@
 
 </style>
 
-<div class="main-card content shadow-sm">
+<div class="main-card sales-role content shadow-sm">
     <div class="dashboard">
 
         <div class="top-section">

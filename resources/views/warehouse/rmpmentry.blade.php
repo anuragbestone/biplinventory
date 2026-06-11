@@ -87,7 +87,7 @@
 
                                                 <input
                                                     value="{{ $rcData['rm_pm_cat_name'] }}"
-                                                    readonly
+                                                    readonly class="category"
                                                 >
                                                 <input
                                                     type="number"
@@ -106,7 +106,7 @@
                                                 >
                                                 <input
                                                     value="{{ $rcData['cat_unit'] }}"
-                                                    readonly
+                                                    readonly class="units"
                                                 >
                                             </div>
                                         @endforeach

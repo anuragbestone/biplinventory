@@ -66,7 +66,7 @@
         @if ($filter == 1)
             <form id="rejectionForm" class="generalformloader" action="{{ url("warehouse/uploadRejection") }}" method="post">
                 @csrf
-                <div class="procure-box">
+                <div class="procure-box mt-5">
                     <input type="hidden" name="production_line_id" value="{{ $selected_production_line_id }}">
                     <input type="hidden" name="shift_from" value="{{ session("shift_from") }}">
                     <input type="hidden" name="shift_to" value="{{ session("shift_to") }}">
@@ -80,7 +80,7 @@
                                         @foreach ($rValues["catData"] as $rcData)
                                             <div class="row g-3">
                                                 <!-- Category -->
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <label class="form-label">Category</label>
                                                     <input type="text" class="procure-input" value="{{ $rcData["rm_pm_cat_name"] }}" readonly />
                                                 </div>
@@ -110,7 +110,7 @@
                                                 </div>
 
                                                 <!-- Rejection % -->
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <label class="form-label">Rejection %</label>
                                                     <input type="text" name="rejection_percentage[{{ $rcData["id"] }}]" class="form-control custom-field rejection-percentage"  readonly/>
                                                 </div>

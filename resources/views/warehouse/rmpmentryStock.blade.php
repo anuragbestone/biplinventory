@@ -19,7 +19,7 @@
                                         <div class="rmpm-user-row">
                                             <input
                                                 value="{{ $rcData['rm_pm_cat_name'] }}"
-                                                readonly
+                                                readonly class="category"
                                             >
                                             <input
                                                 type="number"
