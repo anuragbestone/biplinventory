@@ -926,6 +926,13 @@ class WarehouseController extends Controller {
         }
         // ---- Filter Hit Ends
         
+        $data["shiftData"] = ShiftMaster::select("id", "shift_from", "shift_to", "shift_over_status")
+            ->where("userID", $request->session()->get("userID"))
+            ->latest("id")
+            ->limit(5)
+            ->get()
+            ->toArray();
+
         $data["fgData"] = FgMaster::select("id", "fg_name")
             ->where("is_active", 1)
             ->get()
