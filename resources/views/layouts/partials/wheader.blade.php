@@ -17,6 +17,7 @@
         />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="{{ asset("assets") }}/style.css" />
+        <link rel="stylesheet" type="text/css" href="{{ asset("assets") }}/stylecopy.css" />
         <link rel="stylesheet" type="text/css" href="{{ asset("assets") }}/bottle.css" />
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 

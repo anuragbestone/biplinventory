@@ -382,7 +382,8 @@
                                         <input type="number" min="0" 
                                             max="{{ $fData['stock_quantity'] }}" 
                                             name="fgCat[{{ $fData['id'] }}]"
-                                            {{ (($fData['stock_quantity'] == 0) || (!$fData['stock_quantity'])) ? 'disabled' : '' }}> Cases
+                                            placeholder="{{ (($fData['stock_quantity'] == 0) || (!$fData['stock_quantity'])) ? '0' : $fData['stock_quantity'] }}"
+                                            {{ (($fData['stock_quantity'] == 0) || (!$fData['stock_quantity'])) ? 'disabled' : '' }}> <span class="">Cases</span>
                                     </span>
                                 </div>
                                     @endforeach

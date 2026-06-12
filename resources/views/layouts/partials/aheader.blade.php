@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset("assets") }}/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset("assets") }}/stylecopy.css" />
     <link rel="stylesheet" type="text/css" href="{{ asset("assets") }}/bottle.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
