@@ -364,7 +364,7 @@
                         <div class="modal-body">
                             <!-- ORDER DATE -->
                             <label>Order Date</label>
-                            <input name="order_date" type="date" class="form-control mb-3" required>
+                            <input name="order_date" type="date" id="order_date" class="form-control mb-3" min="{{ date('Y-m-d') }}" required>
                             <!-- ORDER QTY -->
                             <label>Order Quantity</label>
                             <div class="card bg-white p-0 mb-3 custom-case-card">
@@ -391,7 +391,7 @@
 
                             <!-- DISPATCH DATE -->
                             <label>Dispatch Date</label>
-                            <input type="date" name="dispatch_date" class="form-control mb-3" required>
+                            <input type="date" name="dispatch_date" id="dispatch_date" class="form-control mb-3" required>
 
                             <!-- ADDRESS -->
                             <label>Dispatch Address</label>
@@ -616,6 +616,42 @@
         }
     });
 
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const orderDate = document.getElementById('order_date');
+        const dispatchDate = document.getElementById('dispatch_date');
+
+        // Disable dispatch date initially
+        dispatchDate.disabled = true;
+
+        orderDate.addEventListener('change', function () {
+
+            if (this.value) {
+
+                // Enable dispatch date
+                dispatchDate.disabled = false;
+
+                // Set minimum dispatch date
+                dispatchDate.min = this.value;
+
+                // Always clear previously selected dispatch date
+                dispatchDate.value = '';
+
+            } else {
+
+                // Disable and clear dispatch date if order date is removed
+                dispatchDate.disabled = true;
+                dispatchDate.value = '';
+                dispatchDate.removeAttribute('min');
+
+            }
+
+        });
+
+    });
 </script>
 
 @endsection
