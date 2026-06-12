@@ -19,7 +19,6 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
         <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
         <link rel="stylesheet" type="text/css" href="{{ asset("assets") }}/style.css" />
-        <link rel="stylesheet" type="text/css" href="{{ asset("assets") }}/stylecopy.css" />
         <link rel="stylesheet" type="text/css" href="{{ asset("assets") }}/sales.css" />
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
