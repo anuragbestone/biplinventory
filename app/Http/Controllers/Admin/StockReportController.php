@@ -52,7 +52,6 @@ class StockReportController extends Controller
     }
 
     public function rmPmWarehouseStock() {
-        
         $rmPmData = RmPmMaster::select("id", "rm_pm_name", "rm_pm_image")
             ->where("is_active", 1)
             ->get()->toArray();

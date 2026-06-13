@@ -16,7 +16,6 @@ class SalesTargetController extends Controller
 {
 
     public function getSalesTargetData(Request $request) {
-
         $data["userData"] = UserMaster::select("id", "full_name", "email")
             ->where("is_active", 1)
             ->where("role_id", 4)
@@ -25,7 +24,6 @@ class SalesTargetController extends Controller
         if ($request->filter) {
 
         } else {
-
             $data["salesData"] = SalestargetMaster::select(
                 "sales_target_master.id",
                 "sales_target_master.target_date",
@@ -52,7 +50,6 @@ class SalesTargetController extends Controller
             ->exists();
 
         if ($monthStatus) {
-
             $currentQuantityData = SalesTargetMaster::select("id", "target_quantity")
                 ->where("user_id", $request->user_id)
                 ->whereMonth("target_date", date("m", strtotime($request->target_date)))

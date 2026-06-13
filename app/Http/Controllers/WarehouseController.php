@@ -303,10 +303,12 @@ class WarehouseController extends Controller {
         if (!$hasValue) {
             return redirect()->back()->with("error", "Please enter at least one quantity.");
         } else {
+
             $shift_from = Carbon::parse($request->input("shift_from"));
             $shift_to = Carbon::parse($request->input("shift_to"));
             $rData = $request->except(['_token', "shift_from", "shift_to", "production_line_id"]);
             $whatsAppDetailMessage = "";
+
             foreach ($rData as $key => $value) {
                 
                 // ---- Remove From Stock Warehouse Master
@@ -452,13 +454,11 @@ class WarehouseController extends Controller {
                     "production_timer_seconds" => 300
                 ]
             ]);
-
         }
 
         if ($request->production_status == "stop") {
 
         }
-
     }
 
     public function getProductionTimerUpdate() {
@@ -490,7 +490,6 @@ class WarehouseController extends Controller {
                 ->where("fg_cat_master.production_line_id", $pLine["id"])
                 ->whereDate("fg_stock_transaction.created_at", Carbon::today())
                 ->sum("fg_stock_transaction.stock_quantity");
-
             }
         }
 
@@ -507,9 +506,7 @@ class WarehouseController extends Controller {
                 "productionData" => []
             ];
         }
-
         return response()->json($data);
-
     }
 
     public function stopProductionTimer(Request $request, WhatsAppService $whatsapp) {
