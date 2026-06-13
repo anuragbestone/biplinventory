@@ -1306,6 +1306,15 @@ class WarehouseController extends Controller {
                     "for_role_id" => 1
                 ]);
 
+                NotificationMaster::create([
+                    "route_address" => "notification",
+                    "main_address" => "dashboard",
+                    "notification_title" => "Order Dispatched",
+                    "notification_msg" => "Order Details: \nTotal Cases: ".$totalCases."\n",
+                    "is_clicked" => 0,
+                    "for_role_id" => 4
+                ]);
+
                 return back()->with("success", "Order Dispatched Successfully");
 
             } else {

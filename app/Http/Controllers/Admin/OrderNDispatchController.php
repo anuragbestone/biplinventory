@@ -100,14 +100,14 @@ class OrderNDispatchController extends Controller
 
     }
 
-    
+
     public function getOrderDetailsData(Request $request) {
         $data["orderData"] = OrderMaster::select("order_id", "order_date", "order_dispatch_date", "dispatch_address", "order_dispatch_status")
             ->where("id", $request->orderID)
             ->first();
 
 
-        if ($data["order_dispatch_status"] == 0) {
+        if ($data["orderData"]->order_dispatch_status == 0) {
             
             $data["orderDetails"] = OrderDetails::select(
                 "fg_cat_master.fg_cat_name",
@@ -122,7 +122,7 @@ class OrderNDispatchController extends Controller
                 "fg_dispatched_master.fg_quantity"
                 )
                 ->leftjoin("fg_cat_master", "fg_dispatched_master.fg_cat_id", "=","fg_cat_master.id")
-                ->where("order_details.order_id", $data["orderData"]->order_id)
+                ->where("fg_dispatched_master.order_id", $data["orderData"]->order_id)
                 ->get()->toArray();
         }
 
