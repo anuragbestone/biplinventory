@@ -716,7 +716,6 @@ class WarehouseController extends Controller {
                     }
 
                     // ----- Update FG Transaction
-
                     FgStockTransaction::create([
                         "fg_cat_id" => $request->fgID,
                         "stock_quantity" => $request->production_quantity,
