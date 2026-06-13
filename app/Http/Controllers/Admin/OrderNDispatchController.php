@@ -9,6 +9,7 @@ use App\Models\OrderMaster;
 use App\Models\OrderDetails;
 use App\Models\FgCatMaster;
 use App\Models\SalesTargetMaster;
+use App\Models\FgDispatchMaster;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -94,9 +95,12 @@ class OrderNDispatchController extends Controller
             ->where("id", $request->orderID)
             ->first();
 
-        $data["orderDetails"] = OrderDetails::select("fg_cat_master.fg_cat_name", "order_details.fg_quantity")
-            ->leftjoin("fg_cat_master", "order_details.fg_cat_id", "fg_cat_master.id")
-            ->where("order_details.order_id", $data["orderData"]->order_id)
+        $data["orderDetails"] = FgDispatchMaster::select(
+            "fg_cat_master.fg_cat_name", 
+            "fg_dispatched_master.fg_quantity"
+            )
+            ->leftjoin("fg_cat_master", "fg_dispatched_master.fg_cat_id", "fg_cat_master.id")
+            ->where("fg_dispatched_master.order_id", $data["orderData"]->order_id)
             ->get()->toArray();
 
         if ($data["orderData"]) {
