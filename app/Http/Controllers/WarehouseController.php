@@ -102,7 +102,8 @@ class WarehouseController extends Controller {
             "notification_msg" => "Shift Details: \nFrom: ".Carbon::parse($shiftFrom)
                 ->format("l, d F Y h:i A")."\nTo: ".Carbon::parse($shiftTo)
                 ->format("l, d F Y h:i A"),
-            "is_clicked" => 0
+            "is_clicked" => 0,
+            "for_role_id" => 1
         ]);
 
         return back()->with("success", "Shift Updated Successfully");
@@ -207,7 +208,8 @@ class WarehouseController extends Controller {
             "main_address" => "stockReport/rmPmWarehouseStock",
             "notification_title" => "Rm Pm Stock Uploaded",
             "notification_msg" => "New Stocks Have Been Added",
-            "is_clicked" => 0
+            "is_clicked" => 0,
+            "for_role_id" => 1
         ]);
 
         return back()->with("success", "Rm / Pm Stock Uploaded To Warehouse");
@@ -387,7 +389,8 @@ class WarehouseController extends Controller {
                 "main_address" => "stockReport",
                 "notification_title" => "Rm Pm Stock Procured",
                 "notification_msg" => "New Stocks Have Been Procured",
-                "is_clicked" => 0
+                "is_clicked" => 0,
+                "for_role_id" => 1
             ]);
 
             return back()->with("success", "Rm / Pm Stock Updated Successfully!!!");
@@ -407,7 +410,8 @@ class WarehouseController extends Controller {
                 "main_address" => "dashboard",
                 "notification_title" => "Production Has Been Started At ".Carbon::now()->format("d F Y h:i A"),
                 "notification_msg" => "Production Started At ".$lineName,
-                "is_clicked" => 0
+                "is_clicked" => 0,
+                "for_role_id" => 1
             ]);
             
             ProductionTimerMaster::create([
@@ -1062,7 +1066,8 @@ class WarehouseController extends Controller {
                 "main_address" => "rejectionUpdate",
                 "notification_title" => "Rejection Added",
                 "notification_msg" => "Rejection Details: \nTotal Rejection: ".($totalRejection / $rejectionCount),
-                "is_clicked" => 0
+                "is_clicked" => 0,
+                "for_role_id" => 1
             ]);
 
             // WhatsApp Service -- Starts
@@ -1297,7 +1302,8 @@ class WarehouseController extends Controller {
                     "main_address" => "orderNDispatch",
                     "notification_title" => "Order Dispatched",
                     "notification_msg" => "Order Details: \nTotal Cases: ".$totalCases."\n",
-                    "is_clicked" => 0
+                    "is_clicked" => 0,
+                    "for_role_id" => 1
                 ]);
 
                 return back()->with("success", "Order Dispatched Successfully");

@@ -25,7 +25,7 @@ class RoleCheck
         if ($uri == "dashboard" || $uri == "logout" || $uri == "mail") {
             return $next($request);
         } else {
-            if ($rollID == 3) {
+            if ($rollID == 3 && !$request->is('getNotificationUpdates') && !$request->is('notification')) {
                 if ($request->is('warehouse/*')) {
                     return $next($request);
                 } else {

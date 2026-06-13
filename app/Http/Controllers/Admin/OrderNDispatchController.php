@@ -82,6 +82,16 @@ class OrderNDispatchController extends Controller
                     ]);
                 }
             }
+
+            NotificationMaster::create([
+                "route_address" => "notification",
+                "main_address" => "warehouse/order",
+                "notification_title" => "Order Generated",
+                "notification_msg" => "Order Code: ".$orderID,
+                "is_clicked" => 0,
+                "for_role_id" => 3
+            ]);
+
             return back()->with("success", "Order Generated Successfully");
 
         } else {
@@ -90,18 +100,31 @@ class OrderNDispatchController extends Controller
 
     }
 
+    
     public function getOrderDetailsData(Request $request) {
-        $data["orderData"] = OrderMaster::select("order_id", "order_date", "order_dispatch_date", "dispatch_address")
+        $data["orderData"] = OrderMaster::select("order_id", "order_date", "order_dispatch_date", "dispatch_address", "order_dispatch_status")
             ->where("id", $request->orderID)
             ->first();
 
-        $data["orderDetails"] = FgDispatchMaster::select(
-            "fg_cat_master.fg_cat_name", 
-            "fg_dispatched_master.fg_quantity"
-            )
-            ->leftjoin("fg_cat_master", "fg_dispatched_master.fg_cat_id", "fg_cat_master.id")
-            ->where("fg_dispatched_master.order_id", $data["orderData"]->order_id)
-            ->get()->toArray();
+
+        if ($data["order_dispatch_status"] == 0) {
+            
+            $data["orderDetails"] = OrderDetails::select(
+                "fg_cat_master.fg_cat_name",
+                "order_details.fg_quantity"
+                )
+                ->leftjoin("fg_cat_master", "order_details.fg_cat_id", "=","fg_cat_master.id")
+                ->where("order_details.order_id", $data["orderData"]->order_id)
+                ->get()->toArray();
+        } else {
+            $data["orderDetails"] = FgDispatchMaster::select(
+                "fg_cat_master.fg_cat_name",
+                "fg_dispatched_master.fg_quantity"
+                )
+                ->leftjoin("fg_cat_master", "fg_dispatched_master.fg_cat_id", "=","fg_cat_master.id")
+                ->where("order_details.order_id", $data["orderData"]->order_id)
+                ->get()->toArray();
+        }
 
         if ($data["orderData"]) {
             $data = [
@@ -131,7 +154,8 @@ class OrderNDispatchController extends Controller
                 "main_address" => "orderNDispatch",
                 "notification_title" => "Payment Status Updated",
                 "notification_msg" => "Order Code: ".$order_id->order_id,
-                "is_clicked" => 0
+                "is_clicked" => 0,
+                "for_role_id" => 1
             ]);
 
             return back()->with("success", "Payment Status Changed, Waiting For Approval");
@@ -179,10 +203,11 @@ class OrderNDispatchController extends Controller
 
             NotificationMaster::create([
                 "route_address" => "notification",
-                "main_address" => "orderNDispatch",
+                "main_address" => "dashboard",
                 "notification_title" => "Payment Approved",
                 "notification_msg" => "Order Code: ".$order_id->order_id,
-                "is_clicked" => 0
+                "is_clicked" => 0,
+                "for_role_id" => 4
             ]);
 
             return back()->with("success", "Payment Approved Successfully");

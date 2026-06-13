@@ -43,9 +43,10 @@ class DashboardController extends Controller {
         }
     }
 
-    public function getNotificationUpdates() {
+    public function getNotificationUpdates(Request $request) {
         $notificationData = NotificationMaster::select("id", "route_address", "notification_title", "notification_msg", "created_at")
             ->where("is_clicked", 0)
+            ->where("for_role_id", $request->session()->get("role_id"))
             ->latest("created_at")
             ->get()->toArray();
 

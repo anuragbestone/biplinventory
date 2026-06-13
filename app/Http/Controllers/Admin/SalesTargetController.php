@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\SalesTargetMaster;
 use App\Models\UserMaster;
 
+use App\Models\NotificationMaster;
+
 use Illuminate\Support\Carbon;
 
 class SalesTargetController extends Controller
@@ -63,6 +65,15 @@ class SalesTargetController extends Controller
                     "target_given_date" => Carbon::now(),
                     "target_quantity" => $currentQuantityData["target_quantity"] + $request->target_quantity,
                 ]);
+
+            NotificationMaster::create([
+                "route_address" => "notification",
+                "main_address" => "dashboard",
+                "notification_title" => "Target Issued",
+                "notification_msg" => "Target Date: ".$request->target_date."\nTarget Quantity: ".$currentQuantityData["target_quantity"] + $request->target_quantity,
+                "is_clicked" => 0,
+                "for_role_id" => 4
+            ]);
 
             return back()->with("success", "Target Updated");
 

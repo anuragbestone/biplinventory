@@ -39,15 +39,38 @@
 
         <!-- RIGHT ICONS -->
         <div class="d-flex align-items-center">
-            <!-- Notification -->
-            <div class="icon-btn position-relative">
-                <i class="bi bi-bell"></i>
-                <span
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style="font-size: 10px"
-            >
-                3
-                </span>
+            
+            <!-- Notification Bell -->
+            <div class="dropdown position-relative" id="notificationWrapper">
+
+                <!-- Bell Icon -->
+                <div class="icon-btn position-relative" id="notificationBell" style="cursor:pointer;">
+                    <i class="bi bi-bell fs-4"></i>
+
+                    <!-- Count -->
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                        style="font-size:10px;" id="notificationCount">
+                        0
+                    </span>
+                </div>
+
+                <!-- Auto Alert -->
+                <div class="notification-toast shadow" id="notificationToast">
+                    <div class="fw-bold">New Notification</div>
+                    <small>Your order has been approved.</small>
+                </div>
+
+                <!-- Dropdown -->
+                <div class="notification-dropdown shadow-lg" id="notificationDropdown">
+                    <div class="notification-header">
+                        Notifications
+                    </div>
+                    <div class="notification-list">
+                        <div class="p-3 text-center">
+                            Loading Notifications...
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Profile Dropdown -->

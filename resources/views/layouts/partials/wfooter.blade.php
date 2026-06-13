@@ -94,5 +94,154 @@
         <!-- DataTables Bootstrap 5 -->
         <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 
+
+        <script>
+            function hitApiToGetNotifications() {
+                $.ajax({
+                    url: "{{ url('/getNotificationUpdates') }}",
+                    type: "GET",
+                    success: function(response) {
+                        console.log(response);
+                        if(response.status == "success") {
+                            let notificationData = response.notificationData;
+                            let html = '';
+                            
+                            // Notification Count
+                            $("#notificationCount").text(notificationData.length);
+                        
+                            // No Data
+                            if(notificationData.length == 0) {
+                                html = `
+                                    <div class="p-3 text-center">
+                                        No Notifications Found
+                                    </div>
+                                `;
+                        
+                            } else {
+                                $.each(notificationData, function(index, item){
+                                
+                                    // Convert Date
+                                    let createdDate = new Date(item.created_at);
+                                    let formattedDate = createdDate.toLocaleDateString('en-IN', {
+                                        day: '2-digit',
+                                        month: 'short'
+                                    });
+                                
+                                    let formattedTime = createdDate.toLocaleTimeString('en-IN', {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    });
+                                
+                                    // CHECK UNREAD
+                                    let unreadClass = item.is_clicked == 0 ? 'unread' : '';
+                                    html += `
+                                        <a 
+                                            href="/${item.route_address}?id=${item.id}"
+                                            class="text-decoration-none text-dark"
+                                        >
+
+                                            <div class="notification-item ${unreadClass}">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6>
+                                                        ${item.notification_title}
+                                                    </h6>
+                                                    <span class="notif-date">
+                                                        ${formattedDate}
+                                                    </span>
+                                                </div>
+                                                <div class="notif-message">
+                                                    ${item.notification_msg.replace(/\n/g, "<br>")}
+                                                </div>
+                                                <div class="notif-footer">
+                                                    <span class="status-dot"></span>
+                                                    <small>
+                                                        ${formattedTime}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    `;
+                                });
+                            }
+
+                            // Append Notifications
+                            $(".notification-list").html(html);
+
+                            // CHECK ANY NEW NOTIFICATION
+                            let hasNewNotification = notificationData.some(item => item.is_clicked == 0);
+                            if(hasNewNotification) {
+                                $("#notificationToast").html(`
+                                    <div class="fw-bold">
+                                        New Notifications
+                                    </div>
+                                    <small>
+                                        New notifications have arrived.
+                                    </small>
+                                `);
+                            
+                                // Bell Ring
+                                $("#notificationBell").addClass("bell-ring");
+                                setTimeout(function(){
+                                    $("#notificationBell").removeClass("bell-ring");
+                                }, 2000);
+                            
+                                // Show Toast
+                                $("#notificationToast").fadeIn(300);
+                                    setTimeout(function(){
+                                    $("#notificationToast").fadeOut(300);
+                                }, 4000);
+                            }
+                        } else {
+                            $(".notification-list").html(`
+                                <div class="p-3 text-center">
+                                    No Notifications Found
+                                </div>
+                            `);
+                        }
+
+                    },
+
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            $(document).ready(function(){
+                const bell = $("#notificationBell");
+                const dropdown = $("#notificationDropdown");
+            
+                // First Call
+                hitApiToGetNotifications();
+            
+                // Every 15 Seconds
+                setInterval(function () {
+                    hitApiToGetNotifications();
+                }, 15000);
+            
+                // Bell Animation
+                bell.addClass("bell-ring");
+                setTimeout(function(){
+                    bell.removeClass("bell-ring");
+                }, 2000);
+
+                // Toggle Dropdown
+                bell.click(function(e){
+                    e.stopPropagation();
+                    dropdown.fadeToggle(200);
+                });
+
+                // Close Dropdown
+                $(document).click(function(e){
+                    if(
+                        !$(e.target).closest("#notificationWrapper").length
+                    ){
+                        dropdown.fadeOut(200);
+                    }
+                });
+            });
+        </script>
+
     </body>    
 </html>

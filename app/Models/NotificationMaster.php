@@ -16,7 +16,8 @@ class NotificationMaster extends Model
         "notification_title",
         "notification_msg",
         "is_clicked",
-        "main_address"
+        "main_address",
+        "for_role_id"
     ];
 
     protected $casts = [
