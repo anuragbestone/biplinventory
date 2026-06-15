@@ -12,6 +12,7 @@ class OrderMaster extends Model
     protected $table = "order_master";
 
     protected $fillable = [
+
         "order_id",
         "order_date",
         "order_by_id",
@@ -23,6 +24,7 @@ class OrderMaster extends Model
         "payment_status",
         "payment_approve_status",
         "payment_approved_by_id"
+        
     ];
 
     protected $casts = [

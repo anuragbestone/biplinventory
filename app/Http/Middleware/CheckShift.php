@@ -36,7 +36,6 @@ class CheckShift
                 $shiftFrom = $shiftData->shift_from;
 
                 if($currentTime->greaterThan($shiftTo)) {
-
                     ShiftMaster::where("id", $shiftData->id)
                         ->update([
                             "shift_over_status" => 1
@@ -46,12 +45,10 @@ class CheckShift
                     $request->session()->forget("shift_to");
 
                     $whatsapp = app(WhatsAppService::class);
-
                     $message =
                         "*".$request->session()->get("full_name")."'s Shift Ended* \n\n".
                         "*Shift From:* ".Carbon::parse($shiftFrom)->format("l, d F Y h:i A")."\n".
                         "*Shift To:* ".Carbon::parse($shiftTo)->format("l, d F Y h:i A");
-
                     $response = $whatsapp->sendMessage(
                         "919311676180",
                         $message

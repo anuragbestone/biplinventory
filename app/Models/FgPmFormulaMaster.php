@@ -12,10 +12,12 @@ class FgPmFormulaMaster extends Model
     protected $table = "fg_pm_formula_master";
 
     protected $fillable = [
+
         "fg_cat_id",
         "rm_pm_cat_id",
         "fg_cat_quantity",
         "rm_pm_cat_quantity",
+        
     ];
 
     protected $casts = [

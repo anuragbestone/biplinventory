@@ -12,12 +12,14 @@ class RmPmStockTransactionIn extends Model
     protected $table = "rm_pm_stock_transaction_in";
     
     protected $fillable = [
+
         "rm_pm_cat_id",
         "stock_quantity",
         "uploaded_by_user_id",
         "shift_from",
         "shift_to",
         "production_line_id"
+        
     ];
 
     protected $casts = [

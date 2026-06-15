@@ -12,10 +12,12 @@ class ProductionIssueRecorded extends Model
     protected $table = "production_issue_recorded";
 
     protected $fillable = [
+
         "production_line_id",
         "production_type_id",
         "summary",
         "added_by_id"
+        
     ];
 
     protected $casts = [

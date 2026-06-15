@@ -12,8 +12,10 @@ class RmPmStockWarehouseMaster extends Model
     protected $table = "rm_pm_stock_warehouse_master";
     
     protected $fillable = [
+
         "rm_pm_cat_id",
         "stock_quantity"
+        
     ];
 
     protected $casts = [

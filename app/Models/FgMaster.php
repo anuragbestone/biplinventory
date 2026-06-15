@@ -12,8 +12,10 @@ class FgMaster extends Model
     protected $table = "fg_master";
 
     protected $fillable = [
+
         "fg_name",
         "fg_image_link"
+        
     ];
 
     protected $casts = [

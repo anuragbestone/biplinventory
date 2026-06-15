@@ -12,8 +12,10 @@ class RmPmMaster extends Model
     protected $table = "rm_pm_master";
 
     protected $fillable = [
+
         "rm_pm_name",
         "rm_pm_image",
+        
     ];
 
     protected $casts = [

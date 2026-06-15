@@ -290,7 +290,6 @@ class WarehouseController extends Controller {
             ];
         }
 
-        //echo "<pre>";print_r($data);die();
         return view("warehouse.rmpmentry", $data);
     }
 

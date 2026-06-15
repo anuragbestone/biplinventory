@@ -12,8 +12,10 @@ class RmPmStockInReciept extends Model
     protected $table = "rm_pm_stock_in_reciept";
 
     protected $fillable = [
+
         "rm_pm_stock_in_ids",
         "reciept_file"
+        
     ];
 
     protected $casts = [

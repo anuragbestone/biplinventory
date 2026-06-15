@@ -12,12 +12,14 @@ class FgCatBottleHtml extends Model
     protected $table = "fg_cat_bottle_html";
 
     protected $fillable = [
+
         "fg_cat_id",
         "main_id",
         "main_class",
         "sub_class",
         "inner_class",
         "bottle_image",
+        
     ];
 
     protected $casts = [

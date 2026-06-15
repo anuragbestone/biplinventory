@@ -12,12 +12,14 @@ class UserMaster extends Model
     protected $table = "user_master";
     
     protected $fillable = [
+
         "full_name",
         "email",
         "contact_number",
         "whatsapp_number",
         "password",
         "role_id"
+        
     ];
 
     protected $hidden = [

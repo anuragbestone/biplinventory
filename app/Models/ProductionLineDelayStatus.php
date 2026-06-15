@@ -12,8 +12,10 @@ class ProductionLineDelayStatus extends Model
     protected $table = "production_line_delay_status";
 
     protected $fillable = [
+
         "production_line_id",
         "line_status"
+        
     ];
 
     protected $casts = [
