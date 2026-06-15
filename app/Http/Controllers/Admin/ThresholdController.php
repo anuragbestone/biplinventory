@@ -42,7 +42,6 @@ class ThresholdController extends Controller {
             ->leftjoin("threshold_production_master", "threshold_production_master.fg_cat_id", "=", "fg_cat_master.id")
             ->where("fg_cat_master.is_active" , 1)
             ->get()->toArray();
-
         return view("admin.threshold", $data);
     }
 

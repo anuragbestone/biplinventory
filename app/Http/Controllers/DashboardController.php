@@ -519,7 +519,6 @@ class DashboardController extends Controller {
 
                 if ($data["fgCatData"]) {
                     $counter = 0;
-
                     foreach ($data["fgCatData"] as $fgValues) {
                         $data["progressReport"][$counter]["fgData"] = $fgValues;
                         $data["progressReport"][$counter]["totalSold"] = OrderDetails::

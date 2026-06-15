@@ -11,7 +11,6 @@ use Illuminate\Support\Carbon;
 
 class SalesTargetController extends Controller
 {
-
     public function getSalesTargetData(Request $request) {
         $data["userData"] = UserMaster::select("id", "full_name", "email")
             ->where("is_active", 1)

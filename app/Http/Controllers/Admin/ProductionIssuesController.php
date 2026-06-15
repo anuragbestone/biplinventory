@@ -27,7 +27,6 @@ class ProductionIssuesController extends Controller
             ->exists();
 
         if ($status) {
-
             return back()->with("error", $request->issue_type." already exists!!");
 
         } else {

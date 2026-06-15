@@ -43,7 +43,6 @@ class ProductionReportController extends Controller
             ->wheredate("fg_stock_master.created_at", $d)
             ->get()->toArray();
             $counter++;
-            
         }
     
         $data["selectedFilter"] = $filter;

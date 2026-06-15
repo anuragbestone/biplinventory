@@ -22,7 +22,6 @@ class UserRolesController extends Controller
             ->where("role_id", $request->roleID)
             ->get()
             ->toarray();
-
         if ($userList) {
             $data = [
                 "status" => "success",
