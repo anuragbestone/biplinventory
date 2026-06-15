@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RmPmCatMaster;
@@ -36,7 +35,6 @@ class ThresholdController extends Controller {
                 "rm_pm_name" => $rData->rm_pm_name,
                 "catData" => $catData
             ];
-
         }
 
         $data["fgCatData"] = FgCatMaster::select("fg_cat_master.id", "fg_cat_master.fg_cat_name", "fg_master.fg_name", "threshold_production_master.max_quantity")

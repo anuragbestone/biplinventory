@@ -58,8 +58,7 @@ class StockReportController extends Controller
 
         if ($rmPmData) {
             $rmPmStockWiseData = [];
-            $counter = 0;
-
+            $counter = 0;  
             foreach ($rmPmData as $rData) {
                 $rmPmStockWiseData[$counter] = $rData;
                 $rmPmStockWiseData[$counter]["rcData"] = RmPmCatMaster::select(

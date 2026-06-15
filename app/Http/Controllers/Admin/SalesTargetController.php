@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use App\Models\SalesTargetMaster;
 use App\Models\UserMaster;
-
 use App\Models\NotificationMaster;
-
 use Illuminate\Support\Carbon;
 
 class SalesTargetController extends Controller
@@ -41,7 +38,6 @@ class SalesTargetController extends Controller
     }
 
     public function generateTarget(Request $request) {
-        // echo "<pre>";print_r($request->all());die();
 
         // ------- Check For Target Month
         $monthStatus = SalesTargetMaster::whereMonth("target_date", date("m", strtotime($request->target_date)))
