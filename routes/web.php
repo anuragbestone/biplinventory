@@ -48,7 +48,9 @@ Route::middleware("AuthInCheck", "RoleCheck")->group(function() {
     // -- Warehouse Entry Starts
 
     //** Dev URls Starts */
+
     Route::get("/warehouse/deleteShift", [WarehouseController::class, "deleteShift"]);
+    
     //** Dev URLs Ends */
 
     Route::post("/warehouse/updateShift", [WarehouseController::class, "updateShift"]);
