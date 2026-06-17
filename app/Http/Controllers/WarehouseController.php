@@ -1200,6 +1200,7 @@ class WarehouseController extends Controller {
     }
 
     public function order() {
+          
         $orderData = OrderMaster::select(
             "id", 
             "order_id", 
@@ -1257,7 +1258,6 @@ class WarehouseController extends Controller {
                 "status" => "error"
             ];
         }
-
         return response()->json($data);
     }
 
@@ -1318,6 +1318,7 @@ class WarehouseController extends Controller {
             } else {
                 return back()->with("error", "FG Not Found!!!");
             }
+
         } else {
             return back()->with("error", "No Changes Made");
         }

@@ -241,7 +241,7 @@ class DashboardController extends Controller {
                     DB::raw("DATE(created_at)"),
                     [$startDate->toDateString(), $endDate->toDateString()]
                 )
-                ->sum("fg_quantity");
+                ->sum("fg_quantity"); 
             
             $data["dispatchGraphData"] = $finalDispatchData;
             $data["fgCategories"] = $fgCategories;

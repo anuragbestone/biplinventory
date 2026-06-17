@@ -4,16 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 use App\Models\OrderMaster;
 use App\Models\OrderDetails;
 use App\Models\FgCatMaster;
 use App\Models\SalesTargetMaster;
-use App\Models\FgDispatchMaster;
-
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
-
+use App\Models\FgDispatchMaster; 
 use App\Models\NotificationMaster;
 
 class OrderNDispatchController extends Controller
