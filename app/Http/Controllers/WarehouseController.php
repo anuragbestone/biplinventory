@@ -159,6 +159,7 @@ class WarehouseController extends Controller {
     }
 
     public function rmpmentryStockDo(Request $request) {
+
         $data = collect($request->except('_token'))->flatten();
         $hasValue = $data->contains(function ($value) {
             return !empty($value) && $value > 0;
@@ -213,6 +214,7 @@ class WarehouseController extends Controller {
         ]);
 
         return back()->with("success", "Rm / Pm Stock Uploaded To Warehouse");
+
     }
 
     public function rmpmentry(Request $request) {
@@ -1208,7 +1210,8 @@ class WarehouseController extends Controller {
             "order_dispatch_status",
         )->where("is_active", 1)
         ->latest("created_at")
-        ->get()->toArray();
+        ->get()
+        ->toArray();
 
         if ($orderData) {
             $counter = 0;
