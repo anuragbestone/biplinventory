@@ -12,7 +12,6 @@ class ProductionTimerMaster extends Model
     protected $table = "production_timer_master";
 
     protected $fillable = [
-
         "shift_from",
         "shift_to",
         "counter_id",
@@ -22,7 +21,6 @@ class ProductionTimerMaster extends Model
         "production_line_id",
         "production_timer_seconds",
         "production_status",
-        
     ];
 
     protected $casts = [

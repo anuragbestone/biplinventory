@@ -12,11 +12,9 @@ class FgCatMaster extends Model
     protected $table = "fg_cat_master";
 
     protected $fillable = [
-
         "fg_id",
         "production_line_id",
         "fg_cat_name"
-        
     ];
 
     protected $casts = [

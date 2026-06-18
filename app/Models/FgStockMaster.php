@@ -12,10 +12,8 @@ class FgStockMaster extends Model
     protected $table = "fg_stock_master";
 
     protected $fillable = [
-
         "fg_cat_id",
         "stock_quantity"
-        
     ];
 
     protected $casts = [

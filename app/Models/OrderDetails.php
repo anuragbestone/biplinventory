@@ -12,12 +12,10 @@ class OrderDetails extends Model
     protected $table = "order_details";
 
     protected $fillable = [
-
         "order_id",
         "fg_cat_id",
         "fg_quantity",
         "fg_unit",
-        
     ];
 
     protected $casts = [

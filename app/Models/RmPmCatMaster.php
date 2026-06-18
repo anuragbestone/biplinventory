@@ -12,11 +12,9 @@ class RmPmCatMaster extends Model
     protected $table = "rm_pm_cat_master";
 
     protected $fillable = [
-
         "rm_pm_id",
         "rm_pm_cat_name",
-        "cat_unit"
-        
+        "cat_unit" 
     ];
 
     protected $casts = [

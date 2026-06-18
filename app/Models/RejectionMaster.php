@@ -12,7 +12,6 @@ class RejectionMaster extends Model
     protected $table = "rejection_master";
 
     protected $fillable = [
-
         "rm_pm_stock_transaction_out_id",
         "rm_pm_stock_rejection_percentage",
         "total_rejection",
@@ -21,7 +20,6 @@ class RejectionMaster extends Model
         "shift_to",
         "added_by",
         "approved_status"
-        
     ];
 
     protected $casts = [

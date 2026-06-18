@@ -12,11 +12,9 @@ class FgDispatchMaster extends Model
     protected $table = "fg_dispatched_master";
 
     protected $fillable = [
-
         "order_id",
         "fg_cat_id",
         "fg_quantity"
-        
     ];
 
     protected $casts = [

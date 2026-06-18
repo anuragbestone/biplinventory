@@ -12,13 +12,11 @@ class SalesTargetMaster extends Model
     protected $table = "sales_target_master";
     
     protected $fillable = [
-
         "target_date",
         "target_given_date",
         "user_id",
         "target_quantity",
         "achieved_target_quantity"
-        
     ];
 
     protected $casts = [

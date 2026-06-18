@@ -103,7 +103,6 @@ class OrderNDispatchController extends Controller
             ->where("id", $request->orderID)
             ->first();
 
-
         if ($data["orderData"]->order_dispatch_status == 0) {
             
             $data["orderDetails"] = OrderDetails::select(

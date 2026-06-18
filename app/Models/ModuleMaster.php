@@ -12,10 +12,8 @@ class ModuleMaster extends Model
     protected $table = "module_master";
 
     protected $fillable = [
-
         "module_name",
         "module_route",
-        
     ];
 
     protected $casts = [

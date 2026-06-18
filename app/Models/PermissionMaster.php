@@ -12,10 +12,8 @@ class PermissionMaster extends Model
     protected $table = "permission_master";
 
     protected $fillable = [
-
         "role_id",
         "module_id",
-        
     ];
 
     protected $casts = [

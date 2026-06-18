@@ -12,12 +12,10 @@ class ShiftMaster extends Model
     protected $table = "shift_master";
     
     protected $fillable = [
-
         "userID",
         "shift_from",
         "shift_to",
         "shift_over_status"
-        
     ];
 
     protected $casts = [

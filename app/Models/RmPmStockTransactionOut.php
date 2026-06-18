@@ -12,7 +12,6 @@ class RmPmStockTransactionOut extends Model
     protected $table = "rm_pm_stock_transaction_out";
 
     protected $fillable = [
-
         "rm_pm_cat_id",
         "stock_quantity",
         "shift_from",
@@ -21,7 +20,6 @@ class RmPmStockTransactionOut extends Model
         "rejection_quantity",
         "rejection_percentage",
         "uploaded_by_user_id",
-        
     ];
 
     protected $casts = [
